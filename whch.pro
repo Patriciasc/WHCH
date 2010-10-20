@@ -11,7 +11,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        whch.cpp
+           whch.cpp
 
 HEADERS  += whch.h
 
