@@ -1,0 +1,26 @@
+#ifndef WHCH_TABLEMODEL_H
+#define WHCH_TABLEMODEL_H
+
+#include <QAbstractTableModel>
+#include <QList>
+
+class whch_TableModel : public QAbstractTableModel
+{
+    Q_OBJECT
+
+public:
+    whch_TableModel(QObject *parent=0);
+    whch_TableModel(QList<QString> mylist, QObject *parent=0);
+
+    /* Basic functions for providing data access. */
+    int rowCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+private:
+    /* Test data structure. */
+    QList<QString> list;
+};
+
+#endif // WHCH_TABLEMODEL_H

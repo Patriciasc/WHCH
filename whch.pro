@@ -11,8 +11,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-           whch.cpp
+           whch.cpp \
+    whch_tablemodel.cpp
 
-HEADERS  += whch.h
+HEADERS  += whch.h \
+    whch_tablemodel.h
 
 FORMS    += whch.ui
