@@ -10,7 +10,7 @@ class whch_TableModel : public QAbstractTableModel
 
 public:
     whch_TableModel(QObject *parent=0);
-    whch_TableModel(QList<QString> mylist, QObject *parent=0);
+    whch_TableModel(QList<QString> list, QObject *parent=0);
 
     /* Basic functions for providing data access. */
     int rowCount(const QModelIndex &parent) const;
@@ -20,7 +20,7 @@ public:
 
 private:
     /* Test data structure. */
-    QList<QString> list;
+    QList<QString> m_DisplayList;
 };
 
 #endif // WHCH_TABLEMODEL_H
