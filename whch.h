@@ -2,6 +2,7 @@
 #define WHCH_H
 
 #include <QMainWindow>
+#include "whch_tablemodel.h"
 
 namespace Ui {
     class whch;

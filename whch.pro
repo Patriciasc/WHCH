@@ -6,15 +6,17 @@
 
 QT       += core gui
 
+CONFIG   += uitools
+
 TARGET = whch
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
            whch.cpp \
-    whch_tablemodel.cpp
+           whch_tablemodel.cpp
 
-HEADERS  += whch.h \
-    whch_tablemodel.h
+HEADERS += whch.h \
+           whch_tablemodel.h
 
-FORMS    += whch.ui
+FORMS   += whch.ui

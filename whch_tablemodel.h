@@ -10,13 +10,14 @@ class whch_TableModel : public QAbstractTableModel
 
 public:
     whch_TableModel(QObject *parent=0);
-    whch_TableModel(QList<QString> list, QObject *parent=0);
+    whch_TableModel(const QList<QString> &list, QObject *parent=0);
 
     /* Basic functions for providing data access. */
-    int rowCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &parent  = QModelIndex()) const;
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const;
 
 private:
     /* Test data structure. */

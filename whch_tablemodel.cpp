@@ -5,7 +5,7 @@ whch_TableModel::whch_TableModel(QObject *parent)
 {
 }
 
-whch_TableModel::whch_TableModel(QList<QString> list, QObject *parent)
+whch_TableModel::whch_TableModel(const QList<QString> &list, QObject *parent)
     :QAbstractTableModel(parent)
 {
     m_DisplayList = list;
@@ -14,7 +14,7 @@ whch_TableModel::whch_TableModel(QList<QString> list, QObject *parent)
 int whch_TableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_DisplayList.size();
+    return m_DisplayList.count();
 }
 
 int whch_TableModel::columnCount(const QModelIndex &parent) const
