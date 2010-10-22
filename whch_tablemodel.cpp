@@ -8,13 +8,13 @@ whch_TableModel::whch_TableModel(QObject *parent)
 whch_TableModel::whch_TableModel(const QList<QString> &list, QObject *parent)
     :QAbstractTableModel(parent)
 {
-    m_DisplayList = list;
+    m_display_list = list;
 }
 
 int whch_TableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_DisplayList.count();
+    return m_display_list.count();
 }
 
 int whch_TableModel::columnCount(const QModelIndex &parent) const
@@ -28,12 +28,12 @@ QVariant whch_TableModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (index.row() >= m_DisplayList.size() || index.row() < 0)
+    if (index.row() >= m_display_list.size() || index.row() < 0)
         return QVariant();
 
     if (role == Qt::DisplayRole)
     {
-        QString  myString = m_DisplayList.at(index.row());
+        QString  myString = m_display_list.at(index.row());
 
         /* XXX:test 2 columns only. */
         if (index.column() == 0)

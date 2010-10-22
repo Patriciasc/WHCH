@@ -18,6 +18,7 @@ public:
 
 private:
     Ui::whch *ui;
+    whch_TableModel *m_model;
 };
 
 #endif // WHCH_H
