@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "whch_tablemodel.h"
+#include <QFile>
 
 namespace Ui {
     class whch;
@@ -19,6 +20,8 @@ public:
 private:
     Ui::whch *ui;
     whch_TableModel *m_model;
+
+    void load_xml_file_to_dom (QString file_name);
 };
 
 #endif // WHCH_H

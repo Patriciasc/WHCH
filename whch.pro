@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml
 
 TARGET = whch
 TEMPLATE = app
@@ -12,9 +12,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
            whch.cpp \
-           whch_tablemodel.cpp \
+           whch_tablemodel.cpp
 
 HEADERS += whch.h \
            whch_tablemodel.h \
+    whch_task.h
 
 FORMS   += whch.ui
+
+OTHER_FILES += \
+    domtest.xml
