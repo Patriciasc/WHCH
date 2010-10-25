@@ -3,7 +3,6 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-#include "whch_task.h"
 
 class whch_TableModel : public QAbstractTableModel
 {
@@ -23,7 +22,6 @@ public:
 private:
     /* Test data structure. */
     QList<QString> m_display_list;
-    //QLinkedList<whch_task> *m_tasks_list;
 };
 
 #endif // WHCH_TABLEMODEL_H

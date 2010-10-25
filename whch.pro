@@ -12,7 +12,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
            whch.cpp \
-           whch_tablemodel.cpp
+           whch_tablemodel.cpp \
+    whch_task.cpp
 
 HEADERS += whch.h \
            whch_tablemodel.h \
@@ -20,5 +21,4 @@ HEADERS += whch.h \
 
 FORMS   += whch.ui
 
-OTHER_FILES += \
-    domtest.xml
+OTHER_FILES +=

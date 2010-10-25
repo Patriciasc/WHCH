@@ -21,7 +21,8 @@ private:
     Ui::whch *ui;
     whch_TableModel *m_model;
 
-    void load_xml_file_to_dom (QString file_name);
+    int read_in_xml_file();
+    int write_in_xml_file();
 };
 
 #endif // WHCH_H
