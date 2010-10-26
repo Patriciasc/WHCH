@@ -3,6 +3,7 @@
 
 #include <QAbstractTableModel>
 #include <QList>
+#include <QDomDocument>
 
 class whch_TableModel : public QAbstractTableModel
 {
@@ -10,7 +11,7 @@ class whch_TableModel : public QAbstractTableModel
 
 public:
     whch_TableModel(QObject *parent=0);
-    whch_TableModel(const QList<QString> &list, QObject *parent=0);
+    whch_TableModel(const QString &filename, QObject *parent=0);
 
     /* Basic functions for providing data access. */
     int rowCount(const QModelIndex &parent  = QModelIndex()) const;
@@ -22,6 +23,9 @@ public:
 private:
     /* Test data structure. */
     QList<QString> m_display_list;
+    QDomDocument m_dom_file;
+
+    void load_xml_file(const QString &filename = "test.xml");
 };
 
 #endif // WHCH_TABLEMODEL_H

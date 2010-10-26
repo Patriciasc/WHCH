@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include "whch_task.h"
+#include <QDate>
 
 whch::whch(QWidget *parent) :
     QMainWindow(parent),
@@ -12,15 +13,8 @@ whch::whch(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //Test
-    write_in_xml_file();
-    read_in_xml_file ();
-
-    /* Set model/view with test data. */
-    QList<QString> mylist;
-    mylist << "one" << "two" << "three";
-
-    m_model = new whch_TableModel(mylist);
+    /* Set model/view. */
+    m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
 }
 
@@ -42,7 +36,7 @@ int whch::read_in_xml_file ()
     file.close();
 
     QDomElement root = doc.documentElement();
-    if( root.tagName() != "date" )
+    if( root.tagName() != "day" )
     {
       std::cout << "Did not find DOM root" << std::endl;
       return -3;
@@ -63,8 +57,7 @@ int whch::read_in_xml_file ()
                 c.client = e.attribute( "client", "" );
 
                 QMessageBox msgBox;
-                msgBox.information( 0, "Task", c.start + "\n" + c.end + "\n" + c.client );
-                msgBox.exec();
+                //msgBox.information( 0, "Task", c.start + "\n" + c.end + "\n" + c.client );
             }
         }
 
@@ -82,6 +75,11 @@ QDomElement TaskToNode( QDomDocument &d, const whch_task &c )
    cn.setAttribute( "end", c.end );
    cn.setAttribute( "client", c.client );
 
+   QDomElement tn = d.createElement("details");
+   QDomText text = d.createTextNode("something");
+   tn.appendChild(text);
+   cn.appendChild(tn);
+
    return cn;
 }
 
@@ -91,7 +89,8 @@ int whch::write_in_xml_file()
     QDomDocument doc("DOMtest");
 
     // Create a root element for the DOM.
-    QDomElement root = doc.createElement("date");
+    QDomElement root = doc.createElement("day");
+    root.setAttribute("date",QDate::currentDate().toString("yyyy/MM/dd"));
     doc.appendChild(root);
 
     // Add data to the DOM.
