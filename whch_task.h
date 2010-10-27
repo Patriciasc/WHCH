@@ -2,16 +2,19 @@
 #define WHCH_TASK_H
 
 #include <QString>
+#include <QTime>
+
 
 class whch_task
 {
 public:
     whch_task();
 
-    QString start;
-    QString end;
+    QTime start;
+    QTime end;
+    QTime duration;
     QString client;
-    QString task;
+    QString name;
     QString details;
 };
 

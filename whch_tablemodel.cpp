@@ -34,31 +34,48 @@ int whch_TableModel::columnCount(const QModelIndex &parent) const
 
 QVariant whch_TableModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
-
-    if (index.row() >= m_display_list.size() || index.row() < 0)
-        return QVariant();
-
-    if (role == Qt::DisplayRole)
+    if((index.isValid()) && (role == Qt::DisplayRole))
     {
-        QString  myString = m_display_list.at(index.row());
+        // Get index element from file.
+        QDomElement dom_root = m_dom_file.firstChildElement("day");
+        QDomElement element = dom_root.firstChildElement("task");
 
-        /* XXX:test 2 columns only. */
-        if (index.column() == 0)
-            return myString;
-        else if (index.column() == 1)
-            return myString;
+        for(int i=1; i<=index.row(); i++ )
+        {
+            element = element.nextSiblingElement("task");
+        }
+
+        // Display index value.
+        switch (index.column())
+        {
+            case 0:
+                return element.attribute("start","--");
+                break;
+            case 1:
+                return element.attribute("end","--");
+                break;
+            case 2:
+                return element.attribute("duration","jop");
+                break;
+            case 3:
+                return element.attribute("client","--");
+                break;
+            case 4:
+                return element.attribute("name","car");
+                break;
+            case 5:
+                return element.firstChildElement("details").text();
+                break;
+            default:
+                return QVariant();
+        }
     }
     return QVariant();
 }
 
 QVariant whch_TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    if (orientation == Qt::Horizontal)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
         switch (section)
         {
@@ -80,6 +97,8 @@ QVariant whch_TableModel::headerData(int section, Qt::Orientation orientation, i
     }
     return QVariant();
 }
+
+// Load .xml file's content (data).
 void whch_TableModel::load_xml_file(const QString &filename)
 {
     QFile file(filename);

@@ -12,71 +12,24 @@ whch::whch(QWidget *parent) :
     ui(new Ui::whch)
 {
     ui->setupUi(this);
-
+    write_in_xml_file();
     /* Set model/view. */
     m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
 }
 
-int whch::read_in_xml_file ()
-{
-    QDomDocument doc( "DOMtest" );
-    QFile file( "test.xml" );
-    if( !file.open(QIODevice::ReadOnly) )
-    {
-        std::cout << "Could not open file" << std::endl;
-        return -1;
-    }
-    if( !doc.setContent( &file ) )
-    {
-        std::cout << "Problem setting content" << std::endl;
-        file.close();
-        return -2;
-    }
-    file.close();
-
-    QDomElement root = doc.documentElement();
-    if( root.tagName() != "day" )
-    {
-      std::cout << "Did not find DOM root" << std::endl;
-      return -3;
-    }
-
-    QDomNode n = root.firstChild();
-    while( !n.isNull() )
-    {
-        QDomElement e = n.toElement();
-        if( !e.isNull() )
-        {
-            if( e.tagName() == "task" )
-            {
-                whch_task c;
-
-                c.start = e.attribute( "start", "" );
-                c.end = e.attribute( "end", "" );
-                c.client = e.attribute( "client", "" );
-
-                QMessageBox msgBox;
-                //msgBox.information( 0, "Task", c.start + "\n" + c.end + "\n" + c.client );
-            }
-        }
-
-        n = n.nextSibling();
-    }
-    return 0;
-}
-
-
 QDomElement TaskToNode( QDomDocument &d, const whch_task &c )
 {
    QDomElement cn = d.createElement( "task" );
 
-   cn.setAttribute( "start", c.start );
-   cn.setAttribute( "end", c.end );
-   cn.setAttribute( "client", c.client );
-
+   cn.setAttribute("start", c.start.currentTime().toString("hh:mm"));
+   cn.setAttribute("end", c.end.currentTime().toString("hh:mm"));
+   // I will need to make use of restart()/start()/elapse here.
+   cn.setAttribute("duration", "duration");
+   cn.setAttribute("name", "name");
+   cn.setAttribute("client", c.client);
    QDomElement tn = d.createElement("details");
-   QDomText text = d.createTextNode("something");
+   QDomText text = d.createTextNode("????????????????????????????????????????????????????????????????????????????????????????????????????????????????????");
    tn.appendChild(text);
    cn.appendChild(tn);
 
@@ -95,28 +48,16 @@ int whch::write_in_xml_file()
 
     // Add data to the DOM.
     whch_task c;
-    c.start = "10:30";
-    c.end = "18:30";
     c.client = "Openismus";
-
     root.appendChild( TaskToNode( doc, c ) );
 
-    c.start = "10:00";
-    c.end = "17:00";
     c.client = "Nokia";
-
     root.appendChild( TaskToNode( doc, c ) );
 
-    c.start = "10:00";
-    c.end = "17:00";
     c.client = "Nokia";
-
     root.appendChild( TaskToNode( doc, c ) );
 
-    c.start = "10:00";
-    c.end = "17:00";
     c.client = "Nokia";
-
     root.appendChild( TaskToNode( doc, c ) );
 
 
