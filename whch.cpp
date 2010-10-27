@@ -16,6 +16,8 @@ whch::whch(QWidget *parent) :
     /* Set model/view. */
     m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
+    ui->tableView->resizeRowsToContents();
+    //ui->tableView->resizeColumnsToContents();
 }
 
 QDomElement TaskToNode( QDomDocument &d, const whch_task &c )
