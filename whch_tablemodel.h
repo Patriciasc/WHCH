@@ -20,6 +20,11 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const;
 
+    /* Basic functions for making this model editable. */
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool setData(const QModelIndex &index, const QVariant &value,
+                 int role = Qt::EditRole);
+
 private:
     /* Test data structure. */
     QList<QString> m_display_list;

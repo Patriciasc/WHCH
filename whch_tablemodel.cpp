@@ -98,6 +98,24 @@ QVariant whch_TableModel::headerData(int section, Qt::Orientation orientation, i
     return QVariant();
 }
 
+
+Qt::ItemFlags whch_TableModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::ItemIsEnabled;
+    // XXX: I do not like the way this looks. Need to find something
+    // that looks more natural.
+    if ((index.column() == 0) || (index.column() == 1))
+        return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+
+}
+bool whch_TableModel::setData(const QModelIndex &index,
+                              const QVariant &value,
+                              int role)
+{
+
+}
+
 // Load .xml file's content (data).
 void whch_TableModel::load_xml_file(const QString &filename)
 {
