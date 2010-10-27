@@ -34,7 +34,7 @@ int whch_TableModel::columnCount(const QModelIndex &parent) const
 
 QVariant whch_TableModel::data(const QModelIndex &index, int role) const
 {
-    if((index.isValid()) && (role == Qt::DisplayRole))
+    if((index.isValid()) && ((role == Qt::DisplayRole) || (role == Qt::EditRole)))
     {
         // Get index element from file.
         QDomElement dom_root = m_dom_file.firstChildElement("day");
@@ -103,17 +103,47 @@ Qt::ItemFlags whch_TableModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::ItemIsEnabled;
-    // XXX: I do not like the way this looks. Need to find something
-    // that looks more natural.
+
     if ((index.column() == 0) || (index.column() == 1))
         return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+    else
+        return Qt::ItemIsEnabled;
 
 }
 bool whch_TableModel::setData(const QModelIndex &index,
                               const QVariant &value,
                               int role)
 {
+    if (index.isValid() && role == Qt::EditRole)
+    {
 
+        // Get current index element from file.
+        QDomElement dom_root = m_dom_file.firstChildElement("day");
+        QDomElement element = dom_root.firstChildElement("task");
+
+        for(int i=1; i<=index.row(); i++ )
+        {
+            element = element.nextSiblingElement("task");
+        }
+
+        // Replace and display the new given value.
+        switch (index.column())
+        {
+            case 0:
+                element.setAttribute("start",value.toString());
+                emit dataChanged(index, index);
+                return true;
+                break;
+            case 1:
+                element.setAttribute("end",value.toString());
+                emit dataChanged(index, index);
+                return true;
+                break;
+            default:
+                return false;
+        }
+    }
+    return false;
 }
 
 // Load .xml file's content (data).
