@@ -5,8 +5,7 @@
 #include <QTextStream>
 #include <QRegExpValidator>
 #include <QRegExp>
-
-static bool check_time_input_format(const QVariant &value);
+#include <QTime>
 
 whch_TableModel::whch_TableModel(QObject *parent)
     :QAbstractTableModel(parent)
@@ -55,11 +54,19 @@ QVariant whch_TableModel::data(const QModelIndex &index,
         switch (index.column())
         {
             case 0:
-                return element.attribute("start","--");
+            {
+                QString time_string = element.attribute("start","");
+                QTime time = QTime::fromString(time_string, "hh:mm");
+                return time;
                 break;
+            }
             case 1:
-                return element.attribute("end","--");
+            {
+                QString time_string = element.attribute("end","");
+                QTime time = QTime::fromString(time_string, "hh:mm");
+                return time;
                 break;
+            }
             case 2:
                 return element.attribute("duration","jop");
                 break;
@@ -124,32 +131,27 @@ bool whch_TableModel::setData(const QModelIndex &index,
 {
     bool changed = false;
 
-    if (index.isValid() && (role == Qt::EditRole || role == Qt::BackgroundRole))
+    if (index.isValid() && role == Qt::EditRole)
     {
-        if (check_time_input_format(value))
-        {
             // Get current index element from memory.
             QDomElement dom_root = m_dom_file.firstChildElement("day");
             QDomElement element = dom_root.firstChildElement("task");
-
             for(int i=1; i<=index.row(); i++ )
             {
                 element = element.nextSiblingElement("task");
             }
 
             // Replace new value in memory.
-            if (index.column() == 0)
+            switch (index.column())
             {
-                element.setAttribute("start",value.toString());
-                emit dataChanged(index, index);
-                changed = true;
-            }
-
-            if (index.column() == 1)
-            {
-                element.setAttribute("end",value.toString());
-                emit dataChanged(index, index);
-                changed = true;
+                case 0:
+                    element.setAttribute("start",value.toTime().toString("hh:mm"));
+                    emit dataChanged(index, index);
+                    changed = true;
+                case 1:
+                    element.setAttribute("end",value.toTime().toString("hh:mm"));
+                    emit dataChanged(index, index);
+                    changed = true;
             }
 
             // Update change in .xml file.
@@ -157,13 +159,7 @@ bool whch_TableModel::setData(const QModelIndex &index,
             {
                 write_in_xml_file();
             }
-        }
-        else
-        {
-            //Change cell color to red.
-            //This is not working. Maybe I need to use a delegate?
-            //setData(index,Qt::red,Qt::BackgroundRole);
-        }
+
     }
     return changed;
 }
@@ -196,21 +192,3 @@ void whch_TableModel::write_in_xml_file (const QString &filename)
 
         file.close();
  }
-
-//Check format of the time introduced by the user.
-static bool check_time_input_format(const QVariant &value)
-{
-    bool is_acceptable = true;
-    QRegExp format("([01]?[0-9]|2[0-3]):[0-5][0-9]");
-    QRegExpValidator validator(format,0);
-    QString new_string = value.toString();
-    int pos = 0;
-    QValidator::State valid_format = validator.validate(new_string,pos);
-
-    if (valid_format != QValidator::Acceptable)
-    {
-        is_acceptable = false;
-    }
-
-    return is_acceptable;
-}
