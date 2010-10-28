@@ -3,7 +3,10 @@
 #include <QFile>
 #include <iostream>
 #include <QTextStream>
+#include <QRegExpValidator>
+#include <QRegExp>
 
+static bool check_time_input_format(const QVariant &value);
 
 whch_TableModel::whch_TableModel(QObject *parent)
     :QAbstractTableModel(parent)
@@ -103,7 +106,6 @@ QVariant whch_TableModel::headerData(int section,
     return QVariant();
 }
 
-
 Qt::ItemFlags whch_TableModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -115,6 +117,7 @@ Qt::ItemFlags whch_TableModel::flags(const QModelIndex &index) const
         return Qt::ItemIsEnabled;
 
 }
+
 bool whch_TableModel::setData(const QModelIndex &index,
                               const QVariant &value,
                               int role)
@@ -123,35 +126,37 @@ bool whch_TableModel::setData(const QModelIndex &index,
 
     if (index.isValid() && role == Qt::EditRole)
     {
-
-        // Get current index element from memory.
-        QDomElement dom_root = m_dom_file.firstChildElement("day");
-        QDomElement element = dom_root.firstChildElement("task");
-
-        for(int i=1; i<=index.row(); i++ )
+        if (check_time_input_format(value))
         {
-            element = element.nextSiblingElement("task");
-        }
+            // Get current index element from memory.
+            QDomElement dom_root = m_dom_file.firstChildElement("day");
+            QDomElement element = dom_root.firstChildElement("task");
 
-        // Replace new value in memory.
-        if (index.column() == 0)
-        {
-            element.setAttribute("start",value.toString());
-            emit dataChanged(index, index);
-            changed = true;
-        }
+            for(int i=1; i<=index.row(); i++ )
+            {
+                element = element.nextSiblingElement("task");
+            }
 
-        if (index.column() == 1)
-        {
-            element.setAttribute("end",value.toString());
-            emit dataChanged(index, index);
-            changed = true;
-        }
+            // Replace new value in memory.
+            if (index.column() == 0)
+            {
+                element.setAttribute("start",value.toString());
+                emit dataChanged(index, index);
+                changed = true;
+            }
 
-        // Update change in .xml file.
-        if (changed)
-        {
-            write_in_xml_file();
+            if (index.column() == 1)
+            {
+                element.setAttribute("end",value.toString());
+                emit dataChanged(index, index);
+                changed = true;
+            }
+
+            // Update change in .xml file.
+            if (changed)
+            {
+                write_in_xml_file();
+            }
         }
     }
     return changed;
@@ -185,3 +190,21 @@ void whch_TableModel::write_in_xml_file (const QString &filename)
 
         file.close();
  }
+
+//Check format of the time introduced by the user.
+static bool check_time_input_format(const QVariant &value)
+{
+    bool is_acceptable = true;
+    QRegExp format("([01]?[0-9]|2[0-3]):[0-5][0-9]");
+    QRegExpValidator validator(format,0);
+    QString new_string = value.toString();
+    int pos = 0;
+    QValidator::State valid_format = validator.validate(new_string,pos);
+
+    if (valid_format != QValidator::Acceptable)
+    {
+        is_acceptable = false;
+    }
+
+    return is_acceptable;
+}
