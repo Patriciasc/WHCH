@@ -31,6 +31,7 @@ private:
     QDomDocument m_dom_file;
 
     void load_xml_file(const QString &filename = "test.xml");
+    void write_in_xml_file (const QString &filename = "test.xml");
 };
 
 #endif // WHCH_TABLEMODEL_H

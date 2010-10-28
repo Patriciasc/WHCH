@@ -2,6 +2,7 @@
 #include <QDomDocument>
 #include <QFile>
 #include <iostream>
+#include <QTextStream>
 
 
 whch_TableModel::whch_TableModel(QObject *parent)
@@ -114,10 +115,12 @@ bool whch_TableModel::setData(const QModelIndex &index,
                               const QVariant &value,
                               int role)
 {
+    bool changed = false;
+
     if (index.isValid() && role == Qt::EditRole)
     {
 
-        // Get current index element from file.
+        // Get current index element from memory.
         QDomElement dom_root = m_dom_file.firstChildElement("day");
         QDomElement element = dom_root.firstChildElement("task");
 
@@ -126,27 +129,31 @@ bool whch_TableModel::setData(const QModelIndex &index,
             element = element.nextSiblingElement("task");
         }
 
-        // Replace and display the new given value.
-        switch (index.column())
+        // Replace new value in memory.
+        if (index.column() == 0)
         {
-            case 0:
-                element.setAttribute("start",value.toString());
-                emit dataChanged(index, index);
-                return true;
-                break;
-            case 1:
-                element.setAttribute("end",value.toString());
-                emit dataChanged(index, index);
-                return true;
-                break;
-            default:
-                return false;
+            element.setAttribute("start",value.toString());
+            emit dataChanged(index, index);
+            changed = true;
+        }
+
+        if (index.column() == 1)
+        {
+            element.setAttribute("end",value.toString());
+            emit dataChanged(index, index);
+            changed = true;
+        }
+
+        // Update change in .xml file.
+        if (changed)
+        {
+            write_in_xml_file();
         }
     }
-    return false;
+    return changed;
 }
 
-// Load .xml file's content (data).
+// Load .xml file's content (data) in memory.
 void whch_TableModel::load_xml_file(const QString &filename)
 {
     QFile file(filename);
@@ -161,3 +168,16 @@ void whch_TableModel::load_xml_file(const QString &filename)
     }
     file.close();
 }
+
+// Update .xml file's content with the data in memory.
+void whch_TableModel::write_in_xml_file (const QString &filename)
+{
+        QFile file(filename);
+        if( !file.open(QIODevice::WriteOnly))
+            std::cout << "Problem updating .xml file's data from memory" << std::endl;
+
+        QTextStream ts(&file);
+        ts << m_dom_file.toString();
+
+        file.close();
+ }
