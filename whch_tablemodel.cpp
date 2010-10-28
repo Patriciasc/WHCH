@@ -160,7 +160,7 @@ bool whch_TableModel::setData(const QModelIndex &index,
         }
         else
         {
-            //Change color to red.
+            //Change cell color to red.
             //This is not working. Maybe I need to use a delegate?
             //setData(index,Qt::red,Qt::BackgroundRole);
         }
