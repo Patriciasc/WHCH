@@ -12,7 +12,8 @@ whch_TableModel::whch_TableModel(QObject *parent)
     QDomElement dom_root = m_dom_file.documentElement();
 }
 
-whch_TableModel::whch_TableModel(const QString &filename, QObject *parent)
+whch_TableModel::whch_TableModel(const QString &filename,
+                                 QObject *parent)
     :QAbstractTableModel(parent)
 {
     load_xml_file(filename);
@@ -33,7 +34,8 @@ int whch_TableModel::columnCount(const QModelIndex &parent) const
     return 6;
 }
 
-QVariant whch_TableModel::data(const QModelIndex &index, int role) const
+QVariant whch_TableModel::data(const QModelIndex &index,
+                               int role) const
 {
     if((index.isValid()) && ((role == Qt::DisplayRole) || (role == Qt::EditRole)))
     {
@@ -74,7 +76,9 @@ QVariant whch_TableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant whch_TableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant whch_TableModel::headerData(int section,
+                                     Qt::Orientation orientation,
+                                     int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
