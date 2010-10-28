@@ -124,7 +124,7 @@ bool whch_TableModel::setData(const QModelIndex &index,
 {
     bool changed = false;
 
-    if (index.isValid() && role == Qt::EditRole)
+    if (index.isValid() && (role == Qt::EditRole || role == Qt::BackgroundRole))
     {
         if (check_time_input_format(value))
         {
@@ -157,6 +157,12 @@ bool whch_TableModel::setData(const QModelIndex &index,
             {
                 write_in_xml_file();
             }
+        }
+        else
+        {
+            //Change color to red.
+            //This is not working. Maybe I need to use a delegate?
+            //setData(index,Qt::red,Qt::BackgroundRole);
         }
     }
     return changed;
