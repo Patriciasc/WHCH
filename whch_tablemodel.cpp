@@ -10,8 +10,23 @@
 whch_TableModel::whch_TableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
-    load_xml_file();
-    QDomElement dom_root = m_dom_file.documentElement();
+    m_dom_file = QDomDocument("DOMtest");
+    // Create a root element for the DOM.
+    QDomElement root = m_dom_file.createElement("day");
+    root.setAttribute("date",QDate::currentDate().toString("yyyy/MM/dd"));
+    m_dom_file.appendChild(root);
+
+    // Write result to an .xml file.
+    QString filename("test.xml");
+    QFile file(filename);
+    if(!file.open(QIODevice::WriteOnly) )
+        return;
+
+    QTextStream ts(&file);
+    ts << m_dom_file.toString();
+
+    file.close();
+    load_xml_file(filename);
 }
 
 whch_TableModel::whch_TableModel(const QString &filename,
@@ -19,14 +34,13 @@ whch_TableModel::whch_TableModel(const QString &filename,
     :QAbstractTableModel(parent)
 {
     load_xml_file(filename);
-    QDomElement dom_root = m_dom_file.documentElement();
 }
 
 int whch_TableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
-    QDomElement dom_root = m_dom_file.documentElement();
+    QDomElement dom_root = m_dom_file.firstChildElement("day");
     return dom_root.elementsByTagName("task").count();
 }
 
@@ -162,6 +176,41 @@ bool whch_TableModel::setData(const QModelIndex &index,
 
     }
     return changed;
+}
+
+void whch_TableModel::set_new_task()
+{
+    // Create a root element for the DOM.
+    QDomElement dom_root = m_dom_file.firstChildElement("day");
+
+    // Set data. (FUNCION SET TASK)
+    QDomElement task = m_dom_file.createElement( "task" );
+    task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
+    task.setAttribute("end", QTime::currentTime().toString("hh:mm"));
+    // I will need to make use of restart()/start()/elapse here.
+    task.setAttribute("duration", "duration");
+    task.setAttribute("name", "name");
+    task.setAttribute("client", "Openismus");
+
+    QDomElement details_tag = m_dom_file.createElement("details");
+    //QString details_text = ui->lineEdit->text();
+    QDomText details_text = m_dom_file.createTextNode("prueba");
+    details_tag.appendChild(details_text);
+    task.appendChild(details_tag);
+
+    dom_root.appendChild(task);
+
+    // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
+    QFile file( "test.xml" );
+    if( !file.open(QIODevice::ReadWrite) )
+        std::cout << "Error writing result to file" << std::endl;
+
+    QTextStream ts( &file );
+    ts << m_dom_file.toString();
+
+    file.close();
+    reset();
+    load_xml_file("test.xml");
 }
 
 // Load .xml file's content (data) in memory.

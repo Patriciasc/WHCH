@@ -23,10 +23,6 @@ public:
 private:
     Ui::whch *ui;
     whch_TableModel *m_model;
-
-    int read_in_xml_file();
-    int write_in_xml_file();
-    QDomElement TaskToNode( QDomDocument &d, const whch_task &c );
 };
 
 #endif // WHCH_H

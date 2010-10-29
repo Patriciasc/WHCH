@@ -19,7 +19,6 @@ HEADERS += whch.h \
            whch_tablemodel.h \
     whch_task.h
 
-FORMS   += whch.ui \
-    dialog.ui
+FORMS   += whch.ui
 
 OTHER_FILES +=
