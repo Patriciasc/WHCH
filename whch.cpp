@@ -19,7 +19,7 @@ whch::whch(QWidget *parent) :
     ui->tableView->resizeRowsToContents();
 }
 
-QDomElement TaskToNode( QDomDocument &d, const whch_task &c )
+QDomElement whch::TaskToNode( QDomDocument &d, const whch_task &c )
 {
    QDomElement cn = d.createElement( "task" );
 
@@ -30,7 +30,8 @@ QDomElement TaskToNode( QDomDocument &d, const whch_task &c )
    cn.setAttribute("name", "name");
    cn.setAttribute("client", c.client);
    QDomElement tn = d.createElement("details");
-   QDomText text = d.createTextNode("?????????????");
+   QString test = ui->lineEdit->text();
+   QDomText text = d.createTextNode(test);
    tn.appendChild(text);
    cn.appendChild(tn);
 

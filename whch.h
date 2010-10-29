@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include "whch_tablemodel.h"
 #include <QFile>
+#include <QDomElement>
+#include <QDomDocument>
+#include "whch_task.h"
 
 namespace Ui {
     class whch;
@@ -23,6 +26,7 @@ private:
 
     int read_in_xml_file();
     int write_in_xml_file();
+    QDomElement TaskToNode( QDomDocument &d, const whch_task &c );
 };
 
 #endif // WHCH_H
