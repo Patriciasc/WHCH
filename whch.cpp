@@ -7,6 +7,7 @@
 #include "whch_task.h"
 #include "whch_tablemodel.h"
 #include <QDate>
+#include <QFileDialog>
 
 whch::whch(QWidget *parent) :
     QMainWindow(parent),
@@ -14,22 +15,6 @@ whch::whch(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    /* Set model with new .xml file*/
-    on_actionNew_file_triggered();
-}
-
-whch::~whch()
-{
-    delete ui;
-}
-
-/* ------------- */
-/* ACTION SLOTS. */
-/* ------------- */
-
-/* Set model with a new .xml file. */
-void whch::on_actionNew_file_triggered()
-{
     /* Set model/view. */
     m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
@@ -44,12 +29,14 @@ void whch::on_actionNew_file_triggered()
                      m_model, SLOT(set_new_task()));
 }
 
-/* Set model with an already existent .xml file. */
-void whch::on_actionOpen_file_triggered()
+whch::~whch()
 {
-    //Choose file.
-    std::cout << "open new file action" << std::endl;
+    delete ui;
 }
+
+/* ------------- */
+/* ACTION SLOTS. */
+/* ------------- */
 
 void whch::on_actionQuit_triggered()
 {

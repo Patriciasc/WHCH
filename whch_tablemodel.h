@@ -11,7 +11,6 @@ class whch_TableModel : public QAbstractTableModel
 
 public:
     whch_TableModel(QObject *parent=0);
-    whch_TableModel(const QString &filename, QObject *parent=0);
 
     /* Basic functions for providing data access. */
     int rowCount(const QModelIndex &parent  = QModelIndex()) const;

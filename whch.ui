@@ -196,9 +196,6 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew_file"/>
-    <addaction name="actionOpen_file"/>
-    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuSettings">

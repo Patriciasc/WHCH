@@ -7,33 +7,33 @@
 #include <QRegExp>
 #include <QTime>
 
+static const QString FILENAME = "whch_log.xml";
+
 whch_TableModel::whch_TableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
-    m_dom_file = QDomDocument("DOMtest");
-    // Create a root element for the DOM.
-    QDomElement root = m_dom_file.createElement("day");
-    root.setAttribute("date",QDate::currentDate().toString("yyyy/MM/dd"));
-    m_dom_file.appendChild(root);
+    /* Create .xml file if it does not exist. */
+    QFile file(FILENAME);
+    if(!file.exists())
+    {
+        m_dom_file = QDomDocument("DOMtest");
+        // Create a root element for the DOM.
+        QDomElement root = m_dom_file.createElement("day");
+        root.setAttribute("date",QDate::currentDate().toString("yyyy/MM/dd"));
+        m_dom_file.appendChild(root);
 
-    // Write result to an .xml file.
-    QString filename("test.xml");
-    QFile file(filename);
-    if(!file.open(QIODevice::WriteOnly) )
-        return;
+        // Write result to an .xml file.
+        if(!file.open(QIODevice::WriteOnly) )
+            return;
 
-    QTextStream ts(&file);
-    ts << m_dom_file.toString();
+        QTextStream ts(&file);
+        ts << m_dom_file.toString();
 
-    file.close();
-    load_xml_file(filename);
-}
+        file.close();
+    }
 
-whch_TableModel::whch_TableModel(const QString &filename,
-                                 QObject *parent)
-    :QAbstractTableModel(parent)
-{
-    load_xml_file(filename);
+    /* Load .xml file in memory. */
+    load_xml_file(FILENAME);
 }
 
 int whch_TableModel::rowCount(const QModelIndex &parent) const
@@ -205,7 +205,7 @@ void whch_TableModel::set_new_task()
     dom_root.appendChild(task);
 
     // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
-    QFile file( "test.xml" );
+    QFile file(FILENAME);
     if( !file.open(QIODevice::ReadWrite) )
         std::cout << "Error writing result to file" << std::endl;
 
@@ -214,7 +214,7 @@ void whch_TableModel::set_new_task()
 
     file.close();
     reset();
-    load_xml_file("test.xml");
+    load_xml_file(FILENAME);
 }
 
 // Load .xml file's content (data) in memory.
