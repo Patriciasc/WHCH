@@ -83,16 +83,12 @@ QVariant whch_TableModel::data(const QModelIndex &index,
             }
             case 2:
                 return element.attribute("duration","jop");
-                break;
             case 3:
                 return element.attribute("client","--");
-                break;
             case 4:
                 return element.attribute("name","car");
-                break;
             case 5:
                 return element.firstChildElement("details").text();
-                break;
             default:
                 return QVariant();
         }
@@ -132,7 +128,7 @@ Qt::ItemFlags whch_TableModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::ItemIsEnabled;
 
-    if ((index.column() == 0) || (index.column() == 1))
+    if ((index.column() == 0) || (index.column() == 1) || (index.column() == 5))
         return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
     else
         return Qt::ItemIsEnabled;
@@ -162,10 +158,19 @@ bool whch_TableModel::setData(const QModelIndex &index,
                     element.setAttribute("start",value.toTime().toString("hh:mm"));
                     emit dataChanged(index, index);
                     changed = true;
+                    break;
                 case 1:
                     element.setAttribute("end",value.toTime().toString("hh:mm"));
                     emit dataChanged(index, index);
                     changed = true;
+                    break;
+                case 5:
+                    element.firstChildElement("details").firstChild().toText().setData(value.toString());
+                    emit dataChanged(index, index);
+                    changed = true;
+                    break;
+                default:
+                    changed = false;
             }
 
             // Update change in .xml file.
@@ -193,8 +198,7 @@ void whch_TableModel::set_new_task()
     task.setAttribute("client", "Openismus");
 
     QDomElement details_tag = m_dom_file.createElement("details");
-    //QString details_text = ui->lineEdit->text();
-    QDomText details_text = m_dom_file.createTextNode("prueba");
+    QDomText details_text = m_dom_file.createTextNode("test");
     details_tag.appendChild(details_text);
     task.appendChild(details_tag);
 
@@ -241,3 +245,8 @@ void whch_TableModel::write_in_xml_file (const QString &filename)
 
         file.close();
  }
+
+QString whch_TableModel::get_details_input (QString input)
+{
+    return input;
+}

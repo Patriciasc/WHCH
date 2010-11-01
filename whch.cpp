@@ -18,6 +18,12 @@ whch::whch(QWidget *parent) :
     ui->tableView->setModel(m_model);
     ui->tableView->resizeRowsToContents();
     QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
+                     ui->lineEdit, SLOT(clear()));
+
+    QObject::connect(ui->lineEdit, SIGNAL(textChanged(QString)),
+                     m_model, SLOT(get_details_input(QString)));
+
+    QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
                      m_model, SLOT(set_new_task()));
 }
 

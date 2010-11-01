@@ -25,14 +25,15 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole);
 
-    void load_xml_file(const QString &filename);
-    void write_in_xml_file (const QString &filename = "test.xml");
-
 public slots:
     void set_new_task();
+    QString get_details_input (QString input);
 
 private:
-    QDomDocument m_dom_file;
+    QDomDocument m_dom_file; 
+
+    void load_xml_file(const QString &filename);
+    void write_in_xml_file (const QString &filename = "test.xml");
 };
 
 #endif // WHCH_TABLEMODEL_H

@@ -128,7 +128,7 @@
         <item>
          <widget class="QLineEdit" name="lineEdit">
           <property name="text">
-           <string>Please, insert here a detailed description of the task.</string>
+           <string/>
           </property>
          </widget>
         </item>
