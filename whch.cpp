@@ -13,6 +13,23 @@ whch::whch(QWidget *parent) :
     ui(new Ui::whch)
 {
     ui->setupUi(this);
+
+    /* Set model with new .xml file*/
+    on_actionNew_file_triggered();
+}
+
+whch::~whch()
+{
+    delete ui;
+}
+
+/* ------------- */
+/* ACTION SLOTS. */
+/* ------------- */
+
+/* Set model with a new .xml file. */
+void whch::on_actionNew_file_triggered()
+{
     /* Set model/view. */
     m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
@@ -27,24 +44,16 @@ whch::whch(QWidget *parent) :
                      m_model, SLOT(set_new_task()));
 }
 
-whch::~whch()
-{
-    delete ui;
-}
-
-void whch::on_actionNew_file_triggered()
-{
-    std::cout << "new file action" << std::endl;
-}
-
+/* Set model with an already existent .xml file. */
 void whch::on_actionOpen_file_triggered()
 {
-    std::cout << "open file action" << std::endl;
+    //Choose file.
+    std::cout << "open new file action" << std::endl;
 }
 
 void whch::on_actionQuit_triggered()
 {
-    std::cout << "quit action" << std::endl;
+    this->close();
 }
 
 void whch::on_actionTasks_triggered()
@@ -54,5 +63,5 @@ void whch::on_actionTasks_triggered()
 
 void whch::on_actionAbout_whch_triggered()
 {
-    std::cout << "about dialog" << std::endl;
+    return QMessageBox::aboutQt(this,"WHCH (Working hours counter for humans");
 }

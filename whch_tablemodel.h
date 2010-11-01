@@ -30,6 +30,7 @@ public slots:
     QString get_details_input (QString input);
 
 private:
+    /* .xml file in memory. */
     QDomDocument m_dom_file; 
 
     void load_xml_file(const QString &filename);
