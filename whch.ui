@@ -198,7 +198,6 @@
     </property>
     <addaction name="actionNew_file"/>
     <addaction name="actionOpen_file"/>
-    <addaction name="actionSave_file"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
