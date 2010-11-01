@@ -31,3 +31,28 @@ whch::~whch()
 {
     delete ui;
 }
+
+void whch::on_actionNew_file_triggered()
+{
+    std::cout << "new file action" << std::endl;
+}
+
+void whch::on_actionOpen_file_triggered()
+{
+    std::cout << "open file action" << std::endl;
+}
+
+void whch::on_actionQuit_triggered()
+{
+    std::cout << "quit action" << std::endl;
+}
+
+void whch::on_actionTasks_triggered()
+{
+    std::cout << "new task" << std::endl;
+}
+
+void whch::on_actionAbout_whch_triggered()
+{
+    std::cout << "about dialog" << std::endl;
+}

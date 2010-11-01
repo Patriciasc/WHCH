@@ -23,6 +23,13 @@ public:
 private:
     Ui::whch *ui;
     whch_TableModel *m_model;
+
+private slots:
+    void on_actionAbout_whch_triggered();
+    void on_actionTasks_triggered();
+    void on_actionQuit_triggered();
+    void on_actionOpen_file_triggered();
+    void on_actionNew_file_triggered();
 };
 
 #endif // WHCH_H
