@@ -8,6 +8,7 @@
 #include "whch_tablemodel.h"
 #include <QDate>
 #include <QFileDialog>
+#include <QLineEdit>
 
 whch::whch(QWidget *parent) :
     QMainWindow(parent),
@@ -19,19 +20,28 @@ whch::whch(QWidget *parent) :
     m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
     ui->tableView->resizeRowsToContents();
+
+    // When return is pressed on the lineEdit widget:
+    //Get current tasks paramenters and display new task.
+    QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
+                     this, SLOT(set_current_task_parameters()));
+    // Clean displayed input.
     QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
                      ui->lineEdit, SLOT(clear()));
-
-    QObject::connect(ui->lineEdit, SIGNAL(textChanged(QString)),
-                     m_model, SLOT(get_details_input(QString)));
-
-    QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
-                     m_model, SLOT(set_new_task()));
 }
 
 whch::~whch()
 {
     delete ui;
+}
+
+void whch::set_current_task_parameters()
+{
+    whch_task current_task;
+    current_task.details = ui->lineEdit->text();
+    current_task.name = ui->comboBox->currentText();
+    //Display new task.
+    m_model->set_new_task(current_task);
 }
 
 /* ------------- */

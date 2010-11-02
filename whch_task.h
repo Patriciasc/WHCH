@@ -10,10 +10,6 @@ class whch_task
 public:
     whch_task();
 
-    QTime start;
-    QTime end;
-    QTime duration;
-    QString client;
     QString name;
     QString details;
 };

@@ -4,6 +4,7 @@
 #include <QAbstractTableModel>
 #include <QList>
 #include <QDomDocument>
+#include "whch_task.h"
 
 class whch_TableModel : public QAbstractTableModel
 {
@@ -25,8 +26,7 @@ public:
                  int role = Qt::EditRole);
 
 public slots:
-    void set_new_task();
-    QString get_details_input (QString input);
+    void set_new_task(whch_task current_task);
 
 private:
     /* .xml file in memory. */

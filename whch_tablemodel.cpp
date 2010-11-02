@@ -1,4 +1,5 @@
 #include "whch_tablemodel.h"
+#include "whch_task.h"
 #include <QDomDocument>
 #include <QFile>
 #include <iostream>
@@ -183,7 +184,7 @@ bool whch_TableModel::setData(const QModelIndex &index,
     return changed;
 }
 
-void whch_TableModel::set_new_task()
+void whch_TableModel::set_new_task(whch_task current_task)
 {
     // Create a root element for the DOM.
     QDomElement dom_root = m_dom_file.firstChildElement("day");
@@ -194,11 +195,11 @@ void whch_TableModel::set_new_task()
     task.setAttribute("end", QTime::currentTime().toString("hh:mm"));
     // I will need to make use of restart()/start()/elapse here.
     task.setAttribute("duration", "duration");
-    task.setAttribute("name", "name");
+    task.setAttribute("name", current_task.name);
     task.setAttribute("client", "Openismus");
 
     QDomElement details_tag = m_dom_file.createElement("details");
-    QDomText details_text = m_dom_file.createTextNode("test");
+    QDomText details_text = m_dom_file.createTextNode(current_task.details);
     details_tag.appendChild(details_text);
     task.appendChild(details_tag);
 
@@ -245,8 +246,3 @@ void whch_TableModel::write_in_xml_file (const QString &filename)
 
         file.close();
  }
-
-QString whch_TableModel::get_details_input (QString input)
-{
-    return input;
-}

@@ -13,12 +13,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
            whch.cpp \
            whch_tablemodel.cpp \
-    whch_task.cpp
+           whch_task.cpp
 
 HEADERS += whch.h \
            whch_tablemodel.h \
-    whch_task.h
+           whch_task.h
 
-FORMS   += whch.ui
-
-OTHER_FILES +=
+FORMS   += whch.ui \
+           new_task_dialog.ui
