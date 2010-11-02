@@ -13,6 +13,12 @@ static const QString FILENAME = "whch_log.xml";
 whch_TableModel::whch_TableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
+    m_task = m_dom_file.createElement( "task" );
+
+    m_task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
+
+    m_timer.start();
+
     /* Create .xml file if it does not exist. */
     QFile file(FILENAME);
     if(!file.exists())
@@ -83,11 +89,11 @@ QVariant whch_TableModel::data(const QModelIndex &index,
                 break;
             }
             case 2:
-                return element.attribute("duration","jop");
+                return element.attribute("duration","--");
             case 3:
                 return element.attribute("client","--");
             case 4:
-                return element.attribute("name","car");
+                return element.attribute("name","--");
             case 5:
                 return element.firstChildElement("details").text();
             default:
@@ -156,12 +162,22 @@ bool whch_TableModel::setData(const QModelIndex &index,
             switch (index.column())
             {
                 case 0:
+                {
                     element.setAttribute("start",value.toTime().toString("hh:mm"));
+                    //XXX Check duration: not working.
+                    /*QVariant end_time = element.attribute("end");
+                    QVariant start_time = element.attribute("start");
+                    int algo = start_time.toTime().msec();
+                    int algo2 = end_time.toTime().msec();
+                    element.setAttribute("duration",QString("%1").arg(algo2));*/
+
                     emit dataChanged(index, index);
                     changed = true;
                     break;
+                }
                 case 1:
                     element.setAttribute("end",value.toTime().toString("hh:mm"));
+                    //XXX Check duration.
                     emit dataChanged(index, index);
                     changed = true;
                     break;
@@ -177,7 +193,7 @@ bool whch_TableModel::setData(const QModelIndex &index,
             // Update change in .xml file.
             if (changed)
             {
-                write_in_xml_file();
+                write_in_xml_file(FILENAME);
             }
 
     }
@@ -190,20 +206,26 @@ void whch_TableModel::set_new_task(whch_task current_task)
     QDomElement dom_root = m_dom_file.firstChildElement("day");
 
     // Set data. (FUNCION SET TASK)
-    QDomElement task = m_dom_file.createElement( "task" );
-    task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
-    task.setAttribute("end", QTime::currentTime().toString("hh:mm"));
+    //m_task = m_dom_file.createElement( "task" );
+
+    //m_task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
+    m_task.setAttribute("end", QTime::currentTime().toString("hh:mm"));
+
     // I will need to make use of restart()/start()/elapse here.
-    task.setAttribute("duration", "duration");
-    task.setAttribute("name", current_task.name);
-    task.setAttribute("client", "Openismus");
+    int ms = m_timer.elapsed();
+    int s = ms / 1000; ms %= 1000;
+    int m = s / 60; s %= 60;
+    int h = m / 60; m %= 60;
+    m_task.setAttribute("duration",QString("%1:%2:%3").arg(h).arg(m).arg(s));
+    m_task.setAttribute("name", current_task.name);
+    m_task.setAttribute("client", "Openismus");
 
     QDomElement details_tag = m_dom_file.createElement("details");
     QDomText details_text = m_dom_file.createTextNode(current_task.details);
     details_tag.appendChild(details_text);
-    task.appendChild(details_tag);
+    m_task.appendChild(details_tag);
 
-    dom_root.appendChild(task);
+    dom_root.appendChild(m_task);
 
     // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
     QFile file(FILENAME);
@@ -216,6 +238,11 @@ void whch_TableModel::set_new_task(whch_task current_task)
     file.close();
     reset();
     load_xml_file(FILENAME);
+
+    // Set start time for the next task.
+    m_task = m_dom_file.createElement( "task" );
+    m_task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
+    m_timer.start();
 }
 
 // Load .xml file's content (data) in memory.

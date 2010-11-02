@@ -31,9 +31,11 @@ public slots:
 private:
     /* .xml file in memory. */
     QDomDocument m_dom_file; 
+    QDomElement m_task;
+    QTime m_timer;
 
     void load_xml_file(const QString &filename);
-    void write_in_xml_file (const QString &filename = "test.xml");
+    void write_in_xml_file (const QString &filename);
 };
 
 #endif // WHCH_TABLEMODEL_H

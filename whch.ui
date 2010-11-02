@@ -243,6 +243,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>comboBox</tabstop>
+  <tabstop>lineEdit</tabstop>
   <tabstop>tableView</tabstop>
  </tabstops>
  <resources/>
