@@ -75,12 +75,12 @@ QVariant whch_TableModel::data(const QModelIndex &index,
         {
             case 0:
             {
-                QString time_string = element.attribute("start", "");
+                QString time_string = element.attribute("start");
                 return QDateTime::fromString(time_string, "yyyy-MM-ddThh:mm:sstzd");
             }
             case 1:
             {
-                QString time_string = element.attribute("end", "");
+                QString time_string = element.attribute("end");
                 return QDateTime::fromString(time_string, "yyyy-MM-ddThh:mm:sstzd");
             }
             case 2:
@@ -95,9 +95,9 @@ QVariant whch_TableModel::data(const QModelIndex &index,
                 return element.attribute("duration", QString("%1h%2m%3s").arg(h).arg(m).arg(s));
             }
             case 3:
-                return element.attribute("client", "--");
+                return element.attribute("client");
             case 4:
-                return element.attribute("name", "--");
+                return element.attribute("name");
             case 5:
                 return element.firstChildElement("details").text();
             default:
