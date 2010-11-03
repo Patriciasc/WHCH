@@ -6,7 +6,8 @@
 #include <QTextStream>
 #include <QRegExpValidator>
 #include <QRegExp>
-#include <QTime>
+#include <QDateTime>
+#include <QDebug>
 
 static const QString FILENAME = "whch_log.xml";
 
@@ -15,8 +16,7 @@ whch_TableModel::whch_TableModel(QObject *parent)
 {
     m_task = m_dom_file.createElement( "task" );
 
-    m_task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
-
+    m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
     m_timer.start();
 
     /* Create .xml file if it does not exist. */
@@ -26,11 +26,11 @@ whch_TableModel::whch_TableModel(QObject *parent)
         m_dom_file = QDomDocument("DOMtest");
         // Create a root element for the DOM.
         QDomElement root = m_dom_file.createElement("day");
-        root.setAttribute("date",QDate::currentDate().toString("yyyy/MM/dd"));
+        root.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
         m_dom_file.appendChild(root);
 
         // Write result to an .xml file.
-        if(!file.open(QIODevice::WriteOnly) )
+        if(!file.open(QIODevice::WriteOnly))
             return;
 
         QTextStream ts(&file);
@@ -76,24 +76,29 @@ QVariant whch_TableModel::data(const QModelIndex &index,
         {
             case 0:
             {
-                QString time_string = element.attribute("start","");
-                QTime time = QTime::fromString(time_string, "hh:mm");
-                return time;
-                break;
+                QString time_string = element.attribute("start", "");
+                return QDateTime::fromString(time_string, "yyyy-MM-ddThh:mm:sstzd");
             }
             case 1:
             {
-                QString time_string = element.attribute("end","");
-                QTime time = QTime::fromString(time_string, "hh:mm");
-                return time;
-                break;
+                QString time_string = element.attribute("end", "");
+                return QDateTime::fromString(time_string, "yyyy-MM-ddThh:mm:sstzd");
             }
             case 2:
-                return element.attribute("duration","--");
+            {
+                QVariant start = element.attribute("start");
+                QVariant end = element.attribute("end");
+                int s = start.toDateTime().secsTo(end.toDateTime());
+                int m = s / 60;
+                s %= 60;
+                int h = m / 60;
+                m %= 60;
+                return element.attribute("duration", QString("%1h%2m%3s").arg(h).arg(m).arg(s));
+            }
             case 3:
-                return element.attribute("client","--");
+                return element.attribute("client", "--");
             case 4:
-                return element.attribute("name","--");
+                return element.attribute("name", "--");
             case 5:
                 return element.firstChildElement("details").text();
             default:
@@ -153,7 +158,7 @@ bool whch_TableModel::setData(const QModelIndex &index,
             // Get current index element from memory.
             QDomElement dom_root = m_dom_file.firstChildElement("day");
             QDomElement element = dom_root.firstChildElement("task");
-            for(int i=1; i<=index.row(); i++ )
+            for(int i=1; i<=index.row(); i++)
             {
                 element = element.nextSiblingElement("task");
             }
@@ -163,21 +168,13 @@ bool whch_TableModel::setData(const QModelIndex &index,
             {
                 case 0:
                 {
-                    element.setAttribute("start",value.toTime().toString("hh:mm"));
-                    //XXX Check duration: not working.
-                    /*QVariant end_time = element.attribute("end");
-                    QVariant start_time = element.attribute("start");
-                    int algo = start_time.toTime().msec();
-                    int algo2 = end_time.toTime().msec();
-                    element.setAttribute("duration",QString("%1").arg(algo2));*/
-
+                    element.setAttribute("start", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
                     emit dataChanged(index, index);
                     changed = true;
                     break;
                 }
                 case 1:
-                    element.setAttribute("end",value.toTime().toString("hh:mm"));
-                    //XXX Check duration.
+                    element.setAttribute("end", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
                     emit dataChanged(index, index);
                     changed = true;
                     break;
@@ -206,17 +203,7 @@ void whch_TableModel::set_new_task(whch_task current_task)
     QDomElement dom_root = m_dom_file.firstChildElement("day");
 
     // Set data. (FUNCION SET TASK)
-    //m_task = m_dom_file.createElement( "task" );
-
-    //m_task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
-    m_task.setAttribute("end", QTime::currentTime().toString("hh:mm"));
-
-    // I will need to make use of restart()/start()/elapse here.
-    int ms = m_timer.elapsed();
-    int s = ms / 1000; ms %= 1000;
-    int m = s / 60; s %= 60;
-    int h = m / 60; m %= 60;
-    m_task.setAttribute("duration",QString("%1:%2:%3").arg(h).arg(m).arg(s));
+    m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
     m_task.setAttribute("name", current_task.name);
     m_task.setAttribute("client", "Openismus");
 
@@ -232,7 +219,7 @@ void whch_TableModel::set_new_task(whch_task current_task)
     if( !file.open(QIODevice::ReadWrite) )
         std::cout << "Error writing result to file" << std::endl;
 
-    QTextStream ts( &file );
+    QTextStream ts(&file);
     ts << m_dom_file.toString();
 
     file.close();
@@ -241,7 +228,7 @@ void whch_TableModel::set_new_task(whch_task current_task)
 
     // Set start time for the next task.
     m_task = m_dom_file.createElement( "task" );
-    m_task.setAttribute("start", QTime::currentTime().toString("hh:mm"));
+    m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
     m_timer.start();
 }
 

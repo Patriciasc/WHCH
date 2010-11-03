@@ -16,10 +16,15 @@ whch::whch(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    /* Set model/view. */
+    // Set model/view.
     m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
     ui->tableView->resizeRowsToContents();
+
+    // Resize start and end columns.
+    ui->tableView->resizeColumnToContents(0);
+    ui->tableView->resizeColumnToContents(1);
+
 
     // When return is pressed on the lineEdit widget:
     //Get current tasks paramenters and display new task.
@@ -40,8 +45,13 @@ void whch::set_current_task_parameters()
     whch_task current_task;
     current_task.details = ui->lineEdit->text();
     current_task.name = ui->comboBox->currentText();
+
     //Display new task.
     m_model->set_new_task(current_task);
+
+    //Resize start and end columns
+    ui->tableView->resizeColumnToContents(0);
+    ui->tableView->resizeColumnToContents(1);
 }
 
 /* ------------- */
