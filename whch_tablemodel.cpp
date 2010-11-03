@@ -14,8 +14,8 @@ static const QString FILENAME = "whch_log.xml";
 whch_TableModel::whch_TableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
-    m_task = m_dom_file.createElement( "task" );
-
+    // Set start time and timer for first task.
+    m_task = m_dom_file.createElement("task");
     m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
     m_timer.start();
 
@@ -67,12 +67,11 @@ QVariant whch_TableModel::data(const QModelIndex &index,
         QDomElement element = dom_root.firstChildElement("task");
 
         for(int i=1; i<=index.row(); i++ )
-        {
             element = element.nextSiblingElement("task");
-        }
+
 
         // Display index value.
-        switch (index.column())
+        switch(index.column())
         {
             case 0:
             {
@@ -112,9 +111,9 @@ QVariant whch_TableModel::headerData(int section,
                                      Qt::Orientation orientation,
                                      int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        switch (section)
+        switch(section)
         {
             case 0:
                 return tr("Start");
@@ -137,10 +136,10 @@ QVariant whch_TableModel::headerData(int section,
 
 Qt::ItemFlags whch_TableModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if(!index.isValid())
         return Qt::ItemIsEnabled;
 
-    if ((index.column() == 0) || (index.column() == 1) || (index.column() == 5))
+    if((index.column() == 0) || (index.column() == 1) || (index.column() == 5))
         return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
     else
         return Qt::ItemIsEnabled;
@@ -153,18 +152,17 @@ bool whch_TableModel::setData(const QModelIndex &index,
 {
     bool changed = false;
 
-    if (index.isValid() && role == Qt::EditRole)
+    if(index.isValid() && role == Qt::EditRole)
     {
             // Get current index element from memory.
             QDomElement dom_root = m_dom_file.firstChildElement("day");
             QDomElement element = dom_root.firstChildElement("task");
+
             for(int i=1; i<=index.row(); i++)
-            {
                 element = element.nextSiblingElement("task");
-            }
 
             // Replace new value in memory.
-            switch (index.column())
+            switch(index.column())
             {
                 case 0:
                 {
@@ -188,10 +186,8 @@ bool whch_TableModel::setData(const QModelIndex &index,
             }
 
             // Update change in .xml file.
-            if (changed)
-            {
+            if(changed)
                 write_in_xml_file(FILENAME);
-            }
 
     }
     return changed;
@@ -216,7 +212,7 @@ void whch_TableModel::set_new_task(whch_task current_task)
 
     // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
     QFile file(FILENAME);
-    if( !file.open(QIODevice::ReadWrite) )
+    if(!file.open(QIODevice::ReadWrite))
         std::cout << "Error writing result to file" << std::endl;
 
     QTextStream ts(&file);
@@ -226,8 +222,8 @@ void whch_TableModel::set_new_task(whch_task current_task)
     reset();
     load_xml_file(FILENAME);
 
-    // Set start time for the next task.
-    m_task = m_dom_file.createElement( "task" );
+    // Set start time and restart timer for the next task.
+    m_task = m_dom_file.createElement("task");
     m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
     m_timer.start();
 }
@@ -236,27 +232,29 @@ void whch_TableModel::set_new_task(whch_task current_task)
 void whch_TableModel::load_xml_file(const QString &filename)
 {
     QFile file(filename);
-    if( !file.open(QIODevice::ReadOnly) )
-    {
+
+    if(!file.open(QIODevice::ReadOnly))
         std::cout << "Could not open file" << std::endl;
-    }
-    if( !m_dom_file.setContent( &file ) )
+
+    if(!m_dom_file.setContent(&file))
     {
         std::cout << "Problem setting content" << std::endl;
         file.close();
     }
+
     file.close();
 }
 
 // Update .xml file's content with the data in memory.
 void whch_TableModel::write_in_xml_file (const QString &filename)
 {
-        QFile file(filename);
-        if( !file.open(QIODevice::WriteOnly))
-            std::cout << "Problem updating .xml file's data from memory" << std::endl;
+    QFile file(filename);
 
-        QTextStream ts(&file);
-        ts << m_dom_file.toString();
+    if( !file.open(QIODevice::WriteOnly))
+        std::cout << "Problem updating .xml file's data from memory" << std::endl;
 
-        file.close();
+    QTextStream ts(&file);
+    ts << m_dom_file.toString();
+
+    file.close();
  }

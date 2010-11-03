@@ -14,20 +14,21 @@ whch::whch(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::whch)
 {
+    // Set GUI.
     ui->setupUi(this);
 
     // Set model/view.
     m_model = new whch_TableModel();
     ui->tableView->setModel(m_model);
-    ui->tableView->resizeRowsToContents();
 
-    // Resize start and end columns.
+    // Resize start/end columns and rows.
+    ui->tableView->resizeRowsToContents();
     ui->tableView->resizeColumnToContents(0);
     ui->tableView->resizeColumnToContents(1);
 
 
     // When return is pressed on the lineEdit widget:
-    //Get current tasks paramenters and display new task.
+    // Get current tasks paramenters and display new task.
     QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
                      this, SLOT(set_current_task_parameters()));
     // Clean displayed input.
