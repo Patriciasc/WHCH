@@ -1,5 +1,6 @@
 #include "whch.h"
 #include "ui_whch.h"
+#include "ui_new_task_dialog.h"
 #include <QDomDocument>
 #include <iostream>
 #include <QTextStream>
@@ -12,7 +13,8 @@
 
 whch::whch(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::whch)
+    ui(new Ui::whch),
+    ui_dialog(new Ui::Dialog)
 {
     // Set GUI.
     ui->setupUi(this);
@@ -67,6 +69,10 @@ void whch::on_actionQuit_triggered()
 void whch::on_actionTasks_triggered()
 {
     std::cout << "new task" << std::endl;
+    QDialog *task_dialog = new QDialog;
+    //FIXME: Need to make the dialog child of the window.
+    ui_dialog->setupUi(task_dialog);
+    task_dialog->show();
 }
 
 void whch::on_actionAbout_whch_triggered()

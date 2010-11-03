@@ -7,9 +7,11 @@
 #include <QDomElement>
 #include <QDomDocument>
 #include "whch_task.h"
+#include <QDialog>
 
 namespace Ui {
     class whch;
+    class Dialog;
 }
 
 class whch : public QMainWindow
@@ -22,6 +24,7 @@ public:
 
 private:
     Ui::whch *ui;
+    Ui::Dialog *ui_dialog;
     whch_TableModel *m_model;
 
 private slots:
