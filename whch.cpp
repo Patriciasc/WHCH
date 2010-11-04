@@ -41,6 +41,7 @@ whch::whch(QWidget *parent) :
 whch::~whch()
 {
     delete m_ui;
+    delete m_ui_dialog;
 }
 
 void whch::set_current_task_parameters()
