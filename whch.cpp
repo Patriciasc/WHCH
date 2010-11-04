@@ -13,48 +13,48 @@
 
 whch::whch(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::whch),
-    ui_dialog(new Ui::Dialog)
+    m_ui(new Ui::whch),
+    m_ui_dialog(new Ui::Dialog)
 {
     // Set GUI.
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     // Set model/view.
     m_model = new whch_TableModel();
-    ui->tableView->setModel(m_model);
+    m_ui->tableView->setModel(m_model);
 
     // Resize start/end columns and rows.
-    ui->tableView->resizeRowsToContents();
-    ui->tableView->resizeColumnToContents(0);
-    ui->tableView->resizeColumnToContents(1);
+    m_ui->tableView->resizeRowsToContents();
+    m_ui->tableView->resizeColumnToContents(0);
+    m_ui->tableView->resizeColumnToContents(1);
 
 
     // When return is pressed on the lineEdit widget:
     // Get current tasks paramenters and display new task.
-    QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
+    QObject::connect(m_ui->lineEdit, SIGNAL(returnPressed()),
                      this, SLOT(set_current_task_parameters()));
     // Clean displayed input.
-    QObject::connect(ui->lineEdit, SIGNAL(returnPressed()),
-                     ui->lineEdit, SLOT(clear()));
+    QObject::connect(m_ui->lineEdit, SIGNAL(returnPressed()),
+                     m_ui->lineEdit, SLOT(clear()));
 }
 
 whch::~whch()
 {
-    delete ui;
+    delete m_ui;
 }
 
 void whch::set_current_task_parameters()
 {
     whch_task current_task;
-    current_task.details = ui->lineEdit->text();
-    current_task.name = ui->comboBox->currentText();
+    current_task.details = m_ui->lineEdit->text();
+    current_task.name = m_ui->comboBox->currentText();
 
     //Display new task.
     m_model->set_new_task(current_task);
 
     //Resize start and end columns
-    ui->tableView->resizeColumnToContents(0);
-    ui->tableView->resizeColumnToContents(1);
+    m_ui->tableView->resizeColumnToContents(0);
+    m_ui->tableView->resizeColumnToContents(1);
 }
 
 /* ------------- */
@@ -71,7 +71,7 @@ void whch::on_actionTasks_triggered()
     std::cout << "new task" << std::endl;
     QDialog *task_dialog = new QDialog;
     //FIXME: Need to make the dialog child of the window.
-    ui_dialog->setupUi(task_dialog);
+    m_ui_dialog->setupUi(task_dialog);
     task_dialog->show();
 }
 

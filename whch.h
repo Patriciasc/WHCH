@@ -23,8 +23,8 @@ public:
     ~whch();
 
 private:
-    Ui::whch *ui;
-    Ui::Dialog *ui_dialog;
+    Ui::whch *m_ui;
+    Ui::Dialog *m_ui_dialog;
     whch_TableModel *m_model;
 
 private slots:
