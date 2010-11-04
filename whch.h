@@ -29,6 +29,7 @@ private:
 
 private slots:
     void set_current_task_parameters();
+    void on_line_edit_return();
 
     void on_actionAbout_whch_triggered();
     void on_actionTasks_triggered();

@@ -13,8 +13,7 @@
 
 whch::whch(QWidget *parent) :
     QMainWindow(parent),
-    m_ui(new Ui::whch),
-    m_ui_dialog(new Ui::Dialog)
+    m_ui(new Ui::whch)
 {
     // Set GUI.
     m_ui->setupUi(this);
@@ -35,7 +34,7 @@ whch::whch(QWidget *parent) :
                      this, SLOT(set_current_task_parameters()));
     // Clean displayed input.
     QObject::connect(m_ui->lineEdit, SIGNAL(returnPressed()),
-                     m_ui->lineEdit, SLOT(clear()));
+                     this, SLOT(on_line_edit_return()));
 }
 
 whch::~whch()
@@ -43,6 +42,10 @@ whch::~whch()
     delete m_ui;
     delete m_ui_dialog;
 }
+
+/* ------------- */
+/* --- SLOTS.--- */
+/* ------------- */
 
 void whch::set_current_task_parameters()
 {
@@ -58,6 +61,11 @@ void whch::set_current_task_parameters()
     m_ui->tableView->resizeColumnToContents(1);
 }
 
+void whch::on_line_edit_return()
+{
+    m_ui->lineEdit->clear();
+}
+
 /* ------------- */
 /* ACTION SLOTS. */
 /* ------------- */
@@ -69,6 +77,7 @@ void whch::on_actionQuit_triggered()
 
 void whch::on_actionTasks_triggered()
 {
+    m_ui_dialog = new Ui::Dialog;
     std::cout << "new task" << std::endl;
     QDialog *task_dialog = new QDialog;
     //FIXME: Need to make the dialog child of the window.
