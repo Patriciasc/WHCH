@@ -40,12 +40,11 @@ whch::whch(QWidget *parent) :
 whch::~whch()
 {
     delete m_ui;
-    delete m_ui_dialog;
 }
 
-/* ------------- */
-/* --- SLOTS.--- */
-/* ------------- */
+/* ----- */
+/* SLOTS */
+/* ----- */
 
 void whch::set_current_task_parameters()
 {
@@ -66,6 +65,20 @@ void whch::on_line_edit_return()
     m_ui->lineEdit->clear();
 }
 
+void whch::show_client_tasks_in_table(const QString &client)
+{
+    QStringList clients_tasks = m_model->get_client_tasks(client);
+
+    // Set number of rows.
+    m_ui_dialog->tableWidget->setRowCount(clients_tasks.size());
+
+    for(int i=0; i< clients_tasks.size(); ++i)
+    {
+        QTableWidgetItem *newItem = new QTableWidgetItem(clients_tasks.at(i));
+        m_ui_dialog->tableWidget->setItem(i, 0, newItem);
+    }
+}
+
 /* ------------- */
 /* ACTION SLOTS. */
 /* ------------- */
@@ -78,10 +91,18 @@ void whch::on_actionQuit_triggered()
 void whch::on_actionTasks_triggered()
 {
     m_ui_dialog = new Ui::Dialog;
-    std::cout << "new task" << std::endl;
     QDialog *task_dialog = new QDialog;
-    //FIXME: Need to make the dialog child of the window.
+
     m_ui_dialog->setupUi(task_dialog);
+
+    // Load list of clients.
+    QStringList clients = m_model->get_clients_list();
+    m_ui_dialog->comboBox->addItems(clients);
+
+    // Load list of related tasks to the client.
+    QObject::connect(m_ui_dialog->comboBox,SIGNAL(activated(QString)),
+                     this, SLOT(show_client_tasks_in_table(QString)));
+
     task_dialog->show();
 }
 

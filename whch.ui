@@ -195,12 +195,6 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionQuit"/>
-   </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>Settings</string>
@@ -212,6 +206,12 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout_whch"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>

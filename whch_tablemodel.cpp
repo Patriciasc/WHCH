@@ -193,6 +193,57 @@ bool whch_TableModel::setData(const QModelIndex &index,
     return changed;
 }
 
+/* List of current clients. */
+QStringList whch_TableModel::get_clients_list()
+{
+    QDomElement dom_root = m_dom_file.firstChildElement("day");
+    QStringList clients;
+
+    if(!dom_root.isNull())
+    {
+        QDomElement element = dom_root.firstChildElement("task");
+        clients << "Add new client";
+        for (; !element.isNull(); element = element.nextSiblingElement("task"))
+        {
+            QString client_name = element.attribute("client");
+            /* Not repeat clients in the list. */
+            if (clients.filter(client_name).empty())
+                clients << client_name;
+        }
+    }
+
+    return clients;
+}
+
+/* ----- */
+/* SLOTS */
+/* ----- */
+
+/* List of tasks related with the given client. */
+QStringList whch_TableModel::get_client_tasks(const QString &client)
+{
+    QDomElement dom_root = m_dom_file.firstChildElement("day");
+    QStringList client_tasks;
+
+    if(!dom_root.isNull())
+    {
+        QDomElement element = dom_root.firstChildElement("task");
+        for(; !element.isNull(); element = element.nextSiblingElement("task"))
+        {
+            if(element.attribute("client").compare(client) == 0)
+            {
+                QString task_name = element.attribute("name");
+                /* Not repeat tasks in the list. */
+                if (client_tasks.filter(task_name).empty())
+                    client_tasks << task_name;
+            }
+        }
+    }
+
+    return client_tasks;
+}
+
+/* FIXME: Refactorize. */
 void whch_TableModel::set_new_task(whch_task current_task)
 {
     // Create a root element for the DOM.
@@ -227,6 +278,10 @@ void whch_TableModel::set_new_task(whch_task current_task)
     m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
     m_timer.start();
 }
+
+/* ------------------- */
+/* AUXILIARY FUNCTIONS */
+/* ------------------- */
 
 // Load .xml file's content (data) in memory.
 void whch_TableModel::load_xml_file(const QString &filename)

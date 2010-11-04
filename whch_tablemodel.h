@@ -4,6 +4,7 @@
 #include <QAbstractTableModel>
 #include <QList>
 #include <QDomDocument>
+#include <QStringList>
 #include "whch_task.h"
 
 class whch_TableModel : public QAbstractTableModel
@@ -25,8 +26,11 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole);
 
+    QStringList get_clients_list();
+
 public slots:
     void set_new_task(whch_task current_task);
+    QStringList get_client_tasks(const QString &client);
 
 private:
     /* .xml file in memory. */
