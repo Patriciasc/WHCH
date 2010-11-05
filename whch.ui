@@ -217,16 +217,6 @@
    <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
-  <action name="actionNew_file">
-   <property name="text">
-    <string>New file</string>
-   </property>
-  </action>
-  <action name="actionOpen_file">
-   <property name="text">
-    <string>Open file</string>
-   </property>
-  </action>
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>

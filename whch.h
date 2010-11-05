@@ -2,11 +2,10 @@
 #define WHCH_H
 
 #include <QMainWindow>
-#include "whch_tablemodel.h"
+#include "whchTableModel.h"
 #include <QFile>
 #include <QDomElement>
 #include <QDomDocument>
-#include "whch_task.h"
 #include <QDialog>
 
 namespace Ui {
@@ -14,31 +13,29 @@ namespace Ui {
     class Dialog;
 }
 
-class whch : public QMainWindow
+class Whch : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit whch(QWidget *parent = 0);
-    ~whch();
+    explicit Whch(QWidget *parent = 0);
+    ~Whch();
 
 private:
     Ui::whch *m_ui;
-    Ui::Dialog *m_ui_dialog;
-    whch_TableModel *m_model;
+    Ui::Dialog *m_uiDialog;
+    WhchTableModel *m_model;
 
 private slots:
     /* Slots. */
-    void set_current_task_parameters();
-    void on_line_edit_return();
-    void show_client_tasks_in_table(const QString &client);
+    void setCurrentTaskParameters();
+    void onLineEditReturn();
+    void showClientTasksInTable(const QString &client);
 
     /* Action slots. */
     void on_actionAbout_whch_triggered();
     void on_actionTasks_triggered();
     void on_actionQuit_triggered();
-    void on_actionOpen_file_triggered();
-    void on_actionNew_file_triggered();
 };
 
 #endif // WHCH_H

@@ -12,12 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
            whch.cpp \
-           whch_tablemodel.cpp \
-           whch_task.cpp
+           whchTableModel.cpp \
+           whchTask.cpp
 
 HEADERS += whch.h \
-           whch_tablemodel.h \
-           whch_task.h
+           whchTableModel.h \
+           whchTask.h
 
 FORMS   += whch.ui \
-           new_task_dialog.ui
+           dialogTasksClients.ui
