@@ -31,6 +31,7 @@ private slots:
     void setCurrentTaskParameters();
     void onLineEditReturn();
     void showClientTasksInTable(const QString &client);
+    void test();
 
     /* Action slots. */
     void on_actionAbout_whch_triggered();

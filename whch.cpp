@@ -10,11 +10,11 @@
 #include <QDate>
 #include <QFileDialog>
 #include <QLineEdit>
+#include <QDebug>
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
-    m_ui(new Ui::whch),
-    m_uiDialog(new Ui::Dialog)
+    m_ui(new Ui::whch)
 {
     // Set GUI.
     m_ui->setupUi(this);
@@ -50,6 +50,7 @@ Whch::~Whch()
 /* SLOTS */
 /* ----- */
 
+// Set a new task with current input parameters.
 void Whch::setCurrentTaskParameters()
 {
     WhchTask currentTask;
@@ -69,13 +70,24 @@ void Whch::onLineEditReturn()
     m_ui->lineEdit->clear();
 }
 
+// Show selected client's related tasks.
 void Whch::showClientTasksInTable(const QString &client)
 {
+    if (client.compare("Add new client") == 0)
+    {
+        m_uiDialog->comboBox->setEditable(true);
+        m_uiDialog->comboBox->clearEditText();
+        QLineEdit *lineEdit = m_uiDialog->comboBox->lineEdit();
+        QObject::connect(lineEdit, SIGNAL(returnPressed()),
+                         this, SLOT(test()));
+    }
+
     QStringList clientsTasks = m_model->getClientTasks(client);
 
     // Set number of rows.
     m_uiDialog->tableWidget->setRowCount(clientsTasks.size());
 
+    // Show list of tasks.
     for (int i=0; i< clientsTasks.size(); ++i)
     {
         QTableWidgetItem *newItem = new QTableWidgetItem(clientsTasks.at(i));
@@ -94,9 +106,12 @@ void Whch::on_actionQuit_triggered()
 
 void Whch::on_actionTasks_triggered()
 {
+    m_uiDialog= new Ui::Dialog;
     QDialog *taskDialog = new QDialog;
-
     m_uiDialog->setupUi(taskDialog);
+
+    // Insert always at the top.
+    m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
     // Load list of clients.
     QStringList clients = m_model->getAttributesList("client");
@@ -107,10 +122,17 @@ void Whch::on_actionTasks_triggered()
     this->showClientTasksInTable(m_uiDialog->comboBox->currentText());
 
     // Load list of related tasks to the selected client.
-    QObject::connect(m_uiDialog->comboBox,SIGNAL(activated(QString)),
+    QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
                      this, SLOT(showClientTasksInTable(QString)));
 
     taskDialog->show();
+}
+
+void Whch::test()
+{
+    QString input = m_uiDialog->comboBox->lineEdit()->text();
+    m_uiDialog->comboBox->lineEdit()->clear();
+    m_uiDialog->comboBox->setEditable(false);
 }
 
 void Whch::on_actionAbout_whch_triggered()
