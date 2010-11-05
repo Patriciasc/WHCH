@@ -196,25 +196,24 @@ bool WhchTableModel::setData(const QModelIndex &index,
     return changed;
 }
 
-/* List of current clients. */
-QStringList WhchTableModel::getClientsList()
+/* List of attributes "attribute". */
+QStringList WhchTableModel::getAttributesList(const QString &attribute)
 {
     QDomElement domRoot = m_domFile.firstChildElement("day");
-    QStringList clients;
+    QStringList attributes;
 
     if (!domRoot.isNull())
     {
         QDomElement element = domRoot.firstChildElement("task");
-        clients << "Add new client";
         for (; !element.isNull(); element = element.nextSiblingElement("task"))
         {
-            QString clientName = element.attribute("client");
-            /* Not repeat clients in the list. */
-            if (clients.filter(clientName).empty())
-                clients << clientName;
+            QString attributeName = element.attribute(attribute);
+            // Do not repeat attributes in the list.
+            if (attributes.filter(attributeName).empty())
+                attributes << attributeName;
         }
     }
-    return clients;
+    return attributes;
 }
 
 /* ----- */

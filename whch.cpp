@@ -13,7 +13,8 @@
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
-    m_ui(new Ui::whch)
+    m_ui(new Ui::whch),
+    m_uiDialog(new Ui::Dialog)
 {
     // Set GUI.
     m_ui->setupUi(this);
@@ -22,11 +23,14 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
+    // Set list of available tasks.
+    QStringList tasks = m_model->getAttributesList("name");
+    m_ui->comboBox->addItems(tasks);
+
     // Resize start/end columns and rows.
     m_ui->tableView->resizeRowsToContents();
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
-
 
     // When return is pressed on the lineEdit widget:
     // Get current tasks paramenters and display new task.
@@ -90,16 +94,19 @@ void Whch::on_actionQuit_triggered()
 
 void Whch::on_actionTasks_triggered()
 {
-    m_uiDialog = new Ui::Dialog;
     QDialog *taskDialog = new QDialog;
 
     m_uiDialog->setupUi(taskDialog);
 
     // Load list of clients.
-    QStringList clients = m_model->getClientsList();
+    QStringList clients = m_model->getAttributesList("client");
+    clients << "Add new client";
     m_uiDialog->comboBox->addItems(clients);
 
-    // Load list of related tasks to the client.
+    // Load list of tasks for initial client
+    this->showClientTasksInTable(m_uiDialog->comboBox->currentText());
+
+    // Load list of related tasks to the selected client.
     QObject::connect(m_uiDialog->comboBox,SIGNAL(activated(QString)),
                      this, SLOT(showClientTasksInTable(QString)));
 

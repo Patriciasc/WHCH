@@ -26,7 +26,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole);
 
-    QStringList getClientsList();
+    QStringList getAttributesList(const QString &attribute);
 
 public slots:
     void setNewTask(WhchTask currentTask);

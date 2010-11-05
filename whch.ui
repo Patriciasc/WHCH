@@ -58,68 +58,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox">
-          <item>
-           <property name="text">
-            <string>Administration</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Blogs</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Break</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Documentation</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>E-mails</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>E-mails &amp; Blogs</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Harmattan</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Maemo</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Public Holiday</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Sick</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Training</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Vacation</string>
-           </property>
-          </item>
-         </widget>
+         <widget class="QComboBox" name="comboBox"/>
         </item>
         <item>
          <widget class="QLabel" name="label_3">
