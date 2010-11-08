@@ -79,7 +79,7 @@ void Whch::showClientTasksInTable(const QString &client)
         m_uiDialog->comboBox->clearEditText();
         QLineEdit *lineEdit = m_uiDialog->comboBox->lineEdit();
         QObject::connect(lineEdit, SIGNAL(returnPressed()),
-                         this, SLOT(test()));
+                         this, SLOT(updateSessionClients()));
     }
 
     QStringList clientsTasks = m_model->getClientTasks(client);
@@ -115,11 +115,11 @@ void Whch::on_actionTasks_triggered()
 
     // Load list of clients.
     QStringList clients = m_model->getAttributesList("client");
-    clients << "Add new client";
+    clients << m_SessionClients << "Add new client";
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
-    this->showClientTasksInTable(m_uiDialog->comboBox->currentText());
+    showClientTasksInTable(m_uiDialog->comboBox->currentText());
 
     // Load list of related tasks to the selected client.
     QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
@@ -128,9 +128,12 @@ void Whch::on_actionTasks_triggered()
     taskDialog->show();
 }
 
-void Whch::test()
+void Whch::updateSessionClients()
 {
-    QString input = m_uiDialog->comboBox->lineEdit()->text();
+    //Save new client in list of current session clients.
+    QString newClient = m_uiDialog->comboBox->lineEdit()->text();
+    m_SessionClients << newClient;
+
     m_uiDialog->comboBox->lineEdit()->clear();
     m_uiDialog->comboBox->setEditable(false);
 }

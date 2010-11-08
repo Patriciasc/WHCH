@@ -25,13 +25,14 @@ private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
     WhchTableModel *m_model;
+    QStringList m_SessionClients; /* New clients added in the current session. */
 
 private slots:
     /* Slots. */
     void setCurrentTaskParameters();
     void onLineEditReturn();
     void showClientTasksInTable(const QString &client);
-    void test();
+    void updateSessionClients();
 
     /* Action slots. */
     void on_actionAbout_whch_triggered();
