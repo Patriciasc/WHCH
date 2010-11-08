@@ -14,7 +14,8 @@
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
-    m_ui(new Ui::whch)
+    m_ui(new Ui::whch),
+    m_uiDialog(new Ui::Dialog)
 {
     // Set GUI.
     m_ui->setupUi(this);
@@ -44,6 +45,7 @@ Whch::Whch(QWidget *parent) :
 Whch::~Whch()
 {
     delete m_ui;
+    delete m_uiDialog;
 }
 
 /* ----- */
@@ -82,7 +84,9 @@ void Whch::showClientTasksInTable(const QString &client)
                          this, SLOT(updateSessionClients()));
     }
 
+    // Set current available tasks and new line for new task.
     QStringList clientsTasks = m_model->getClientTasks(client);
+    clientsTasks << "";
 
     // Set number of rows.
     m_uiDialog->tableWidget->setRowCount(clientsTasks.size());
@@ -93,6 +97,17 @@ void Whch::showClientTasksInTable(const QString &client)
         QTableWidgetItem *newItem = new QTableWidgetItem(clientsTasks.at(i));
         m_uiDialog->tableWidget->setItem(i, 0, newItem);
     }
+}
+
+void Whch::setCurrentCellEditable(QTableWidgetItem* item)
+{
+    if ((item->column() == 0) && (item->row() == m_uiDialog->tableWidget->rowCount()-1))
+        m_uiDialog->tableWidget->editItem(item);
+}
+
+void Whch::test(QTableWidgetItem* item)
+{
+    qDebug() << "valor" << item->text();
 }
 
 /* ------------- */
@@ -106,7 +121,6 @@ void Whch::on_actionQuit_triggered()
 
 void Whch::on_actionTasks_triggered()
 {
-    m_uiDialog= new Ui::Dialog;
     QDialog *taskDialog = new QDialog;
     m_uiDialog->setupUi(taskDialog);
 
@@ -124,6 +138,13 @@ void Whch::on_actionTasks_triggered()
     // Load list of related tasks to the selected client.
     QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
                      this, SLOT(showClientTasksInTable(QString)));
+
+    // Signals for the table.
+    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)),
+                     this, SLOT(setCurrentCellEditable(QTableWidgetItem*)));
+
+    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)),
+                     this, SLOT(test(QTableWidgetItem*)));
 
     taskDialog->show();
 }

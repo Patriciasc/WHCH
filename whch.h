@@ -7,6 +7,7 @@
 #include <QDomElement>
 #include <QDomDocument>
 #include <QDialog>
+#include <QTableWidgetItem>
 
 namespace Ui {
     class whch;
@@ -33,6 +34,8 @@ private slots:
     void onLineEditReturn();
     void showClientTasksInTable(const QString &client);
     void updateSessionClients();
+    void setCurrentCellEditable(QTableWidgetItem* item);
+    void test(QTableWidgetItem* item);
 
     /* Action slots. */
     void on_actionAbout_whch_triggered();
