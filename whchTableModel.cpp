@@ -251,11 +251,11 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 
     // Set data. (FUNCION SET TASK)
     m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
-    m_task.setAttribute("name", currentTask.name);
+    m_task.setAttribute("name", currentTask.m_name);
     m_task.setAttribute("client", "Openismus");
 
     QDomElement detailsTag = m_domFile.createElement("details");
-    QDomText detailsText = m_domFile.createTextNode(currentTask.details);
+    QDomText detailsText = m_domFile.createTextNode(currentTask.m_details);
     detailsTag.appendChild(detailsText);
     m_task.appendChild(detailsTag);
 

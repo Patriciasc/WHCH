@@ -53,8 +53,8 @@ Whch::~Whch()
 void Whch::onLineEditReturn()
 {
     WhchTask currentTask;
-    currentTask.details = m_ui->lineEdit->text();
-    currentTask.name = m_ui->comboBox->currentText();
+    currentTask.m_details = m_ui->lineEdit->text();
+    currentTask.m_name = m_ui->comboBox->currentText();
 
     //Display new task.
     m_model->setNewTask(currentTask);

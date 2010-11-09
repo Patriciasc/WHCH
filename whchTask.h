@@ -10,8 +10,8 @@ class WhchTask
 public:
     WhchTask();
 
-    QString name;
-    QString details;
+    QString m_name;
+    QString m_details;
 };
 
 #endif // WHCHTASK_H

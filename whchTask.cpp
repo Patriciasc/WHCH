@@ -1,5 +1,7 @@
 #include "whchTask.h"
 
-WhchTask::WhchTask()
+WhchTask::WhchTask():
+        m_name(""),
+        m_details("")
 {
 }
