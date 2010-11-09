@@ -8,7 +8,6 @@
 #include <QDomDocument>
 #include <QDialog>
 #include <QTableWidgetItem>
-#include "whchSessionDataItem.h"
 
 namespace Ui {
     class whch;
@@ -27,8 +26,7 @@ private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
     WhchTableModel *m_model;
-    QStringList m_SessionClients; /* New clients added in the current session. */
-    QLinkedList<WhchSessionDataItem> *m_SessionData;
+    QMap<QString,QStringList> m_SessionData;
 
 private slots:
     /* Slots. */
@@ -36,7 +34,7 @@ private slots:
     void onDialogComboboxItemActivated(const QString &client);
     void onDialogLineEditReturn();
     void onDialogTableCellChanged(QTableWidgetItem* item);
-    void test(QTableWidgetItem* item);
+    void onDialogTableItemChanged(QTableWidgetItem* item);
 
     /* Action slots. */
     void on_actionAbout_whch_triggered();

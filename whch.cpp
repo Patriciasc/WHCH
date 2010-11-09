@@ -11,6 +11,7 @@
 #include <QFileDialog>
 #include <QLineEdit>
 #include <QDebug>
+#include <QStandardItemModel>
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
@@ -82,7 +83,7 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
 
     // Set current available tasks and new line for new task.
     QStringList clientsTasks = m_model->getClientTasks(client);
-    clientsTasks << "";
+    clientsTasks << m_SessionData.value(client) << "";
 
     // Set number of rows.
     m_uiDialog->tableWidget->setRowCount(clientsTasks.size());
@@ -102,9 +103,16 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem* item)
         m_uiDialog->tableWidget->editItem(item);
 }
 
-void Whch::test(QTableWidgetItem* item)
+// Save user's new task into the session's structure.
+void Whch::onDialogTableItemChanged(QTableWidgetItem* item)
 {
-    qDebug() << "valor" << item->text();
+    if (item->text().compare("") != 0)
+    {
+        QString currentClient(m_uiDialog->comboBox->currentText());
+        QStringList tasks(m_SessionData.value(currentClient));
+        tasks << item->text();
+        m_SessionData.insert(currentClient, tasks);
+    }
 }
 
 /* ------------- */
@@ -126,7 +134,7 @@ void Whch::on_actionTasks_triggered()
 
     // Load list of clients.
     QStringList clients = m_model->getAttributesList("client");
-    clients << m_SessionClients << "Add new client";
+    clients << m_SessionData.keys() << "Add new client";
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
@@ -142,7 +150,7 @@ void Whch::on_actionTasks_triggered()
 
     // Manages data if any cell of the last row is edited.
     QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)),
-                     this, SLOT(test(QTableWidgetItem*)));
+                     this, SLOT(onDialogTableItemChanged(QTableWidgetItem*)));
 
     taskDialog->show();
 }
@@ -152,7 +160,8 @@ void Whch::onDialogLineEditReturn()
 {
     //Save new client in list of current session clients.
     QString newClient = m_uiDialog->comboBox->lineEdit()->text();
-    m_SessionClients << newClient;
+    QStringList tasks;
+    m_SessionData.insert(newClient, tasks);
 
     m_uiDialog->comboBox->lineEdit()->clear();
     m_uiDialog->comboBox->setEditable(false);
