@@ -13,11 +13,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
            whch.cpp \
            whchTableModel.cpp \
-           whchTask.cpp
+           whchTask.cpp \
+    whchSessionDataItem.cpp
 
 HEADERS += whch.h \
            whchTableModel.h \
-           whchTask.h
+           whchTask.h \
+    whchSessionDataItem.h
 
 FORMS   += whch.ui \
            dialogTasksClients.ui

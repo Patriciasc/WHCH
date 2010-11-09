@@ -8,6 +8,7 @@
 #include <QDomDocument>
 #include <QDialog>
 #include <QTableWidgetItem>
+#include "whchSessionDataItem.h"
 
 namespace Ui {
     class whch;
@@ -27,6 +28,7 @@ private:
     Ui::Dialog *m_uiDialog;
     WhchTableModel *m_model;
     QStringList m_SessionClients; /* New clients added in the current session. */
+    QLinkedList<WhchSessionDataItem> *m_SessionData;
 
 private slots:
     /* Slots. */
