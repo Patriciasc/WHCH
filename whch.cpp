@@ -33,13 +33,10 @@ Whch::Whch(QWidget *parent) :
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
 
-    // When return is pressed on the lineEdit widget:
     // Get current tasks paramenters and display new task.
-    QObject::connect(m_ui->lineEdit, SIGNAL(returnPressed()),
-                     this, SLOT(setCurrentTaskParameters()));
     // Clean displayed input.
     QObject::connect(m_ui->lineEdit, SIGNAL(returnPressed()),
-                     this, SLOT(onLineEditReturn()));
+              this, SLOT(onLineEditReturn()));
 }
 
 Whch::~Whch()
@@ -52,8 +49,8 @@ Whch::~Whch()
 /* SLOTS */
 /* ----- */
 
-// Set a new task with current input parameters.
-void Whch::setCurrentTaskParameters()
+// Sets a new task with current input parameters.
+void Whch::onLineEditReturn()
 {
     WhchTask currentTask;
     currentTask.details = m_ui->lineEdit->text();
@@ -65,23 +62,22 @@ void Whch::setCurrentTaskParameters()
     //Resize start and end columns
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
-}
 
-void Whch::onLineEditReturn()
-{
+    // Clear input.
     m_ui->lineEdit->clear();
 }
 
-// Show selected client's related tasks.
-void Whch::showClientTasksInTable(const QString &client)
+// Shows the related tasks of the selected client.
+void Whch::onDialogComboboxItemActivated(const QString &client)
 {
+    // Make it editable for adding a new client.
     if (client.compare("Add new client") == 0)
     {
         m_uiDialog->comboBox->setEditable(true);
         m_uiDialog->comboBox->clearEditText();
         QLineEdit *lineEdit = m_uiDialog->comboBox->lineEdit();
         QObject::connect(lineEdit, SIGNAL(returnPressed()),
-                         this, SLOT(updateSessionClients()));
+                         this, SLOT(onDialogLineEditReturn()));
     }
 
     // Set current available tasks and new line for new task.
@@ -99,7 +95,8 @@ void Whch::showClientTasksInTable(const QString &client)
     }
 }
 
-void Whch::setCurrentCellEditable(QTableWidgetItem* item)
+// Makes last row editable.
+void Whch::onDialogTableCellChanged(QTableWidgetItem* item)
 {
     if ((item->column() == 0) && (item->row() == m_uiDialog->tableWidget->rowCount()-1))
         m_uiDialog->tableWidget->editItem(item);
@@ -133,23 +130,25 @@ void Whch::on_actionTasks_triggered()
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
-    showClientTasksInTable(m_uiDialog->comboBox->currentText());
+    onDialogComboboxItemActivated(m_uiDialog->comboBox->currentText());
 
     // Load list of related tasks to the selected client.
     QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
-                     this, SLOT(showClientTasksInTable(QString)));
+                     this, SLOT(onDialogComboboxItemActivated(QString)));
 
-    // Signals for the table.
+    // Makes last row editable.
     QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)),
-                     this, SLOT(setCurrentCellEditable(QTableWidgetItem*)));
+                     this, SLOT(onDialogTableCellChanged(QTableWidgetItem*)));
 
+    // Manages data if any cell of the last row is edited.
     QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)),
                      this, SLOT(test(QTableWidgetItem*)));
 
     taskDialog->show();
 }
 
-void Whch::updateSessionClients()
+// Update session data.
+void Whch::onDialogLineEditReturn()
 {
     //Save new client in list of current session clients.
     QString newClient = m_uiDialog->comboBox->lineEdit()->text();

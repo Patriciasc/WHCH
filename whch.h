@@ -30,11 +30,10 @@ private:
 
 private slots:
     /* Slots. */
-    void setCurrentTaskParameters();
     void onLineEditReturn();
-    void showClientTasksInTable(const QString &client);
-    void updateSessionClients();
-    void setCurrentCellEditable(QTableWidgetItem* item);
+    void onDialogComboboxItemActivated(const QString &client);
+    void onDialogLineEditReturn();
+    void onDialogTableCellChanged(QTableWidgetItem* item);
     void test(QTableWidgetItem* item);
 
     /* Action slots. */
