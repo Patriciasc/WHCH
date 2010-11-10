@@ -197,7 +197,7 @@ bool WhchTableModel::setData(const QModelIndex &index,
 }
 
 /* List of attributes "attribute". */
-QStringList WhchTableModel::getAttributesList(const QString &attribute)
+QStringList WhchTableModel::AttributesList(const QString &attribute)
 {
     QDomElement domRoot = m_domFile.firstChildElement("day");
     QStringList attributes;
@@ -221,7 +221,7 @@ QStringList WhchTableModel::getAttributesList(const QString &attribute)
 /* ----- */
 
 /* List of tasks related with the given client. */
-QStringList WhchTableModel::getClientTasks(const QString &client)
+QStringList WhchTableModel::ClientTasks(const QString &client)
 {
     QDomElement domRoot = m_domFile.firstChildElement("day");
     QStringList clientTasks;

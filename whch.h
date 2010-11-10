@@ -40,6 +40,8 @@ private slots:
     void on_actionAbout_whch_triggered();
     void on_actionTasks_triggered();
     void on_actionQuit_triggered();
+
+    QStringList sessionTasks();
 };
 
 #endif // WHCH_H

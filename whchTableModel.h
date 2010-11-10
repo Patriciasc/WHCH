@@ -26,11 +26,11 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole);
 
-    QStringList getAttributesList(const QString &attribute);
+    QStringList AttributesList(const QString &attribute);
 
 public slots:
     void setNewTask(WhchTask currentTask);
-    QStringList getClientTasks(const QString &client);
+    QStringList ClientTasks(const QString &client);
 
 private:
     /* .xml file in memory. */

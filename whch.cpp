@@ -26,7 +26,7 @@ Whch::Whch(QWidget *parent) :
     m_ui->tableView->setModel(m_model);
 
     // Set list of available tasks.
-    QStringList tasks = m_model->getAttributesList("name");
+    QStringList tasks = m_model->AttributesList("name");
     m_ui->comboBox->addItems(tasks);
 
     // Resize start/end columns and rows.
@@ -44,6 +44,27 @@ Whch::~Whch()
 {
     delete m_ui;
     delete m_uiDialog;
+}
+
+/* List of new added tasks. */
+QStringList Whch::sessionTasks()
+{
+    QStringList sessionTasks;
+    QMap<QString, QStringList>::const_iterator i = m_SessionData.constBegin();
+
+    while (i != m_SessionData.constEnd())
+    {
+        QStringList itemTasks = i.value();
+        for (int j = 0; j < itemTasks.size(); ++j)
+        {
+            // Do not repeat elements.
+            QString item(itemTasks.at(j));
+            if (!sessionTasks.contains(item))
+                sessionTasks << item;
+        }
+        ++i;
+    }
+    return sessionTasks;
 }
 
 /* ----- */
@@ -82,7 +103,7 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     }
 
     // Set current available tasks and new line for new task.
-    QStringList clientTasks = m_model->getClientTasks(client);
+    QStringList clientTasks = m_model->ClientTasks(client);
     clientTasks << m_SessionData.value(client) << "";
 
     // Set number of rows.
@@ -106,15 +127,21 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem* item)
 // Save user's new task into the session's structure.
 void Whch::onDialogTableItemChanged(QTableWidgetItem* item)
 {
-    if (item->text().compare("") != 0)
+    QString itemText (item->text());
+    if (itemText.compare("") != 0)
     {
+        // Update task's combobox.
+        if(!sessionTasks().contains(itemText))
+            m_ui->comboBox->addItem(itemText);
+
+        // Save data into session structure.
         QString currentClient(m_uiDialog->comboBox->currentText());
         QStringList tasks(m_SessionData.value(currentClient));
 
         // Do not repeat tasks.
-        if(!tasks.contains(item->text()))
+        if(!tasks.contains(itemText))
         {
-            tasks << item->text();
+            tasks << itemText;
             m_SessionData.insert(currentClient, tasks);
         }
     }
@@ -138,12 +165,14 @@ void Whch::on_actionTasks_triggered()
     m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
     // Load list of clients.
-    QStringList clients = m_model->getAttributesList("client");
+    QStringList clients = m_model->AttributesList("client");
     clients << m_SessionData.keys() << "Add new client";
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
-    /*onDialogComboboxItemActivated(m_uiDialog->comboBox->currentText());*/
+    QString currentClient (m_uiDialog->comboBox->currentText());
+    if (currentClient.compare("Add new client") != 0)
+        onDialogComboboxItemActivated(currentClient);
 
     // Load list of related tasks to the selected client.
     QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
