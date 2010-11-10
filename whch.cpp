@@ -82,16 +82,19 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     }
 
     // Set current available tasks and new line for new task.
-    QStringList clientsTasks = m_model->getClientTasks(client);
-    clientsTasks << m_SessionData.value(client) << "";
+    QStringList clientTasks = m_model->getClientTasks(client);
+    clientTasks << m_SessionData.value(client) << "";
+
+    for (int i=0; i<clientTasks.size(); ++i)
+        qDebug() << "Task: " << clientTasks.at(i) << "\n";
 
     // Set number of rows.
-    m_uiDialog->tableWidget->setRowCount(clientsTasks.size());
+    m_uiDialog->tableWidget->setRowCount(clientTasks.size());
 
     // Show list of tasks.
-    for (int i=0; i< clientsTasks.size(); ++i)
+    for (int i=0; i< clientTasks.size(); ++i)
     {
-        QTableWidgetItem *newItem = new QTableWidgetItem(clientsTasks.at(i));
+        QTableWidgetItem *newItem = new QTableWidgetItem(clientTasks.at(i));
         m_uiDialog->tableWidget->setItem(i, 0, newItem);
     }
 }
@@ -108,10 +111,17 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem* item)
 {
     if (item->text().compare("") != 0)
     {
+        std::cout << "in" << std::endl;
         QString currentClient(m_uiDialog->comboBox->currentText());
         QStringList tasks(m_SessionData.value(currentClient));
-        tasks << item->text();
-        m_SessionData.insert(currentClient, tasks);
+
+        // Do not repeat tasks.
+        if(!tasks.contains(item->text()))
+        {
+            qDebug() << "added task: " << item->text();
+            tasks << item->text();
+            m_SessionData.insert(currentClient, tasks);
+        }
     }
 }
 
@@ -138,7 +148,7 @@ void Whch::on_actionTasks_triggered()
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
-    onDialogComboboxItemActivated(m_uiDialog->comboBox->currentText());
+    /*onDialogComboboxItemActivated(m_uiDialog->comboBox->currentText());*/
 
     // Load list of related tasks to the selected client.
     QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
