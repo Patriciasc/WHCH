@@ -85,9 +85,6 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     QStringList clientTasks = m_model->getClientTasks(client);
     clientTasks << m_SessionData.value(client) << "";
 
-    for (int i=0; i<clientTasks.size(); ++i)
-        qDebug() << "Task: " << clientTasks.at(i) << "\n";
-
     // Set number of rows.
     m_uiDialog->tableWidget->setRowCount(clientTasks.size());
 
@@ -111,14 +108,12 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem* item)
 {
     if (item->text().compare("") != 0)
     {
-        std::cout << "in" << std::endl;
         QString currentClient(m_uiDialog->comboBox->currentText());
         QStringList tasks(m_SessionData.value(currentClient));
 
         // Do not repeat tasks.
         if(!tasks.contains(item->text()))
         {
-            qDebug() << "added task: " << item->text();
             tasks << item->text();
             m_SessionData.insert(currentClient, tasks);
         }
