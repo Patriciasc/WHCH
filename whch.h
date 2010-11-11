@@ -41,6 +41,7 @@ private slots:
     void on_actionTasks_triggered();
     void on_actionQuit_triggered();
 
+    /* Auxiliary functions */
     QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
 };
