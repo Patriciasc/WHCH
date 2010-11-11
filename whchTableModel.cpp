@@ -252,7 +252,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
     // Set data. (FUNCION SET TASK)
     m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
     m_task.setAttribute("name", currentTask.m_name);
-    m_task.setAttribute("client", "Openismus");
+    m_task.setAttribute("client", currentTask.m_client);
 
     QDomElement detailsTag = m_domFile.createElement("details");
     QDomText detailsText = m_domFile.createTextNode(currentTask.m_details);
@@ -313,3 +313,21 @@ void WhchTableModel::writeInXmlFile (const QString &filename)
 
     file.close();
  }
+
+// Retrieves given task's client.
+QString WhchTableModel::clientOfTask(const QString task)
+{
+    QDomElement domRoot = m_domFile.firstChildElement("day");
+    QString client;
+
+    if (!domRoot.isNull())
+    {
+        QDomElement element = domRoot.firstChildElement("task");
+        for (; !element.isNull(); element = element.nextSiblingElement("task"))
+        {
+            if (element.attribute("name").compare(task) == 0)
+                return client = element.attribute("client");
+        }
+    }
+    return client;
+}

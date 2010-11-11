@@ -67,6 +67,25 @@ QStringList Whch::sessionTasks()
     return sessionTasks;
 }
 
+/* Get related client of a task. */
+QString Whch::sessionClientOfTask(const QString &task)
+{
+    QMap<QString, QStringList>::const_iterator i = m_SessionData.constBegin();
+    QString sessionClient;
+
+    while (i != m_SessionData.constEnd())
+    {
+        QStringList itemTasks = i.value();
+        for (int j = 0; j < itemTasks.size(); ++j)
+        {
+            if(task.contains(itemTasks.at(j)))
+                return sessionClient = i.key();
+        }
+        ++i;
+    }
+    return sessionClient;
+}
+
 /* ----- */
 /* SLOTS */
 /* ----- */
@@ -76,7 +95,19 @@ void Whch::onLineEditReturn()
 {
     WhchTask currentTask;
     currentTask.m_details = m_ui->lineEdit->text();
-    currentTask.m_name = m_ui->comboBox->currentText();
+    QString text(m_ui->comboBox->currentText());
+    currentTask.m_name = text;
+    // The user did not add new tasks or clients.
+    if(m_SessionData.isEmpty())
+    {
+        std::cout << "if" << std::endl;
+        currentTask.m_client = m_model->clientOfTask(text);
+    }
+    else
+    {
+        std::cout << "else" << std::endl;
+        currentTask.m_client = sessionClientOfTask(text);
+    }
 
     //Display new task.
     m_model->setNewTask(currentTask);
@@ -156,17 +187,19 @@ void Whch::on_actionQuit_triggered()
     this->close();
 }
 
+// Sets up dialog for adding tasks and clients.
 void Whch::on_actionTasks_triggered()
 {
     QDialog *taskDialog = new QDialog;
     m_uiDialog->setupUi(taskDialog);
 
-    // Insert always at the top.
+    // Insert new added clients always at the top.
     m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
     // Load list of clients.
-    QStringList clients = m_model->AttributesList("client");
+    QStringList clients(m_model->AttributesList("client"));
     clients << m_SessionData.keys() << "Add new client";
+
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
@@ -193,12 +226,14 @@ void Whch::on_actionTasks_triggered()
 void Whch::onDialogLineEditReturn()
 {
     //Save new client in list of current session clients.
+    QStringList clients(m_model->AttributesList("client"));
     QString newClient = m_uiDialog->comboBox->lineEdit()->text();
-    QStringList tasks;
-    m_SessionData.insert(newClient, tasks);
-
-    m_uiDialog->comboBox->lineEdit()->clear();
-    m_uiDialog->comboBox->setEditable(false);
+    if (!clients.contains(newClient))
+    {
+        QStringList tasks;
+        m_SessionData.insert(newClient, tasks);
+    }
+        m_uiDialog->comboBox->setEditable(false);
 }
 
 void Whch::on_actionAbout_whch_triggered()

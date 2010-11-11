@@ -27,6 +27,7 @@ public:
                  int role = Qt::EditRole);
 
     QStringList AttributesList(const QString &attribute);
+    QString clientOfTask(const QString task);
 
 public slots:
     void setNewTask(WhchTask currentTask);

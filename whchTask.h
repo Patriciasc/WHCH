@@ -12,6 +12,7 @@ public:
 
     QString m_name;
     QString m_details;
+    QString m_client;
 };
 
 #endif // WHCHTASK_H

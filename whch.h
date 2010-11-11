@@ -33,8 +33,8 @@ private slots:
     void onLineEditReturn();
     void onDialogComboboxItemActivated(const QString &client);
     void onDialogLineEditReturn();
-    void onDialogTableCellChanged(QTableWidgetItem* item);
-    void onDialogTableItemChanged(QTableWidgetItem* item);
+    void onDialogTableCellChanged(QTableWidgetItem *item);
+    void onDialogTableItemChanged(QTableWidgetItem *item);
 
     /* Action slots. */
     void on_actionAbout_whch_triggered();
@@ -42,6 +42,7 @@ private slots:
     void on_actionQuit_triggered();
 
     QStringList sessionTasks();
+    QString sessionClientOfTask(const QString &task);
 };
 
 #endif // WHCH_H
