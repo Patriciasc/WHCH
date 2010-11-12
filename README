@@ -1,0 +1,51 @@
+                       WHCH (Working Hours Counter for Humans).
+                                   version 0.1
+
+                        Copyright (C) 2010 Openismus GmbH
+
+                               Patricia Santana Cruz
+                             patriciasc@openismus.com
+
+                                    November 2010
+
+     ----------------------------------------------------------------------
+
+   +--------------------------------------+
+   |           Table of Contents          |
+   |--------------------------------------|
+   |  * About                             |
+   |    + What Is 'WHCH?'                 |
+   |    + License                         |
+   |                                      |
+   |  * Using WHCH                        |
+   |    + How To Use 'WHCH?'              |
+   |    + Installation                    |
+   +--------------------------------------+
+
+     ----------------------------------------------------------------------
+
+                                     About
+
+What Is 'WHCH?'
+WHCH stands for "Working Hours Counter for Humans".
+
+This is an application for tracking the time spent on
+individual projects.
+
+Development is just starting and thus WHCH is not yet useful.
+
+
+License:
+
+       WHCH is an Open Source project, Free Software released under the
+       GNU General Public License (GPL). It is free, and the 'source code'
+       behind the program is available. (This allows others to add features,
+       fix bugs, and use parts of the program in their own GPL'd software.)
+
+
+                                Using WHCH
+
+How To Play 'WHCH?' (TODO)
+
+
+Installation: (TODO)
