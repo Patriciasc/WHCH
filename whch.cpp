@@ -125,7 +125,6 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     // Make it editable for adding a new client.
     if (client.compare("Add new client") == 0)
     {
-        std::cout << "add new client" << std::endl;
         m_uiDialog->comboBox->setEditable(true);
         m_uiDialog->comboBox->clearEditText();
         QLineEdit *lineEdit = m_uiDialog->comboBox->lineEdit();
@@ -134,13 +133,17 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     }
 
     // Set current available tasks and new line for new task.
-    //FIXME
-    QStringList clientTasks;
-    if (m_SessionData.isEmpty())
-        clientTasks << m_model->ClientTasks(client);
-    else
-        clientTasks <<  m_SessionData.value(client);
-
+    QStringList clientTasks(m_model->ClientTasks(client));
+    if (m_SessionData.contains(client))
+    {
+        QStringList sessionClientTasks(m_SessionData.value(client));
+        for (int i = 0; i < sessionClientTasks.size(); ++i)
+        {
+            QString sessionTaskItem(sessionClientTasks.at(i));
+            if (!clientTasks.contains(sessionTaskItem))
+                clientTasks << sessionTaskItem;
+        }
+    }
     clientTasks << "";
 
     // Set number of rows.
@@ -157,7 +160,6 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
 // Update session data.
 void Whch::onDialogLineEditReturn()
 {
-    std::cout << "ondialogeditreturn" << std::endl;
     //Save new client in list of current session clients.
     QStringList clients(m_model->AttributesList("client"));
     QString newClient = m_uiDialog->comboBox->lineEdit()->text();
@@ -182,10 +184,8 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem* item)
     QString itemText (item->text());
     if (itemText.compare("") != 0)
     {
-        qDebug() << "item" << itemText;
-        std::cout << "table item changed" << std::endl;
         // Update task's combobox.
-        if(!sessionTasks().contains(itemText))
+        if((!sessionTasks().contains(itemText)) && (!m_model->AttributesList("name").contains(itemText)))
             m_ui->comboBox->addItem(itemText);
 
         // Save data into session structure.
@@ -220,12 +220,17 @@ void Whch::on_actionTasks_triggered()
     m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
     // Load list of clients.
-    QStringList clients;
-    if (m_SessionData.isEmpty())
-        clients << m_model->AttributesList("client");
-    else
-        clients << m_SessionData.keys();
-
+    QStringList clients(m_model->AttributesList("client"));
+    if (!m_SessionData.isEmpty())
+    {
+        QStringList sessionClients (m_SessionData.keys());
+        for (int i=0; i < sessionClients.size(); ++i)
+        {
+            QString sessionClientItem(sessionClients.at(i));
+            if(!clients.contains(sessionClientItem))
+                clients << sessionClientItem;
+        }
+    }
     clients << "Add new client";
     m_uiDialog->comboBox->addItems(clients);
 
