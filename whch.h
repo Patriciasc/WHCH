@@ -26,7 +26,7 @@ private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
     WhchTableModel *m_model;
-    QMap<QString,QStringList> m_SessionData;
+    QMap<QString,QStringList> m_sessionData;
 
 private slots:
     /* Slots. */

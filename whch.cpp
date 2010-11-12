@@ -54,9 +54,9 @@ Whch::~Whch()
 QStringList Whch::sessionTasks()
 {
     QStringList sessionTasks;
-    QMap<QString, QStringList>::const_iterator i = m_SessionData.constBegin();
+    QMap<QString, QStringList>::const_iterator i = m_sessionData.constBegin();
 
-    while (i != m_SessionData.constEnd())
+    while (i != m_sessionData.constEnd())
     {
         QStringList itemTasks = i.value();
         for (int j = 0; j < itemTasks.size(); ++j)
@@ -74,10 +74,10 @@ QStringList Whch::sessionTasks()
 /* Get related client of a task. */
 QString Whch::sessionClientOfTask(const QString &task)
 {
-    QMap<QString, QStringList>::const_iterator i = m_SessionData.constBegin();
+    QMap<QString, QStringList>::const_iterator i = m_sessionData.constBegin();
     QString sessionClient;
 
-    while (i != m_SessionData.constEnd())
+    while (i != m_sessionData.constEnd())
     {
         QStringList itemTasks = i.value();
         for (int j = 0; j < itemTasks.size(); ++j)
@@ -103,7 +103,7 @@ void Whch::onLineEditReturn()
     currentTask.m_name = text;
 
     // The user did not add new tasks or clients.
-    if(m_SessionData.isEmpty())
+    if(m_sessionData.isEmpty())
         currentTask.m_client = m_model->clientOfTask(text);
     else
         currentTask.m_client = sessionClientOfTask(text);
@@ -134,9 +134,9 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
 
     // Set current available tasks and new line for new task.
     QStringList clientTasks(m_model->ClientTasks(client));
-    if (m_SessionData.contains(client))
+    if (m_sessionData.contains(client))
     {
-        QStringList sessionClientTasks(m_SessionData.value(client));
+        QStringList sessionClientTasks(m_sessionData.value(client));
         for (int i = 0; i < sessionClientTasks.size(); ++i)
         {
             QString sessionTaskItem(sessionClientTasks.at(i));
@@ -166,7 +166,7 @@ void Whch::onDialogLineEditReturn()
     if (!clients.contains(newClient))
     {
         QStringList tasks;
-        m_SessionData.insert(newClient, tasks);
+        m_sessionData.insert(newClient, tasks);
     }
         m_uiDialog->comboBox->setEditable(false);
 }
@@ -190,13 +190,13 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem* item)
 
         // Save data into session structure.
         QString currentClient(m_uiDialog->comboBox->currentText());
-        QStringList tasks(m_SessionData.value(currentClient));
+        QStringList tasks(m_sessionData.value(currentClient));
 
         // Do not repeat tasks.
         if(!tasks.contains(itemText))
         {
             tasks << itemText;
-            m_SessionData.insert(currentClient, tasks);
+            m_sessionData.insert(currentClient, tasks);
         }
     }
 }
@@ -221,9 +221,9 @@ void Whch::on_actionTasks_triggered()
 
     // Load list of clients.
     QStringList clients(m_model->AttributesList("client"));
-    if (!m_SessionData.isEmpty())
+    if (!m_sessionData.isEmpty())
     {
-        QStringList sessionClients (m_SessionData.keys());
+        QStringList sessionClients (m_sessionData.keys());
         for (int i=0; i < sessionClients.size(); ++i)
         {
             QString sessionClientItem(sessionClients.at(i));
