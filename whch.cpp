@@ -41,6 +41,8 @@
 #include <QDebug>
 #include <QStandardItemModel>
 
+static const QString NEW_CLIENT = "Add new client";
+
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::whch),
@@ -151,7 +153,7 @@ void Whch::onLineEditReturn()
 void Whch::onDialogComboboxItemActivated(const QString &client)
 {
     // Make it editable for adding a new client.
-    if (client.compare("Add new client") == 0)
+    if (client.compare(NEW_CLIENT) == 0)
     {
         m_uiDialog->comboBox->setEditable(true);
         m_uiDialog->comboBox->clearEditText();
@@ -259,12 +261,12 @@ void Whch::on_actionTasks_triggered()
                 clients << sessionClientItem;
         }
     }
-    clients << "Add new client";
+    clients << NEW_CLIENT;
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
     QString currentClient (m_uiDialog->comboBox->currentText());
-    if (currentClient.compare("Add new client") != 0)
+    if (currentClient.compare(NEW_CLIENT) != 0)
         onDialogComboboxItemActivated(currentClient);
 
     // Load list of related tasks to the selected client.
