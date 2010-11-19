@@ -41,7 +41,7 @@
 #include <QDebug>
 #include <QStandardItemModel>
 
-static const QString NEW_CLIENT = "Add new client";
+static const QString NEW_CLIENT(QObject::tr("Add new client"));
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
