@@ -84,7 +84,7 @@ Whch::~Whch()
 QStringList Whch::sessionTasks()
 {
     QStringList sessionTasks;
-    QMap<QString, QStringList>::const_iterator i = m_sessionData.constBegin();
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
 
     while (i != m_sessionData.constEnd())
     {
@@ -104,7 +104,7 @@ QStringList Whch::sessionTasks()
 /* Get related client of a task. */
 QString Whch::sessionClientOfTask(const QString &task)
 {
-    QMap<QString, QStringList>::const_iterator i = m_sessionData.constBegin();
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
     QString sessionClient;
 
     while (i != m_sessionData.constEnd())
