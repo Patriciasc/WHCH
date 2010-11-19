@@ -226,6 +226,7 @@ void Whch::onDialogLineEditReturn()
 {
     //Save new client in list of current session clients.
     QStringList clients(m_model->AttributesList("client"));
+    qDebug() << "el client" <<  m_uiDialog->comboBox->lineEdit()->text();
     QString newClient = m_uiDialog->comboBox->lineEdit()->text();
     if (!clients.contains(newClient))
     {
@@ -236,14 +237,14 @@ void Whch::onDialogLineEditReturn()
 }
 
 // Makes last row editable.
-void Whch::onDialogTableCellChanged(QTableWidgetItem* item)
+void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 {
     if ((item->column() == 0) && (item->row() == m_uiDialog->tableWidget->rowCount()-1))
         m_uiDialog->tableWidget->editItem(item);
 }
 
 // Save user's new task into the session's structure.
-void Whch::onDialogTableItemChanged(QTableWidgetItem* item)
+void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 {
     QString itemText (item->text());
     if (itemText.compare("") != 0)
@@ -308,12 +309,12 @@ void Whch::on_actionTasks_triggered()
                      this, SLOT(onDialogComboboxItemActivated(QString)));
 
     // Makes last row editable.
-    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)),
-                     this, SLOT(onDialogTableCellChanged(QTableWidgetItem*)));
+    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem *)),
+                     this, SLOT(onDialogTableCellChanged(QTableWidgetItem *)));
 
     // Manages data if any cell of the last row is edited.
-    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)),
-                     this, SLOT(onDialogTableItemChanged(QTableWidgetItem*)));
+    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem *)),
+                     this, SLOT(onDialogTableItemChanged(QTableWidgetItem *)));
 
     taskDialog->show();
 }
