@@ -59,6 +59,7 @@ Whch::Whch(QWidget *parent) :
     // Set list of available tasks and give user a start point in the
     // usage of the app, which would be to add a task related to a client.
     // FIXME: the policy is not working when inserting new tasks.
+    // I would like to keem "Add new task" always as the last item.
     m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
     QStringList tasks = m_model->AttributesList("name") <<  NEW_TASK;
     m_ui->comboBox->addItems(tasks);
@@ -138,25 +139,34 @@ QString Whch::sessionClientOfTask(const QString &task)
 void Whch::onLineEditReturn()
 {
     WhchTask currentTask;
-    currentTask.m_details = m_ui->lineEdit->text();
-    QString text(m_ui->comboBox->currentText());
-    currentTask.m_name = text;
+    QString lineEditText(m_ui->lineEdit->text());
 
-    // The user did not add new tasks or clients.
-    if(m_sessionData.isEmpty())
-        currentTask.m_client = m_model->clientOfTask(text);
+    // Do not admit empty detail's fields.
+    if (lineEditText.isEmpty())
+        m_ui->lineEdit->setText("Soo... What have you been doing in the last minutes?");
+
     else
-        currentTask.m_client = sessionClientOfTask(text);
+    {
+        currentTask.m_details = lineEditText;
+        QString text(m_ui->comboBox->currentText());
+        currentTask.m_name = text;
 
-    //Display new task.
-    m_model->setNewTask(currentTask);
+        // The user did not add new tasks or clients.
+        if(m_sessionData.isEmpty())
+            currentTask.m_client = m_model->clientOfTask(text);
+        else
+            currentTask.m_client = sessionClientOfTask(text);
 
-    //Resize start and end columns
-    m_ui->tableView->resizeColumnToContents(0);
-    m_ui->tableView->resizeColumnToContents(1);
+        //Display new task.
+        m_model->setNewTask(currentTask);
 
-    // Clear input.
-    m_ui->lineEdit->clear();
+        //Resize start and end columns
+        m_ui->tableView->resizeColumnToContents(0);
+        m_ui->tableView->resizeColumnToContents(1);
+
+        // Clear input.
+        m_ui->lineEdit->clear();
+    }
 }
 
 // Shows the related tasks of the selected client.
@@ -201,6 +211,9 @@ void Whch::onUiComboboxItemActivated(const QString &task)
 {
     if (task.compare( NEW_TASK) == 0)
     {
+        // Clean line in the case tha the user tried to
+        // add some empty details.
+        m_ui->lineEdit->clear();
         m_ui->lineEdit->setEnabled(false);
         on_actionTasks_triggered();
     }
