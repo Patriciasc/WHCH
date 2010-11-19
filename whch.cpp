@@ -42,6 +42,7 @@
 #include <QStandardItemModel>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
+static const QString NEW_TASK(QObject::tr( "Add new task"));
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
@@ -55,9 +56,18 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
-    // Set list of available tasks.
-    QStringList tasks = m_model->AttributesList("name");
+    // Set list of available tasks and give user a start point in the
+    // usage of the app, which would be to add a task related to a client.
+    // FIXME: the policy is not working when inserting new tasks.
+    m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
+    QStringList tasks = m_model->AttributesList("name") <<  NEW_TASK;
     m_ui->comboBox->addItems(tasks);
+
+    if (m_ui->comboBox->currentText().compare( NEW_TASK) == 0)
+        m_ui->lineEdit->setEnabled(false);
+
+    QObject::connect(m_ui->comboBox, SIGNAL(activated(QString)),
+              this, SLOT(onUiComboboxItemActivated(QString)));
 
     // Resize start/end columns and rows.
     m_ui->tableView->resizeRowsToContents();
@@ -185,6 +195,17 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
         QTableWidgetItem *newItem = new QTableWidgetItem(clientTasks.at(i));
         m_uiDialog->tableWidget->setItem(i, 0, newItem);
     }
+}
+
+void Whch::onUiComboboxItemActivated(const QString &task)
+{
+    if (task.compare( NEW_TASK) == 0)
+    {
+        m_ui->lineEdit->setEnabled(false);
+        on_actionTasks_triggered();
+    }
+    else
+        m_ui->lineEdit->setEnabled(true);
 }
 
 // Update session data.

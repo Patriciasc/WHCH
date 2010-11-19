@@ -61,6 +61,7 @@ private slots:
     /* Slots. */
     void onLineEditReturn();
     void onDialogComboboxItemActivated(const QString &client);
+    void onUiComboboxItemActivated(const QString &task);
     void onDialogLineEditReturn();
     void onDialogTableCellChanged(QTableWidgetItem *item);
     void onDialogTableItemChanged(QTableWidgetItem *item);
