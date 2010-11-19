@@ -232,8 +232,9 @@ QStringList WhchTableModel::AttributesList(const QString &attribute)
 
     if (!domRoot.isNull())
     {
-        QDomElement element = domRoot.firstChildElement("task");
-        for (; !element.isNull(); element = element.nextSiblingElement("task"))
+
+        for (QDomElement element = domRoot.firstChildElement("task");
+             !element.isNull(); element = element.nextSiblingElement("task"))
         { 
             QString attributeName = element.attribute(attribute);
             // Do not repeat attributes in the list.
