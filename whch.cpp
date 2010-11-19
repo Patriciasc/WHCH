@@ -207,6 +207,8 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     }
 }
 
+// Shows all available tasks (from session and .xml file) and enables the
+// user to add new ones.
 void Whch::onUiComboboxItemActivated(const QString &task)
 {
     if (task.compare( NEW_TASK) == 0)
