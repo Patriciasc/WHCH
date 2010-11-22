@@ -228,14 +228,18 @@ void Whch::onDialogLineEditReturn()
 {
     //Save new client in list of current session clients.
     QStringList clients(m_model->AttributesList("client"));
-    qDebug() << "el client" <<  m_uiDialog->comboBox->lineEdit()->text();
+    //qDebug() << "client" <<  m_uiDialog->comboBox->lineEdit()->text();
     const QString newClient = m_uiDialog->comboBox->lineEdit()->text();
     if (!clients.contains(newClient))
     {
         QStringList tasks;
         m_sessionData.insert(newClient, tasks);
     }
-        m_uiDialog->comboBox->setEditable(false);
+
+    // FIXME: If I do not set editable = false, the programm
+    // does not give a segmentation false. If it is true, it
+    // does. This FIXME is explained in the Wiki page.
+    m_uiDialog->comboBox->setEditable(false);
 }
 
 // Makes last row editable.
