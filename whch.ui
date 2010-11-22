@@ -78,6 +78,16 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLCDNumber" name="lcdNumber">
+          <property name="numDigits">
+           <number>8</number>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::Flat</enum>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
