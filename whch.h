@@ -54,8 +54,12 @@ private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
     WhchTableModel *m_model;
+    /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;
+    /* Track spent time on current task */
+    int m_seconds;
+    QTimer *m_timer;
 
 private slots:
     /* Slots. */
@@ -72,6 +76,7 @@ private slots:
     void on_actionQuit_triggered();
 
     /* Auxiliary functions */
+    void onTimerTimeOut();
     QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
 };

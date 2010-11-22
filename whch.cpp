@@ -40,6 +40,7 @@
 #include <QLineEdit>
 #include <QDebug>
 #include <QStandardItemModel>
+#include <QTimer>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr( "Add new task"));
@@ -47,7 +48,9 @@ static const QString NEW_TASK(QObject::tr( "Add new task"));
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::whch),
-    m_uiDialog(new Ui::Dialog)
+    m_uiDialog(new Ui::Dialog),
+    m_seconds(0),
+    m_timer(new QTimer)
 {
     // Set GUI.
     m_ui->setupUi(this);
@@ -55,6 +58,12 @@ Whch::Whch(QWidget *parent) :
     // Set model/view.
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
+
+    // Initialize LCD Timer.
+    // TODO: Make this numbers more visible.
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
+    m_timer->start(1000);
+    onTimerTimeOut();
 
     // Set list of available tasks and give user a start point in the
     // usage of the app, which would be to add a task related to a client.
@@ -64,7 +73,7 @@ Whch::Whch(QWidget *parent) :
     QStringList tasks = m_model->AttributesList("name") <<  NEW_TASK;
     m_ui->comboBox->addItems(tasks);
 
-    if (m_ui->comboBox->currentText().compare( NEW_TASK) == 0)
+    if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
         m_ui->lineEdit->setEnabled(false);
 
     QObject::connect(m_ui->comboBox, SIGNAL(activated(QString)),
@@ -90,6 +99,20 @@ Whch::~Whch()
 /* ------------------- */
 /* AUXILIARY FUNCTIONS */
 /* ------------------- */
+
+void Whch::onTimerTimeOut()
+{
+    int seconds = ++m_seconds;
+    int minutes = seconds / 60;
+    seconds %= 60;
+    int hours = minutes / 60;
+    minutes %= 60;
+
+    QTime *time = new QTime(hours,minutes,seconds);
+    QString text = time->toString("HH:mm:ss");
+
+    m_ui->lcdNumber->display(text);
+}
 
 /* List of new added tasks. */
 QStringList Whch::sessionTasks()
@@ -147,6 +170,10 @@ void Whch::onLineEditReturn()
 
     else
     {
+        // Stop counting time spent on current task.
+        m_timer->stop();
+        m_ui->lcdNumber->display("00:00:00");
+
         currentTask.m_details = lineEditText;
         const QString text(m_ui->comboBox->currentText());
         currentTask.m_name = text;
@@ -166,6 +193,10 @@ void Whch::onLineEditReturn()
 
         // Clear input.
         m_ui->lineEdit->clear();
+
+        // Starts counting time spent on current task.
+        m_seconds = 0;
+        m_timer->start(1000);
     }
 }
 
