@@ -59,7 +59,7 @@ Whch::Whch(QWidget *parent) :
     // Set list of available tasks and give user a start point in the
     // usage of the app, which would be to add a task related to a client.
     // FIXME: the policy is not working when inserting new tasks.
-    // I would like to keem "Add new task" always as the last item.
+    // I would like to keep "Add new task" always as the last item.
     m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
     QStringList tasks = m_model->AttributesList("name") <<  NEW_TASK;
     m_ui->comboBox->addItems(tasks);
@@ -103,7 +103,7 @@ QStringList Whch::sessionTasks()
         for (int j = 0; j < itemTasks.size(); ++j)
         {
             // Do not repeat elements.
-            QString item(itemTasks.at(j));
+            const QString item(itemTasks.at(j));
             if (!sessionTasks.contains(item))
                 sessionTasks << item;
         }
@@ -139,7 +139,7 @@ QString Whch::sessionClientOfTask(const QString &task)
 void Whch::onLineEditReturn()
 {
     WhchTask currentTask;
-    QString lineEditText(m_ui->lineEdit->text());
+    const QString lineEditText(m_ui->lineEdit->text());
 
     // Do not admit empty detail's fields.
     if (lineEditText.isEmpty())
@@ -148,7 +148,7 @@ void Whch::onLineEditReturn()
     else
     {
         currentTask.m_details = lineEditText;
-        QString text(m_ui->comboBox->currentText());
+        const QString text(m_ui->comboBox->currentText());
         currentTask.m_name = text;
 
         // The user did not add new tasks or clients.
@@ -189,7 +189,7 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
         QStringList sessionClientTasks(m_sessionData.value(client));
         for (int i = 0; i < sessionClientTasks.size(); ++i)
         {
-            QString sessionTaskItem(sessionClientTasks.at(i));
+            const QString sessionTaskItem(sessionClientTasks.at(i));
             if (!clientTasks.contains(sessionTaskItem))
                 clientTasks << sessionTaskItem;
         }
@@ -229,7 +229,7 @@ void Whch::onDialogLineEditReturn()
     //Save new client in list of current session clients.
     QStringList clients(m_model->AttributesList("client"));
     qDebug() << "el client" <<  m_uiDialog->comboBox->lineEdit()->text();
-    QString newClient = m_uiDialog->comboBox->lineEdit()->text();
+    const QString newClient = m_uiDialog->comboBox->lineEdit()->text();
     if (!clients.contains(newClient))
     {
         QStringList tasks;
@@ -248,7 +248,7 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 // Save user's new task into the session's structure.
 void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 {
-    QString itemText (item->text());
+    const QString itemText (item->text());
     if (itemText.compare("") != 0)
     {
         // Update task's combobox.
@@ -256,7 +256,7 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
             m_ui->comboBox->addItem(itemText);
 
         // Save data into session structure.
-        QString currentClient(m_uiDialog->comboBox->currentText());
+        const QString currentClient(m_uiDialog->comboBox->currentText());
         QStringList tasks(m_sessionData.value(currentClient));
 
         // Do not repeat tasks.
@@ -293,7 +293,7 @@ void Whch::on_actionTasks_triggered()
         QStringList sessionClients (m_sessionData.keys());
         for (int i=0; i < sessionClients.size(); ++i)
         {
-            QString sessionClientItem(sessionClients.at(i));
+            const QString sessionClientItem(sessionClients.at(i));
             if(!clients.contains(sessionClientItem))
                 clients << sessionClientItem;
         }
@@ -302,7 +302,7 @@ void Whch::on_actionTasks_triggered()
     m_uiDialog->comboBox->addItems(clients);
 
     // Load list of tasks for initial client
-    QString currentClient (m_uiDialog->comboBox->currentText());
+    const QString currentClient (m_uiDialog->comboBox->currentText());
     if (currentClient.compare(NEW_CLIENT) != 0)
         onDialogComboboxItemActivated(currentClient);
 

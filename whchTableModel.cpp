@@ -236,7 +236,7 @@ QStringList WhchTableModel::AttributesList(const QString &attribute)
         for (QDomElement element = domRoot.firstChildElement("task");
              !element.isNull(); element = element.nextSiblingElement("task"))
         { 
-            QString attributeName = element.attribute(attribute);
+            const QString attributeName = element.attribute(attribute);
             // Do not repeat attributes in the list.
             if (attributes.filter(attributeName).empty())
                 attributes << attributeName;
@@ -262,7 +262,7 @@ QStringList WhchTableModel::ClientTasks(const QString &client)
         {
             if (element.attribute("client").compare(client) == 0)
             {
-                QString taskName = element.attribute("name");
+                const QString taskName = element.attribute("name");
                 /* Not repeat tasks in the list. */
                 if (clientTasks.filter(taskName).empty())
                     clientTasks << taskName;
