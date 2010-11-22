@@ -211,7 +211,7 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
 // user to add new ones.
 void Whch::onUiComboboxItemActivated(const QString &task)
 {
-    if (task.compare( NEW_TASK) == 0)
+    if (task.compare(NEW_TASK) == 0)
     {
         // Clean line in the case tha the user tried to
         // add some empty details.
