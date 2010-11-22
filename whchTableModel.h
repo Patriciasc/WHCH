@@ -68,7 +68,7 @@ private:
     QTime m_timer;
 
     void loadXmlFile(const QString &filename);
-    void writeInXmlFile (const QString &filename);
+    void writeInXmlFile(const QString &filename);
 };
 
 #endif // WHCHTABLEMODEL_H

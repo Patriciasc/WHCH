@@ -52,6 +52,7 @@ WhchTableModel::WhchTableModel(QObject *parent)
     if (!file.exists())
     {
         m_domFile = QDomDocument("DOMtest");
+
         // Create a root element for the DOM.
         QDomElement domRoot = m_domFile.createElement("day");
         domRoot.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
@@ -75,8 +76,16 @@ int WhchTableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
-    QDomElement domRoot = m_domFile.firstChildElement("day");
-    return domRoot.elementsByTagName("task").count();
+    QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
+    int rowCount = 0;
+
+    for (QDomElement domRoot = m_domFile.firstChildElement("day");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("day"))
+    {
+        if (domRoot.attribute("date").compare(currentDate) == 0)
+            rowCount = +domRoot.elementsByTagName("task").count();
+    }
+    return rowCount;
 }
 
 int WhchTableModel::columnCount(const QModelIndex &parent) const
@@ -90,10 +99,9 @@ QVariant WhchTableModel::data(const QModelIndex &index,
 {
     if ((index.isValid()) && ((role == Qt::DisplayRole) || (role == Qt::EditRole)))
     {
-        // Get index element from file from the current day.
         QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
-        QDomElement domRoot = m_domFile.firstChildElement("day");
 
+        QDomElement domRoot = m_domFile.firstChildElement("day");
         while(domRoot.attribute("date").compare(currentDate) != 0)
             domRoot = domRoot.nextSiblingElement("day");
 
@@ -191,39 +199,44 @@ bool WhchTableModel::setData(const QModelIndex &index,
 
     if (index.isValid() && role == Qt::EditRole)
     {
-            // Get current index element from memory.
-            QDomElement domRoot = m_domFile.firstChildElement("day");
-            QDomElement element = domRoot.firstChildElement("task");
 
-            for (int i=1; i<=index.row(); i++)
-                element = element.nextSiblingElement("task");
+        QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
 
-            // Replace new value in memory.
-            switch (index.column())
-            {
-                case 0:
-                    element.setAttribute("start", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
-                    emit dataChanged(index, index);
-                    changed = true;
-                    break;
-                case 1:
-                    element.setAttribute("end", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
-                    emit dataChanged(index, index);
-                    changed = true;
-                    break;
-                case 5:
-                    element.firstChildElement("details").firstChild().toText().setData(value.toString());
-                    emit dataChanged(index, index);
-                    changed = true;
-                    break;
-                default:
-                    changed = false;
-                    break;
-            }
+        QDomElement domRoot = m_domFile.firstChildElement("day");
+        while(domRoot.attribute("date").compare(currentDate) != 0)
+            domRoot = domRoot.nextSiblingElement("day");
 
-            // Update change in .xml file.
-            if (changed)
-                writeInXmlFile(FILENAME);
+        QDomElement element = domRoot.firstChildElement("task");
+
+        for (int i=1; i<=index.row(); i++)
+            element = element.nextSiblingElement("task");
+
+        // Replace new value in memory.
+        switch (index.column())
+        {
+            case 0:
+                element.setAttribute("start", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+                emit dataChanged(index, index);
+                changed = true;
+                break;
+            case 1:
+                element.setAttribute("end", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+                emit dataChanged(index, index);
+                changed = true;
+                break;
+            case 5:
+                element.firstChildElement("details").firstChild().toText().setData(value.toString());
+                emit dataChanged(index, index);
+                changed = true;
+                break;
+            default:
+                changed = false;
+                break;
+        }
+
+        // Update change in .xml file.
+        if (changed)
+            writeInXmlFile(FILENAME);
 
     }
     return changed;
@@ -232,12 +245,11 @@ bool WhchTableModel::setData(const QModelIndex &index,
 /* List of attributes "attribute". */
 QStringList WhchTableModel::AttributesList(const QString &attribute)
 {
-    QDomElement domRoot = m_domFile.firstChildElement("day");
     QStringList attributes;
 
-    if (!domRoot.isNull())
+    for (QDomElement domRoot = m_domFile.firstChildElement("day");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("day"))
     {
-
         for (QDomElement element = domRoot.firstChildElement("task");
              !element.isNull(); element = element.nextSiblingElement("task"))
         { 
@@ -257,13 +269,13 @@ QStringList WhchTableModel::AttributesList(const QString &attribute)
 /* List of tasks related with the given client. */
 QStringList WhchTableModel::ClientTasks(const QString &client)
 {
-    QDomElement domRoot = m_domFile.firstChildElement("day");
     QStringList clientTasks;
 
-    if (!domRoot.isNull())
+    for (QDomElement domRoot = m_domFile.firstChildElement("day");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("day"))
     {
-        QDomElement element = domRoot.firstChildElement("task");
-        for (; !element.isNull(); element = element.nextSiblingElement("task"))
+        for (QDomElement element = domRoot.firstChildElement("task");
+             !element.isNull(); element = element.nextSiblingElement("task"))
         {
             if (element.attribute("client").compare(client) == 0)
             {
@@ -280,8 +292,27 @@ QStringList WhchTableModel::ClientTasks(const QString &client)
 /* FIXME: Refactorize. */
 void WhchTableModel::setNewTask(WhchTask currentTask)
 {
-    // Create a root element for the DOM.
+    // Look if the current day already exists in memory
+    QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
+
     QDomElement domRoot = m_domFile.firstChildElement("day");
+    for (; !domRoot.isNull(); domRoot = domRoot.nextSiblingElement())
+    {
+        if (domRoot.attribute("date").compare(currentDate) == 0)
+        {
+            std::cout << "day is in memory" << std::endl;
+            break;
+        }
+    }
+    // Create current day in memory.
+    if (domRoot.isNull())
+    {
+        domRoot = m_domFile.createElement("day");
+        domRoot.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
+        m_domFile.appendChild(domRoot);
+    }
+
+    /*QDomElement domRoot = m_domFile.firstChildElement("day");*/
 
     // Set data. (FUNCION SET TASK)
     m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
