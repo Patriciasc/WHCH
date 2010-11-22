@@ -90,8 +90,13 @@ QVariant WhchTableModel::data(const QModelIndex &index,
 {
     if ((index.isValid()) && ((role == Qt::DisplayRole) || (role == Qt::EditRole)))
     {
-        // Get index element from file.
+        // Get index element from file from the current day.
+        QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
         QDomElement domRoot = m_domFile.firstChildElement("day");
+
+        while(domRoot.attribute("date").compare(currentDate) != 0)
+            domRoot = domRoot.nextSiblingElement("day");
+
         QDomElement element = domRoot.firstChildElement("task");
 
         for (int i=1; i<=index.row(); i++ )

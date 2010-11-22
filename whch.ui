@@ -41,10 +41,13 @@
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Sunken</enum>
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="lineWidth">
          <number>0</number>
+        </property>
+        <property name="autoScroll">
+         <bool>true</bool>
         </property>
         <property name="alternatingRowColors">
          <bool>true</bool>
@@ -52,6 +55,12 @@
         <property name="gridStyle">
          <enum>Qt::SolidLine</enum>
         </property>
+        <property name="sortingEnabled">
+         <bool>false</bool>
+        </property>
+        <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+         <bool>false</bool>
+        </attribute>
         <attribute name="horizontalHeaderStretchLastSection">
          <bool>true</bool>
         </attribute>
