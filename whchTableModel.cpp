@@ -402,15 +402,10 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 
             // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
             writeInXmlFile (FILENAME);
-            /*QFile file(FILENAME);
-            if (!file.open(QIODevice::ReadWrite))
-                std::cout << "Error writing result to file" << std::endl;
 
-            QTextStream ts(&file);
-            ts << m_domFile.toString();
-
-            file.close();*/
+            // Refresh view.
             reset();
+
             loadXmlFile(FILENAME);
 
             // Set start time and restart timer for the next task.
