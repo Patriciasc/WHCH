@@ -50,17 +50,12 @@ WhchTableModel::WhchTableModel(QObject *parent)
     {
         m_domFile = QDomDocument("DOMtest");
 
-        //NEW
+        // Create root element for the DOM
         QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
 
         QDomElement domRoot = m_domFile.createElement("year");
         domRoot.setAttribute("date", currentDate.section("/", 0, 0));
         m_domFile.appendChild(domRoot);
-
-        // Create a root element for the DOM.
-        /*QDomElement dayElement = m_domFile.createElement("day");
-        dayElement.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
-        domRoot.appendChild(dayElement);*/
 
         // Write result to an .xml file.
         if (!file.open(QIODevice::WriteOnly))
@@ -113,6 +108,7 @@ QVariant WhchTableModel::data(const QModelIndex &index,
         QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
         QDomElement element;
 
+        // Search for the element in memory.
         for (QDomElement domRoot = m_domFile.firstChildElement("year");
              !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
         {
@@ -132,7 +128,6 @@ QVariant WhchTableModel::data(const QModelIndex &index,
 
         for (int i=1; i<=index.row(); i++ )
             element = element.nextSiblingElement("task");
-
 
         // Display index value.
         switch (index.column())
@@ -222,11 +217,10 @@ bool WhchTableModel::setData(const QModelIndex &index,
 
     if (index.isValid() && role == Qt::EditRole)
     {
-
         QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
-
         QDomElement element;
 
+        // Serach for the element in memory
         for (QDomElement domRoot = m_domFile.firstChildElement("year");
              !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
         {
@@ -273,7 +267,6 @@ bool WhchTableModel::setData(const QModelIndex &index,
         // Update change in .xml file.
         if (changed)
             writeInXmlFile(FILENAME);
-
     }
     return changed;
 }
@@ -362,6 +355,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 
     QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
 
+    // Set the new task in the current date.
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
     !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
@@ -383,9 +377,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
                 m_domFile.appendChild(dayElement);
             }
 
-            /*QDomElement domRoot = m_domFile.firstChildElement("day");*/
-
-            // Set data. (FUNCION SET TASK)
+            // Set data for the new task. (FUNCION SET TASK)
             m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
             m_task.setAttribute("name", currentTask.m_name);
             m_task.setAttribute("client", currentTask.m_client);
@@ -395,6 +387,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             detailsTag.appendChild(detailsText);
             m_task.appendChild(detailsTag);
 
+            // Add elements in memory.
             dayElement.appendChild(m_task);
             domRoot.appendChild(dayElement);
 
