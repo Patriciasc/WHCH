@@ -401,14 +401,15 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             domRoot.appendChild(dayElement);
 
             // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
-            QFile file(FILENAME);
+            writeInXmlFile (FILENAME);
+            /*QFile file(FILENAME);
             if (!file.open(QIODevice::ReadWrite))
                 std::cout << "Error writing result to file" << std::endl;
 
             QTextStream ts(&file);
             ts << m_domFile.toString();
 
-            file.close();
+            file.close();*/
             reset();
             loadXmlFile(FILENAME);
 
