@@ -45,7 +45,6 @@ WhchTableModel::WhchTableModel(QObject *parent)
     // Set start time and timer for first task.
     m_task = m_domFile.createElement("task");
     m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
-    m_timer.start();
 
     /* Create .xml file if it does not exist. */
     QFile file(FILENAME);
@@ -393,7 +392,6 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             // Set start time and restart timer for the next task.
             m_task = m_domFile.createElement("task");
             m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
-            m_timer.start();
         }
     }
 }
