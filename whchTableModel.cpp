@@ -32,8 +32,6 @@
 #include <QFile>
 #include <iostream>
 #include <QTextStream>
-#include <QRegExpValidator>
-#include <QRegExp>
 #include <QDateTime>
 #include <QDebug>
 
