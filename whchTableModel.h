@@ -58,14 +58,13 @@ public:
     QString clientOfTask(const QString task);
 
 public slots:
-    void setNewTask(WhchTask currentTask);
     QStringList ClientTasks(const QString &client);
+    void setNewTask(WhchTask currentTask);
 
 private:
     /* .xml file in memory. */
     QDomDocument m_domFile;
     QDomElement m_task;
-    QTime m_timer;
 
     void loadXmlFile(const QString &filename);
     void writeInXmlFile(const QString &filename);

@@ -304,6 +304,29 @@ QStringList WhchTableModel::AttributesList(const QString &attribute)
     return attributes;
 }
 
+// Retrieves given task's client.
+QString WhchTableModel::clientOfTask(const QString task)
+{
+    QString client;
+
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    {
+        for (QDomElement dayElement = domRoot.firstChildElement("day");
+             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+        {
+            for (QDomElement element = dayElement.firstChildElement("task");
+                 !element.isNull(); element = element.nextSiblingElement("task"))
+            {
+                if (element.attribute("name").compare(task) == 0)
+                    return client = element.attribute("client");
+            }
+        }
+
+    }
+    return client;
+}
+
 /* ----- */
 /* SLOTS */
 /* ----- */
@@ -430,26 +453,3 @@ void WhchTableModel::writeInXmlFile (const QString &filename)
 
     file.close();
  }
-
-// Retrieves given task's client.
-QString WhchTableModel::clientOfTask(const QString task)
-{
-    QString client;
-
-    for (QDomElement domRoot = m_domFile.firstChildElement("year");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
-    {
-        for (QDomElement dayElement = domRoot.firstChildElement("day");
-             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
-        {
-            for (QDomElement element = dayElement.firstChildElement("task");
-                 !element.isNull(); element = element.nextSiblingElement("task"))
-            {
-                if (element.attribute("name").compare(task) == 0)
-                    return client = element.attribute("client");
-            }
-        }
-
-    }
-    return client;
-}
