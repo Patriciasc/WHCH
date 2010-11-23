@@ -53,10 +53,17 @@ WhchTableModel::WhchTableModel(QObject *parent)
     {
         m_domFile = QDomDocument("DOMtest");
 
-        // Create a root element for the DOM.
-        QDomElement domRoot = m_domFile.createElement("day");
-        domRoot.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
+        //NEW
+        QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
+
+        QDomElement domRoot = m_domFile.createElement("year");
+        domRoot.setAttribute("date", currentDate.section("/", 0, 0));
         m_domFile.appendChild(domRoot);
+
+        // Create a root element for the DOM.
+        /*QDomElement dayElement = m_domFile.createElement("day");
+        dayElement.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
+        domRoot.appendChild(dayElement);*/
 
         // Write result to an .xml file.
         if (!file.open(QIODevice::WriteOnly))
@@ -79,11 +86,18 @@ int WhchTableModel::rowCount(const QModelIndex &parent) const
     QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
     int rowCount = 0;
 
-    for (QDomElement domRoot = m_domFile.firstChildElement("day");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("day"))
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        if (domRoot.attribute("date").compare(currentDate) == 0)
-            rowCount = +domRoot.elementsByTagName("task").count();
+        if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
+        {
+            for (QDomElement dayElement = domRoot.firstChildElement("day");
+                 !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            {
+                if (dayElement.attribute("date").compare(currentDate) == 0)
+                    rowCount = +dayElement.elementsByTagName("task").count();
+            }
+        }
     }
     return rowCount;
 }
@@ -100,12 +114,24 @@ QVariant WhchTableModel::data(const QModelIndex &index,
     if ((index.isValid()) && ((role == Qt::DisplayRole) || (role == Qt::EditRole)))
     {
         QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
+        QDomElement element;
 
-        QDomElement domRoot = m_domFile.firstChildElement("day");
-        while(domRoot.attribute("date").compare(currentDate) != 0)
-            domRoot = domRoot.nextSiblingElement("day");
-
-        QDomElement element = domRoot.firstChildElement("task");
+        for (QDomElement domRoot = m_domFile.firstChildElement("year");
+             !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+        {
+            if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
+            {
+                for (QDomElement dayElement = domRoot.firstChildElement("day");
+                     !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+                {
+                    if (dayElement.attribute("date").compare(currentDate) == 0)
+                    {
+                        element = dayElement.firstChildElement("task");
+                        break;
+                    }
+                }
+            }
+         }
 
         for (int i=1; i<=index.row(); i++ )
             element = element.nextSiblingElement("task");
@@ -202,11 +228,24 @@ bool WhchTableModel::setData(const QModelIndex &index,
 
         QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
 
-        QDomElement domRoot = m_domFile.firstChildElement("day");
-        while(domRoot.attribute("date").compare(currentDate) != 0)
-            domRoot = domRoot.nextSiblingElement("day");
+        QDomElement element;
 
-        QDomElement element = domRoot.firstChildElement("task");
+        for (QDomElement domRoot = m_domFile.firstChildElement("year");
+             !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+        {
+            if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
+            {
+                for (QDomElement dayElement = domRoot.firstChildElement("day");
+                     !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+                {
+                    if (dayElement.attribute("date").compare(currentDate) == 0)
+                    {
+                        element = dayElement.firstChildElement("task");
+                        break;
+                    }
+                }
+            }
+         }
 
         for (int i=1; i<=index.row(); i++)
             element = element.nextSiblingElement("task");
@@ -247,16 +286,20 @@ QStringList WhchTableModel::AttributesList(const QString &attribute)
 {
     QStringList attributes;
 
-    for (QDomElement domRoot = m_domFile.firstChildElement("day");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("day"))
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        for (QDomElement element = domRoot.firstChildElement("task");
-             !element.isNull(); element = element.nextSiblingElement("task"))
-        { 
-            const QString attributeName = element.attribute(attribute);
-            // Do not repeat attributes in the list.
-            if (attributes.filter(attributeName).empty())
-                attributes << attributeName;
+        for (QDomElement dayElement = domRoot.firstChildElement("day");
+             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+        {
+            for (QDomElement element = dayElement.firstChildElement("task");
+                 !element.isNull(); element = element.nextSiblingElement("task"))
+            {
+                const QString attributeName = element.attribute(attribute);
+                // Do not repeat attributes in the list.
+                if (attributes.filter(attributeName).empty())
+                    attributes << attributeName;
+            }
         }
     }
     return attributes;
@@ -271,18 +314,22 @@ QStringList WhchTableModel::ClientTasks(const QString &client)
 {
     QStringList clientTasks;
 
-    for (QDomElement domRoot = m_domFile.firstChildElement("day");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("day"))
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        for (QDomElement element = domRoot.firstChildElement("task");
-             !element.isNull(); element = element.nextSiblingElement("task"))
+        for (QDomElement dayElement = domRoot.firstChildElement("day");
+             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
         {
-            if (element.attribute("client").compare(client) == 0)
+            for (QDomElement element = dayElement.firstChildElement("task");
+                 !element.isNull(); element = element.nextSiblingElement("task"))
             {
-                const QString taskName = element.attribute("name");
-                /* Not repeat tasks in the list. */
-                if (clientTasks.filter(taskName).empty())
-                    clientTasks << taskName;
+                if (element.attribute("client").compare(client) == 0)
+                {
+                    const QString taskName = element.attribute("name");
+                    /* Not repeat tasks in the list. */
+                    if (clientTasks.filter(taskName).empty())
+                        clientTasks << taskName;
+                }
             }
         }
     }
@@ -292,56 +339,63 @@ QStringList WhchTableModel::ClientTasks(const QString &client)
 /* FIXME: Refactorize. */
 void WhchTableModel::setNewTask(WhchTask currentTask)
 {
-    // Look if the current day already exists in memory
+
     QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
 
-    QDomElement domRoot = m_domFile.firstChildElement("day");
-    for (; !domRoot.isNull(); domRoot = domRoot.nextSiblingElement())
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        if (domRoot.attribute("date").compare(currentDate) == 0)
+        if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
-            std::cout << "day is in memory" << std::endl;
-            break;
+            // Look if the current day already exists in memory
+            QDomElement dayElement = domRoot.firstChildElement("day");
+            for (; !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            {
+                if (dayElement.attribute("date").compare(currentDate) == 0)
+                    break;
+            }
+
+            // Create current day in memory.
+            if (dayElement.isNull())
+            {
+                dayElement = m_domFile.createElement("day");
+                dayElement.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
+                m_domFile.appendChild(dayElement);
+            }
+
+            /*QDomElement domRoot = m_domFile.firstChildElement("day");*/
+
+            // Set data. (FUNCION SET TASK)
+            m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+            m_task.setAttribute("name", currentTask.m_name);
+            m_task.setAttribute("client", currentTask.m_client);
+
+            QDomElement detailsTag = m_domFile.createElement("details");
+            QDomText detailsText = m_domFile.createTextNode(currentTask.m_details);
+            detailsTag.appendChild(detailsText);
+            m_task.appendChild(detailsTag);
+
+            dayElement.appendChild(m_task);
+            domRoot.appendChild(dayElement);
+
+            // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
+            QFile file(FILENAME);
+            if (!file.open(QIODevice::ReadWrite))
+                std::cout << "Error writing result to file" << std::endl;
+
+            QTextStream ts(&file);
+            ts << m_domFile.toString();
+
+            file.close();
+            reset();
+            loadXmlFile(FILENAME);
+
+            // Set start time and restart timer for the next task.
+            m_task = m_domFile.createElement("task");
+            m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+            m_timer.start();
         }
     }
-    // Create current day in memory.
-    if (domRoot.isNull())
-    {
-        domRoot = m_domFile.createElement("day");
-        domRoot.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
-        m_domFile.appendChild(domRoot);
-    }
-
-    /*QDomElement domRoot = m_domFile.firstChildElement("day");*/
-
-    // Set data. (FUNCION SET TASK)
-    m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
-    m_task.setAttribute("name", currentTask.m_name);
-    m_task.setAttribute("client", currentTask.m_client);
-
-    QDomElement detailsTag = m_domFile.createElement("details");
-    QDomText detailsText = m_domFile.createTextNode(currentTask.m_details);
-    detailsTag.appendChild(detailsText);
-    m_task.appendChild(detailsTag);
-
-    domRoot.appendChild(m_task);
-
-    // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
-    QFile file(FILENAME);
-    if (!file.open(QIODevice::ReadWrite))
-        std::cout << "Error writing result to file" << std::endl;
-
-    QTextStream ts(&file);
-    ts << m_domFile.toString();
-
-    file.close();
-    reset();
-    loadXmlFile(FILENAME);
-
-    // Set start time and restart timer for the next task.
-    m_task = m_domFile.createElement("task");
-    m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
-    m_timer.start();
 }
 
 /* ------------------- */
@@ -382,17 +436,22 @@ void WhchTableModel::writeInXmlFile (const QString &filename)
 // Retrieves given task's client.
 QString WhchTableModel::clientOfTask(const QString task)
 {
-    QDomElement domRoot = m_domFile.firstChildElement("day");
     QString client;
 
-    if (!domRoot.isNull())
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        QDomElement element = domRoot.firstChildElement("task");
-        for (; !element.isNull(); element = element.nextSiblingElement("task"))
+        for (QDomElement dayElement = domRoot.firstChildElement("day");
+             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
         {
-            if (element.attribute("name").compare(task) == 0)
-                return client = element.attribute("client");
+            for (QDomElement element = dayElement.firstChildElement("task");
+                 !element.isNull(); element = element.nextSiblingElement("task"))
+            {
+                if (element.attribute("name").compare(task) == 0)
+                    return client = element.attribute("client");
+            }
         }
+
     }
     return client;
 }
