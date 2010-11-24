@@ -48,7 +48,7 @@ WhchTableModel::WhchTableModel(QObject *parent)
     QFile file(FILENAME);
     if (!file.exists())
     {
-        m_domFile = QDomDocument("DOMtest");
+        m_domFile = QDomDocument("WHCH");
 
         // Create root element for the DOM
         QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));

@@ -297,7 +297,7 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
         // Do not repeat tasks.
         if(!tasks.contains(itemText))
         {
-            tasks << itemText << "";
+            tasks << itemText;
             m_sessionData.insert(currentClient, tasks);
         }
 
