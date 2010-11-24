@@ -317,6 +317,7 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 {
     const QString itemText (item->text());
+
     if (itemText.compare("") != 0)
     {
         // Update task's combobox.
@@ -327,9 +328,18 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
         const QString currentClient(m_uiDialog->comboBox->currentText());
 
         // Do not repeat tasks.
-        // TODO: give some feedback if user enters twice the same task.
         if(!clientTotalTasks(currentClient).contains(itemText))
         {
+            std::cout << "if" << std::endl;
+
+            // Change color back to white (for repeated elements).
+            if (item->backgroundColor() != Qt::white)
+            {
+                const QColor warningColor (Qt::white);
+                item->setBackgroundColor(warningColor);
+            }
+
+            // Add new task as session data.
             QStringList tasks(m_sessionData.value(currentClient));
             tasks << itemText;
             m_sessionData.insert(currentClient, tasks);
@@ -338,6 +348,16 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
             m_uiDialog->tableWidget->setRowCount(clientTotalTasks(currentClient).count()+1);
             QTableWidgetItem *newItem = new QTableWidgetItem("");
             m_uiDialog->tableWidget->setItem(clientTotalTasks(currentClient).count(), 0, newItem);
+        }
+        else
+        {
+            // FIXME: Still not working correctly.
+            // Give feedback to the user on repeated elements.
+            std::cout << "else" << std::endl;
+            QColor warningColor;
+            warningColor.setRed(200);
+            item->setBackgroundColor(warningColor);
+            item->setSelected(false);
         }
     }
 }
