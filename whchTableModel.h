@@ -55,7 +55,8 @@ public:
                  int role = Qt::EditRole);
 
     QStringList AttributesList(const QString &attribute);
-    QString clientOfTask(const QString task);
+    QString clientOfTask(const QString &task);
+    bool isClient(const QString &client);
 
 public slots:
     QStringList ClientTasks(const QString &client);

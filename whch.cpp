@@ -155,6 +155,39 @@ QString Whch::sessionClientOfTask(const QString &task)
     return sessionClient;
 }
 
+QStringList Whch::sessionClientTasks(const QString &client)
+{
+    return m_sessionData[client];
+}
+
+bool Whch::isSessionClient(const QString &client)
+{
+    if (m_sessionData.contains(client))
+        return true;
+    return false;
+}
+
+// Return a list of the total tasks of a client. Those saved
+// in the .xml file and those that are session data.
+QStringList Whch::clientTotalTasks(const QString &client)
+{
+    QStringList clientTasks;
+
+    if (m_model->isClient(client))
+        clientTasks << m_model->ClientTasks(client);
+    if (m_sessionData.contains(client))
+    {
+        QStringList sessionClientTasks(m_sessionData.value(client));
+        for (int i = 0; i < sessionClientTasks.size(); ++i)
+        {
+            const QString sessionTaskItem(sessionClientTasks.at(i));
+            if (!clientTasks.contains(sessionTaskItem))
+                clientTasks << sessionTaskItem;
+        }
+    }
+    return clientTasks;
+}
+
 /* ----- */
 /* SLOTS */
 /* ----- */
@@ -292,15 +325,20 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 
         // Save data into session structure.
         const QString currentClient(m_uiDialog->comboBox->currentText());
-        QStringList tasks(m_sessionData.value(currentClient));
 
         // Do not repeat tasks.
-        if(!tasks.contains(itemText))
+        // TODO: give some feedback if user enters twice the same task.
+        if(!clientTotalTasks(currentClient).contains(itemText))
         {
+            QStringList tasks(m_sessionData.value(currentClient));
             tasks << itemText;
             m_sessionData.insert(currentClient, tasks);
-        }
 
+            // Insert new empty element.
+            m_uiDialog->tableWidget->setRowCount(clientTotalTasks(currentClient).count()+1);
+            QTableWidgetItem *newItem = new QTableWidgetItem("");
+            m_uiDialog->tableWidget->setItem(clientTotalTasks(currentClient).count(), 0, newItem);
+        }
     }
 }
 

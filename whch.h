@@ -79,6 +79,9 @@ private slots:
     void onTimerTimeOut();
     QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
+    QStringList sessionClientTasks(const QString &client);
+    bool isSessionClient(const QString &client);
+    QStringList clientTotalTasks(const QString &client);
 };
 
 #endif // WHCH_H
