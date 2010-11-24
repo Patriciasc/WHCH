@@ -43,7 +43,8 @@
 #include <QTimer>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
-static const QString NEW_TASK(QObject::tr( "Add new task"));
+static const QString NEW_TASK(QObject::tr("Add new task"));
+static const QString ADVISE(QObject::tr("Soo... What have you been doing in the last minutes?"));
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
@@ -165,8 +166,8 @@ void Whch::onLineEditReturn()
     const QString lineEditText(m_ui->lineEdit->text());
 
     // Do not admit empty detail's fields.
-    if (lineEditText.isEmpty())
-        m_ui->lineEdit->setText("Soo... What have you been doing in the last minutes?");
+    if (lineEditText.isEmpty() || lineEditText.compare(ADVISE) == 0)
+        m_ui->lineEdit->setText(ADVISE);
 
     else
     {
@@ -259,7 +260,6 @@ void Whch::onDialogLineEditReturn()
 {
     //Save new client in list of current session clients.
     QStringList clients(m_model->AttributesList("client"));
-    //qDebug() << "client" <<  m_uiDialog->comboBox->lineEdit()->text();
     const QString newClient = m_uiDialog->comboBox->lineEdit()->text();
     if (!clients.contains(newClient))
     {
@@ -268,7 +268,7 @@ void Whch::onDialogLineEditReturn()
     }
 
     // FIXME: If I do not set editable = false, the programm
-    // does not give a segmentation false. If it is true, it
+    // does not give a segmentation fault. If it is true, it
     // does. This FIXME is explained in the Wiki page.
     m_uiDialog->comboBox->setEditable(false);
 }
@@ -297,9 +297,10 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
         // Do not repeat tasks.
         if(!tasks.contains(itemText))
         {
-            tasks << itemText;
+            tasks << itemText << "";
             m_sessionData.insert(currentClient, tasks);
         }
+
     }
 }
 
