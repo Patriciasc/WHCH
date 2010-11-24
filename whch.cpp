@@ -44,7 +44,7 @@
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr("Add new task"));
-static const QString ADVISE(QObject::tr("Soo... What have you been doing in the last minutes?"));
+static const QString WARNING(QObject::tr("Soo... What have you been doing in the last minutes?"));
 
 Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
@@ -166,8 +166,8 @@ void Whch::onLineEditReturn()
     const QString lineEditText(m_ui->lineEdit->text());
 
     // Do not admit empty detail's fields.
-    if (lineEditText.isEmpty() || lineEditText.compare(ADVISE) == 0)
-        m_ui->lineEdit->setText(ADVISE);
+    if (lineEditText.isEmpty() || lineEditText.compare(WARNING) == 0)
+        m_ui->lineEdit->setText(WARNING);
 
     else
     {
