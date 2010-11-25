@@ -41,6 +41,7 @@
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QTimer>
+#include <QComboBox>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr("Add new task"));
@@ -243,9 +244,22 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
         m_uiDialog->comboBox->setEditable(true);
         m_uiDialog->comboBox->clearEditText();
         QLineEdit *lineEdit = m_uiDialog->comboBox->lineEdit();
-        QObject::connect(lineEdit, SIGNAL(returnPressed()),
-                         this, SLOT(onDialogLineEditReturn()));
+
+        // Update session data.
+        const QString newClient = lineEdit->text();
+        if (newClient.compare("") != 0)
+        {
+            QStringList clients(m_model->AttributesList("client"));
+
+            if (!clients.contains(newClient))
+            {
+                QStringList tasks;
+                m_sessionData.insert(newClient, tasks);
+            }
+        }
     }
+    else
+        m_uiDialog->comboBox->setEditable(false);
 
     // Set current available tasks and new line for new task.
     QStringList clientTasks(m_model->ClientTasks(client));
@@ -288,24 +302,6 @@ void Whch::onUiComboboxItemActivated(const QString &task)
         m_ui->lineEdit->setEnabled(true);
 }
 
-// Update session data.
-void Whch::onDialogLineEditReturn()
-{
-    //Save new client in list of current session clients.
-    QStringList clients(m_model->AttributesList("client"));
-    const QString newClient = m_uiDialog->comboBox->lineEdit()->text();
-    if (!clients.contains(newClient))
-    {
-        QStringList tasks;
-        m_sessionData.insert(newClient, tasks);
-    }
-
-    // FIXME: If I do not set editable = false, the programm
-    // does not give a segmentation fault. If it is true, it
-    // does. This FIXME is explained in the Wiki page.
-    m_uiDialog->comboBox->setEditable(false);
-}
-
 // Makes last row editable.
 void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 {
@@ -330,14 +326,16 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
         // Do not repeat tasks.
         if(!clientTotalTasks(currentClient).contains(itemText))
         {
-            std::cout << "if" << std::endl;
+            // FIXME: Commented code is for testing still.
+            // Still not working correctly.
+            //std::cout << "if" << std::endl;
 
             // Change color back to white (for repeated elements).
-            if (item->backgroundColor() != Qt::white)
+           /* if (item->backgroundColor() != Qt::white)
             {
                 const QColor warningColor (Qt::white);
                 item->setBackgroundColor(warningColor);
-            }
+            }*/
 
             // Add new task as session data.
             QStringList tasks(m_sessionData.value(currentClient));
@@ -349,16 +347,15 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
             QTableWidgetItem *newItem = new QTableWidgetItem("");
             m_uiDialog->tableWidget->setItem(clientTotalTasks(currentClient).count(), 0, newItem);
         }
-        else
+        /*else
         {
-            // FIXME: Still not working correctly.
             // Give feedback to the user on repeated elements.
             std::cout << "else" << std::endl;
             QColor warningColor;
             warningColor.setRed(200);
             item->setBackgroundColor(warningColor);
             item->setSelected(false);
-        }
+        }*/
     }
 }
 
