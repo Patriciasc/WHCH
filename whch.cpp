@@ -302,7 +302,6 @@ void Whch::onUiComboboxItemActivated(const QString &task)
 // Makes last row editable.
 void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 {
-    std::cout << "CELL" << std::endl;
     if ((item->column() == 0) && (item->row() == m_uiDialog->tableWidget->rowCount()-1))
         m_uiDialog->tableWidget->editItem(item);
 }
@@ -310,8 +309,6 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 // Save user's new task into the session's structure.
 void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 {
-    std::cout << "ITEM" << std::endl;
-
     const QString itemText (item->text());
 
     if (itemText.compare("") != 0)
@@ -332,7 +329,9 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
         if(!clientTotalTasks(currentClient).contains(itemText))
         {
             // FIXME: Commented code is for testing still.
-            // Still not working correctly.
+            // This code should give feedback to the user
+            // when introducing an already existent task.
+            // Still not working.
             //std::cout << "if" << std::endl;
 
             // Change color back to white (for repeated elements).
