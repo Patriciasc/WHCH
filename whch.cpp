@@ -290,8 +290,7 @@ void Whch::onUiComboboxItemActivated(const QString &task)
 {
     if (task.compare(NEW_TASK) == 0)
     {
-        // Clean line in the case tha the user tried to
-        // add some empty details.
+        // Displays "Add tasks/clients" dialog.
         m_ui->lineEdit->clear();
         m_ui->lineEdit->setEnabled(false);
         on_actionTasks_triggered();
