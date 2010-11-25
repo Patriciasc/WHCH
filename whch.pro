@@ -10,14 +10,14 @@ TARGET = whch
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-           whch.cpp \
-           whchTableModel.cpp \
-           whchTask.cpp
+SOURCES += src/main.cpp\
+           src/whch.cpp \
+           src/whchTableModel.cpp \
+           src/whchTask.cpp
 
-HEADERS += whch.h \
-           whchTableModel.h \
-           whchTask.h
+HEADERS += src/whch.h \
+           src/whchTableModel.h \
+           src/whchTask.h
 
-FORMS   += whch.ui \
-           dialogTasksClients.ui
+FORMS   += ui/whch.ui \
+           ui/dialogTasksClients.ui
