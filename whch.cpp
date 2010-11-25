@@ -69,8 +69,6 @@ Whch::Whch(QWidget *parent) :
 
     // Set list of available tasks and give user a start point in the
     // usage of the app, which would be to add a task related to a client.
-    // FIXME: the policy is not working when inserting new tasks.
-    // I would like to keep "Add new task" always as the last item.
     m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
     QStringList tasks = m_model->AttributesList("name") <<  NEW_TASK;
     m_ui->comboBox->addItems(tasks);
@@ -305,6 +303,7 @@ void Whch::onUiComboboxItemActivated(const QString &task)
 // Makes last row editable.
 void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 {
+    std::cout << "CELL" << std::endl;
     if ((item->column() == 0) && (item->row() == m_uiDialog->tableWidget->rowCount()-1))
         m_uiDialog->tableWidget->editItem(item);
 }
@@ -312,13 +311,20 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 // Save user's new task into the session's structure.
 void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 {
+    std::cout << "ITEM" << std::endl;
+
     const QString itemText (item->text());
 
     if (itemText.compare("") != 0)
     {
         // Update task's combobox.
         if((!sessionTasks().contains(itemText)) && (!m_model->AttributesList("name").contains(itemText)))
-            m_ui->comboBox->addItem(itemText);
+        {
+            m_ui->comboBox->clear();
+            QStringList tasks;
+            tasks << itemText << m_model->AttributesList("name")  <<  NEW_TASK;
+            m_ui->comboBox->addItems(tasks);
+        }
 
         // Save data into session structure.
         const QString currentClient(m_uiDialog->comboBox->currentText());
