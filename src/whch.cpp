@@ -187,6 +187,21 @@ QStringList Whch::clientTotalTasks(const QString &client)
     return clientTasks;
 }
 
+// Return total tasks (session and .xml file ones).
+QStringList Whch::totalTasks()
+{
+    QStringList totalTasks (m_model->AttributesList("name"));
+    QStringList newTasks (sessionTasks());
+
+    for (int i = 0; i < newTasks.count(); ++i)
+    {
+        const QString sessionTaskItem(newTasks.at(i));
+        if (!totalTasks.contains(sessionTaskItem))
+            totalTasks << sessionTaskItem;
+    }
+    return totalTasks;
+}
+
 /* ----- */
 /* SLOTS */
 /* ----- */
@@ -314,11 +329,11 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
     if (itemText.compare("") != 0)
     {
         // Update task's combobox.
-        if((!sessionTasks().contains(itemText)) && (!m_model->AttributesList("name").contains(itemText)))
+        if (!totalTasks().contains(itemText))
         {
             m_ui->comboBox->clear();
             QStringList tasks;
-            tasks << itemText << m_model->AttributesList("name")  <<  NEW_TASK;
+            tasks << itemText << totalTasks() <<  NEW_TASK;
             m_ui->comboBox->addItems(tasks);
         }
 

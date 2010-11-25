@@ -81,6 +81,7 @@ private slots:
     QStringList sessionClientTasks(const QString &client);
     bool isSessionClient(const QString &client);
     QStringList clientTotalTasks(const QString &client);
+    QStringList totalTasks();
 };
 
 #endif // WHCH_H
