@@ -226,11 +226,10 @@ void Whch::onLineEditReturn()
         const QString text(m_ui->comboBox->currentText());
         currentTask.m_name = text;
 
-        // The user did not add new tasks or clients.
-        if(m_sessionData.isEmpty())
-            currentTask.m_client = m_model->clientOfTask(text);
-        else
-            currentTask.m_client = sessionClientOfTask(text);
+        // Set task's related client.
+        currentTask.m_client = m_model->clientOfTask(text);
+        if (currentTask.m_client.compare("") == 0)
+            currentTask.m_client =  sessionClientOfTask(text);
 
         //Display new task.
         m_model->setNewTask(currentTask);
