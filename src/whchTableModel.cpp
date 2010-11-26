@@ -42,7 +42,7 @@ WhchTableModel::WhchTableModel(QObject *parent)
 {
     // Set start time and timer for first task.
     m_task = m_domFile.createElement("task");
-    m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+    m_task.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     /* Create .xml file if it does not exist. */
     QFile file(FILENAME);
@@ -135,12 +135,12 @@ QVariant WhchTableModel::data(const QModelIndex &index,
             case 0:
             {
                 QString time = element.attribute("start");
-                return QDateTime::fromString(time, "yyyy-MM-ddThh:mm:sstzd");
+                return QDateTime::fromString(time, Qt::ISODate);
             }
             case 1:
             {
                 QString time = element.attribute("end");
-                return QDateTime::fromString(time, "yyyy-MM-ddThh:mm:sstzd");
+                return QDateTime::fromString(time, Qt::ISODate);
             }
             case 2:
             {
@@ -245,12 +245,12 @@ bool WhchTableModel::setData(const QModelIndex &index,
         switch (index.column())
         {
             case 0:
-                element.setAttribute("start", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+                element.setAttribute("start", value.toDateTime().toString(Qt::ISODate));
                 emit dataChanged(index, index);
                 changed = true;
                 break;
             case 1:
-                element.setAttribute("end", value.toDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+                element.setAttribute("end", value.toDateTime().toString(Qt::ISODate));
                 emit dataChanged(index, index);
                 changed = true;
                 break;
@@ -397,7 +397,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             }
 
             // Set data for the new task. (FUNCION SET TASK)
-            m_task.setAttribute("end", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+            m_task.setAttribute("end", QDateTime::currentDateTime().toString(Qt::ISODate));
             m_task.setAttribute("name", currentTask.m_name);
             m_task.setAttribute("client", currentTask.m_client);
 
@@ -420,7 +420,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 
             // Set start time and restart timer for the next task.
             m_task = m_domFile.createElement("task");
-            m_task.setAttribute("start", QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:sstzd"));
+            m_task.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
         }
     }
 }
