@@ -4,11 +4,11 @@
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template match="/">
-  <xsl:text>{|</xsl:text><br/>
-  <xsl:text>|Client||Duration||Task</xsl:text><br/>
+  <xsl:text>{| border="1"</xsl:text><br/>
+  <xsl:text>!Client||Duration||Task</xsl:text><br/>
   <xsl:for-each select="year/day/task">
     <xsl:sort select="@client"/>
-    <xsl:text>|-</xsl:text><br/>
+      <xsl:text>|-</xsl:text><br/>
       <xsl:text>|</xsl:text>
       <xsl:value-of select="@client"/>
       <xsl:text>||</xsl:text>
