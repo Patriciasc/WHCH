@@ -4,29 +4,19 @@
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template match="/">
-  <html>
-  <body>
-  <h2>Working Hours. PSC</h2>
-  <table border="1">
-    <tr>
-      <th>Start</th>
-      <th>End</th>
-      <th>Client</th>
-      <th>Duration</th>
-      <th>Task</th>
-    </tr>
-    <xsl:for-each select="year/day/task">
+  <xsl:text>{|</xsl:text><br/>
+  <xsl:text>|Client||Duration||Task</xsl:text><br/>
+  <xsl:for-each select="year/day/task">
     <xsl:sort select="@client"/>
-    <tr>
-      <td><xsl:value-of select="@start"/></td>
-      <td><xsl:value-of select="@end"/></td>
-      <td><xsl:value-of select="@client"/></td>
-      <td><xsl:value-of select="@client"/></td>
-      <td><xsl:value-of select="@name"/></td>
-    </tr>
-    </xsl:for-each>
-  </table>
-  </body>
-  </html>
+    <xsl:text>|-</xsl:text><br/>
+      <xsl:text>|</xsl:text>
+      <xsl:value-of select="@client"/>
+      <xsl:text>||</xsl:text>
+      <xsl:value-of select="@end"/>
+      <xsl:text>||</xsl:text>
+      <xsl:value-of select="@name"/><br/>
+  </xsl:for-each>
+  <xsl:text>|}</xsl:text>
 </xsl:template>
 </xsl:stylesheet>
+
