@@ -19,7 +19,37 @@
       <xsl:text>||</xsl:text>
       <xsl:value-of select="@client"/>
       <xsl:text>||</xsl:text>
-      <xsl:value-of select="@name"/>
+
+      <!-- Start TESTING -->
+      <xsl:variable name="start" select="@start"/>
+      <xsl:variable name="startTime" select="substring-after($start,'T')"/>
+      <xsl:variable name="startHours" select="substring-before($startTime,':')"/>
+      <xsl:variable name="startMinutes" select="substring($startTime,4,2)"/>
+      <xsl:variable name="startSeconds" select="substring($startTime,7,2)"/>
+
+      <xsl:variable name="end" select="@end"/>
+      <xsl:variable name="endTime" select="substring-after($end,'T')"/>
+      <xsl:variable name="endHours" select="substring-before($endTime,':')"/>
+      <xsl:variable name="endMinutes" select="substring($endTime,4,2)"/>
+      <xsl:variable name="endSeconds" select="substring($endTime,7,2)"/>
+
+      <xsl:variable name="sHours" select="number($startHours)"/>
+      <xsl:variable name="eHours" select="number($endHours)"/>
+      <xsl:variable name="Hours" select="eHours - sHours"/>
+
+      <xsl:variable name="sMinutes" select="number($startMinutes)"/>
+      <xsl:variable name="eMinutes" select="number($endMinutes)"/>
+      <xsl:variable name="Minutes" select="eMinutes - sMinutes"/>
+
+      <xsl:variable name="sSeconds" select="number($startSeconds)"/>
+      <xsl:variable name="eSeconds" select="number($endSeconds)"/>
+      <xsl:variable name="Seconds" select="eSeconds - sSeconds"/>
+
+      <!-- convert first back to string? -->
+      <xsl:variable name="duration" select="concat($Hours,$Minutes,$Seconds)"/>
+      <xsl:value-of select="$Hours"/>
+      <!-- End TESTING -->
+
       <xsl:text>||</xsl:text>
       <xsl:value-of select="details"/>
     </xsl:for-each>
