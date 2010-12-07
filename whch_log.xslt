@@ -20,7 +20,8 @@
       <xsl:value-of select="@client"/>
       <xsl:text>||</xsl:text>
 
-      <!-- Start TESTING -->
+      <!-- Start: Calculate time difference -->
+      <!-- Need to find a good algorithem still. -->
       <xsl:variable name="start" select="@start"/>
       <xsl:variable name="startTime" select="substring-after($start,'T')"/>
       <xsl:variable name="startHours" select="substring-before($startTime,':')"/>
@@ -35,20 +36,19 @@
 
       <xsl:variable name="sHours" select="number($startHours)"/>
       <xsl:variable name="eHours" select="number($endHours)"/>
-      <xsl:variable name="Hours" select="eHours - sHours"/>
+      <xsl:variable name="Hours" select="$eHours - $sHours"/>
 
       <xsl:variable name="sMinutes" select="number($startMinutes)"/>
       <xsl:variable name="eMinutes" select="number($endMinutes)"/>
-      <xsl:variable name="Minutes" select="eMinutes - sMinutes"/>
+      <xsl:variable name="Minutes" select="$eMinutes - $sMinutes"/>
 
       <xsl:variable name="sSeconds" select="number($startSeconds)"/>
       <xsl:variable name="eSeconds" select="number($endSeconds)"/>
-      <xsl:variable name="Seconds" select="eSeconds - sSeconds"/>
+      <xsl:variable name="Seconds" select="$eSeconds - $sSeconds"/>
 
-      <!-- convert first back to string? -->
-      <xsl:variable name="duration" select="concat($Hours,$Minutes,$Seconds)"/>
-      <xsl:value-of select="$Hours"/>
-      <!-- End TESTING -->
+      <xsl:variable name="duration" select="concat($Hours,':',$Minutes, ':', $Seconds)"/>
+      <xsl:value-of select="$duration"/>
+      <!-- End: Calculate time difference -->
 
       <xsl:text>||</xsl:text>
       <xsl:value-of select="details"/>
