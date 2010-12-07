@@ -42,6 +42,7 @@
 #include <QStandardItemModel>
 #include <QTimer>
 #include <QComboBox>
+#include <QtXmlPatterns>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr("Add new task"));
@@ -433,4 +434,25 @@ void Whch::on_actionTasks_triggered()
 void Whch::on_actionAbout_whch_triggered()
 {
     return QMessageBox::aboutQt(this,"WHCH (Working hours counter for humans");
+}
+
+/* Still testing. */
+/* FIXME: change paths where files are saved. */
+/* Exports the .xml file to a wikimedia format. */
+void Whch::on_actionExport_to_wiki_format_triggered()
+{
+    QXmlQuery query(QXmlQuery::XSLT20);
+    query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
+    query.setQuery(QUrl("whch_log.xslt"));
+    QString *out;
+    query.evaluateTo(out);
+
+    QFile file("whch_wikimedia_format");
+    if (!file.open(QIODevice::WriteOnly))
+        std::cout << "Problem creating wikimedia format from .xml file" << std::endl;
+
+    QTextStream ts(&file);
+    ts << *out;
+
+    file.close();
 }

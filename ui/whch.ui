@@ -185,6 +185,8 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionExport_to_wiki_format"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -204,6 +206,11 @@
   <action name="actionAbout_whch">
    <property name="text">
     <string>About whch</string>
+   </property>
+  </action>
+  <action name="actionExport_to_wiki_format">
+   <property name="text">
+    <string>Export to wiki format</string>
    </property>
   </action>
  </widget>

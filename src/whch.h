@@ -73,6 +73,7 @@ private slots:
     void on_actionAbout_whch_triggered();
     void on_actionTasks_triggered();
     void on_actionQuit_triggered();
+    void on_actionExport_to_wiki_format_triggered();
 
     /* Auxiliary functions */
     void onTimerTimeOut();
