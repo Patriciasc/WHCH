@@ -60,6 +60,7 @@ private:
     /* Track spent time on current task */
     int m_seconds;
     QTimer *m_timer;
+    QTimer *m_progress_timer;
 
 private slots:
     /* Slots. */
@@ -83,6 +84,8 @@ private slots:
     bool isSessionClient(const QString &client);
     QStringList clientTotalTasks(const QString &client);
     QStringList totalTasks();
+    void show_progressbar();
+    void hide_progressbar();
 };
 
 #endif // WHCH_H
