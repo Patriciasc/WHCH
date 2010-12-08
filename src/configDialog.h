@@ -21,6 +21,7 @@ private:
 
     void writeSettings();
     void readSettings();
+    void setSettings();
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton* button);

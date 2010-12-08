@@ -60,3 +60,10 @@ void configDialog::readSettings()
     bool setBreakMsg = settings.value("break_msg").toBool();
     bool setOvertimeMsg = settings.value("break_msg").toBool();
 }
+
+void configDialog::setSettings()
+{
+    /* readSettings() */
+    /* set statusbar */
+    /* set notification messages */
+}
