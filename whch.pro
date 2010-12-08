@@ -13,11 +13,13 @@ TEMPLATE = app
 SOURCES += src/main.cpp\
            src/whch.cpp \
            src/whchTableModel.cpp \
-           src/whchTask.cpp
+           src/whchTask.cpp \
+    ui/configDialog.cpp
 
 HEADERS += src/whch.h \
            src/whchTableModel.h \
-           src/whchTask.h
+           src/whchTask.h \
+    ui/configDialog.h
 
 FORMS   += ui/whch.ui \
-           ui/dialogTasksClients.ui
+    ui/configDialog.ui
