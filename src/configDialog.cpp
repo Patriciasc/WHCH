@@ -29,7 +29,7 @@ void configDialog::writeSettings()
 {
     QCoreApplication::setOrganizationName("Openismus");
     QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("WHCH (Working Hours Counter for Humans)");
+    QCoreApplication::setApplicationName("WHCH");
 
     QSettings settings;
     settings.setValue("hours", QString::number(this->ui->spinBox->value()));
@@ -44,4 +44,19 @@ void configDialog::writeSettings()
         settings.setValue("overtime_msg", "true");
     else
         settings.setValue("overtime_msg", "false");
+}
+
+/* Read settings. */
+void configDialog::readSettings()
+{
+    QCoreApplication::setOrganizationName("Openismus");
+    QCoreApplication::setOrganizationDomain("openismus.com");
+    QCoreApplication::setApplicationName("WHCH");
+
+    QSettings settings;
+
+    int hours = settings.value("hours").toInt();
+    QString period = settings.value("period").toString();
+    bool setBreakMsg = settings.value("break_msg").toBool();
+    bool setOvertimeMsg = settings.value("break_msg").toBool();
 }

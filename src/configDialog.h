@@ -20,6 +20,7 @@ private:
     Ui::configDialog *ui;
 
     void writeSettings();
+    void readSettings();
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton* button);
