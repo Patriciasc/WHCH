@@ -371,7 +371,6 @@ QStringList WhchTableModel::ClientTasks(const QString &client)
 /* FIXME: Refactorize. */
 void WhchTableModel::setNewTask(WhchTask currentTask)
 {
-
     QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
 
     // Set the new task in the current date.
