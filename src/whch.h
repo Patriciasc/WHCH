@@ -84,8 +84,8 @@ private slots:
     bool isSessionClient(const QString &client);
     QStringList clientTotalTasks(const QString &client);
     QStringList totalTasks();
-    void show_progressbar();
-    void hide_progressbar();
+    void showProgressbar();
+    void hideProgressbar();
 };
 
 #endif // WHCH_H

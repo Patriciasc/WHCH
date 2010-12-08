@@ -444,7 +444,7 @@ void Whch::on_actionAbout_whch_triggered()
 void Whch::on_actionExport_to_wiki_format_triggered()
 {
     /* Set progress bar. */
-    show_progressbar();
+    showProgressbar();
 
     QXmlQuery query(QXmlQuery::XSLT20);
     query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
@@ -460,15 +460,15 @@ void Whch::on_actionExport_to_wiki_format_triggered()
 }
 
 /* Shows progressbar. */
-void Whch::show_progressbar()
+void Whch::showProgressbar()
 {
     m_ui->progressBar->show();
-    connect(m_progress_timer, SIGNAL(timeout()), this, SLOT(hide_progressbar()));
+    connect(m_progress_timer, SIGNAL(timeout()), this, SLOT(hideProgressbar()));
     m_progress_timer->start(1500);
 }
 
 /* Hides progressbar.*/
-void Whch::hide_progressbar()
+void Whch::hideProgressbar()
 {
     /* Set progress bar. */
     m_progress_timer->stop();
