@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "whchTableModel.h"
 #include <QFile>
+#include "configDialog.h"
 /*
  * ########################################################################
  * # File: WHCH (Working Hours Counter for Humans)- whch.h                #
@@ -53,6 +54,7 @@ public:
 private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
+    configDialog *m_uiConfigDialog;
     WhchTableModel *m_model;
     /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
@@ -75,6 +77,7 @@ private slots:
     void on_actionTasks_triggered();
     void on_actionQuit_triggered();
     void on_actionExport_to_wiki_format_triggered();
+    void on_actionPreferences_triggered();
 
     /* Auxiliary functions */
     void onTimerTimeOut();

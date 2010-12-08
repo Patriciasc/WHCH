@@ -52,6 +52,7 @@ Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::whch),
     m_uiDialog(new Ui::Dialog),
+    m_uiConfigDialog(new configDialog),
     m_seconds(0),
     m_timer(new QTimer),
     m_progress_timer(new QTimer)
@@ -99,6 +100,7 @@ Whch::~Whch()
 {
     delete m_ui;
     delete m_uiDialog;
+    delete m_uiConfigDialog;
 }
 
 /* ------------------- */
@@ -474,4 +476,10 @@ void Whch::hideProgressbar()
     m_progress_timer->stop();
     m_ui->progressBar->hide();
     m_ui->progressBar->reset();
+}
+
+/* Set up Configuration dialog */
+void Whch::on_actionPreferences_triggered()
+{
+    m_uiConfigDialog->show();
 }

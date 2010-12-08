@@ -2,6 +2,7 @@
 #define CONFIGDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
 
 namespace Ui {
     class configDialog;
@@ -17,6 +18,11 @@ public:
 
 private:
     Ui::configDialog *ui;
+
+    void writeSettings();
+
+private slots:
+    void on_buttonBox_clicked(QAbstractButton* button);
 };
 
 #endif // CONFIGDIALOG_H

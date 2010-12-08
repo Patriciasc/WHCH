@@ -14,12 +14,12 @@ SOURCES += src/main.cpp\
            src/whch.cpp \
            src/whchTableModel.cpp \
            src/whchTask.cpp \
-    ui/configDialog.cpp
+           src/configDialog.cpp
 
 HEADERS += src/whch.h \
            src/whchTableModel.h \
            src/whchTask.h \
-    ui/configDialog.h
+           src/configDialog.h
 
 FORMS   += ui/whch.ui \
     ui/configDialog.ui
