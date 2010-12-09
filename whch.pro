@@ -22,4 +22,5 @@ HEADERS += src/whch.h \
            src/configDialog.h
 
 FORMS   += ui/whch.ui \
-    ui/configDialog.ui
+    ui/configDialog.ui \
+    ui/dialogTasksClients.ui
