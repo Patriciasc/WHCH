@@ -58,12 +58,15 @@ public:
     QStringList AttributesList(const QString &attribute);
     QString clientOfTask(const QString &task);
     bool isClient(const QString &client);
+    QTime workedTime(Period timePeriod);
+    QTime dayWorkedTime(QString currentDate);
+    QTime weekWorkedTime(QString currentDate);
+    QTime monthWorkedTime(QString currentDate);
+    QTime yearWorkedTime(QString currentDate);
 
 public slots:
     QStringList ClientTasks(const QString &client);
     void setNewTask(WhchTask currentTask);
-    QTime workedTime(Period timePeriod);
-    QTime yearWorkedTime(QString currentDate);
 
 private:
     /* .xml file in memory. */

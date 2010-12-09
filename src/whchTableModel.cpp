@@ -459,6 +459,7 @@ void WhchTableModel::writeInXmlFile (const QString &filename)
     file.close();
  }
 
+/* Returns the total time worked in a period. */
 QTime WhchTableModel::workedTime(Period timePeriod)
 {
     QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
@@ -466,26 +467,39 @@ QTime WhchTableModel::workedTime(Period timePeriod)
     switch (timePeriod)
     {
         case PERIOD_DAY:
-        {
-           return yearWorkedTime(currentDate);
-        }
+            return dayWorkedTime(currentDate);
         case PERIOD_WEEK:
-            break;
+            return weekWorkedTime(currentDate);
         case PERIOD_MONTH:
-            break;
+            return monthWorkedTime(currentDate);
         case PERIOD_YEAR:
-            break;
+            return yearWorkedTime(currentDate);
         default:
             std::cout << "Failed calculating workedTime period" << std::endl;
     }
 }
 
+/* Returns the total time worked in a day. */
+QTime WhchTableModel::dayWorkedTime(QString currentDate)
+{
+}
+
+/* Returns the total time worked in a week. */
+QTime WhchTableModel::weekWorkedTime(QString currentDate)
+{
+}
+
+/* Returns the total time worked in a month. */
+QTime WhchTableModel::monthWorkedTime(QString currentDate)
+{
+}
+
+/* Returns the total time worked in a year. */
 QTime WhchTableModel::yearWorkedTime(QString currentDate)
 {
     int totalHours = 0;
     int totalMinutes = 0;
     int totalSeconds = 0;
-    QDomElement element;
 
     // Serach for the element in memory
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
