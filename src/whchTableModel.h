@@ -34,6 +34,7 @@
 #include <QDomDocument>
 #include <QStringList>
 #include "whchTask.h"
+#include "whchSettings.h"
 
 class WhchTableModel : public QAbstractTableModel
 {
@@ -61,6 +62,8 @@ public:
 public slots:
     QStringList ClientTasks(const QString &client);
     void setNewTask(WhchTask currentTask);
+    QTime workedTime(Period timePeriod);
+    QTime yearWorkedTime(QString currentDate);
 
 private:
     /* .xml file in memory. */
@@ -69,6 +72,7 @@ private:
 
     void loadXmlFile(const QString &filename);
     void writeInXmlFile(const QString &filename);
+    QTime calculateDuration(QDomElement element);
 };
 
 #endif // WHCHTABLEMODEL_H

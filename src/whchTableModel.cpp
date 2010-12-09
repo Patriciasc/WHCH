@@ -458,3 +458,66 @@ void WhchTableModel::writeInXmlFile (const QString &filename)
 
     file.close();
  }
+
+QTime WhchTableModel::workedTime(Period timePeriod)
+{
+    QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
+
+    switch (timePeriod)
+    {
+        case PERIOD_DAY:
+        {
+           return yearWorkedTime(currentDate);
+        }
+        case PERIOD_WEEK:
+            break;
+        case PERIOD_MONTH:
+            break;
+        case PERIOD_YEAR:
+            break;
+        default:
+            std::cout << "Failed calculating workedTime period" << std::endl;
+    }
+}
+
+QTime WhchTableModel::yearWorkedTime(QString currentDate)
+{
+    int totalHours = 0;
+    int totalMinutes = 0;
+    int totalSeconds = 0;
+    QDomElement element;
+
+    // Serach for the element in memory
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    {
+        if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
+        {
+            for (QDomElement dayElement = domRoot.firstChildElement("day");
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            {
+                if (dayElement.attribute("date").compare(currentDate) == 0)
+                {
+                    for (QDomElement element = dayElement.firstChildElement("task");
+                    !element.isNull(); element = element.nextSiblingElement("task"))
+                    {
+                        //TODO: function to calculate duration.
+                        QVariant start = element.attribute("start");
+                        QVariant end = element.attribute("end");
+                        int seconds = start.toDateTime().secsTo(end.toDateTime());
+                        int minutes = seconds / 60;
+                        seconds %= 60;
+                        int hours = minutes / 60;
+                        minutes %= 60;
+
+                        totalHours += hours;
+                        totalMinutes += minutes;
+                        totalSeconds += seconds;
+                    }
+                }
+            }
+        }
+    }
+    QTime totalTime (totalHours, totalMinutes, totalSeconds);
+    return totalTime;
+}

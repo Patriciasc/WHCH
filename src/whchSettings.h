@@ -1,21 +1,20 @@
 #ifndef WHCHSETTINGS_H
 #define WHCHSETTINGS_H
 
-
 #include "configDialog.h"
 #include <QSettings>
+
+enum Period
+{
+        PERIOD_DAY,
+        PERIOD_WEEK,
+        PERIOD_MONTH,
+        PERIOD_YEAR
+};
 
 class whchSettings: public QSettings
 {
 public:
-    enum Period
-    {
-            PERIOD_DAY,
-            PERIOD_WEEK,
-            PERIOD_MONTH,
-            PERIOD_YEAR
-    };
-
     whchSettings();
     void hours(int hours);
     void period(QString period);
