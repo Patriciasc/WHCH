@@ -37,6 +37,7 @@
 #include <QDomDocument>
 #include <QDialog>
 #include <QTableWidgetItem>
+#include <QProgressBar>
 
 namespace Ui {
     class whch;
@@ -63,6 +64,7 @@ private:
     int m_seconds;
     QTimer *m_timer;
     QTimer *m_progress_timer;
+    QProgressBar *m_progressbar;
 
 private slots:
     /* Slots. */

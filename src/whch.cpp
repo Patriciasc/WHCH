@@ -70,8 +70,10 @@ Whch::Whch(QWidget *parent) :
     m_timer->start(1000);
     onTimerTimeOut();
 
-    //Hide Progress bar.
-    m_ui->progressBar->hide();
+    // Initialize status bar.
+    m_progressbar = new QProgressBar(m_ui->statusBar);
+    m_progressbar->hide();
+    m_ui->statusBar->addPermanentWidget(m_progressbar);
 
     // Set list of available tasks and give user a start point in the
     // usage of the app, which would be to add a task related to a client.
@@ -464,7 +466,8 @@ void Whch::on_actionExport_to_wiki_format_triggered()
 /* Shows progressbar. */
 void Whch::showProgressbar()
 {
-    m_ui->progressBar->show();
+    m_progressbar->setRange(0,0);
+    m_progressbar->show();
     connect(m_progress_timer, SIGNAL(timeout()), this, SLOT(hideProgressbar()));
     m_progress_timer->start(1500);
 }
@@ -474,8 +477,8 @@ void Whch::hideProgressbar()
 {
     /* Set progress bar. */
     m_progress_timer->stop();
-    m_ui->progressBar->hide();
-    m_ui->progressBar->reset();
+    m_progressbar->hide();
+    m_progressbar->reset();
 }
 
 /* Set up Configuration dialog */
