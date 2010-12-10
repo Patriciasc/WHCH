@@ -392,6 +392,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             {
                 dayElement = m_domFile.createElement("day");
                 dayElement.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
+                dayElement.setAttribute("week", QDate::currentDate().weekNumber());
                 m_domFile.appendChild(dayElement);
             }
 
