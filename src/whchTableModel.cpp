@@ -526,8 +526,44 @@ QTime WhchTableModel::dayWorkedTime(QString currentDate)
 /* Returns the total time worked in a week. */
 QTime WhchTableModel::weekWorkedTime(QString currentDate)
 {
-    QTime test;
-    return test;
+    int totalHours = 0;
+    int totalMinutes = 0;
+    int totalSeconds = 0;
+    int currentWeek = QDate::currentDate().weekNumber();
+
+    // Serach for the element in memory
+    for (QDomElement domRoot = m_domFile.firstChildElement("year");
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    {
+        if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
+        {
+            for (QDomElement dayElement = domRoot.firstChildElement("day");
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            {
+                if (dayElement.attribute("week").toInt() == currentWeek)
+                {
+                    for (QDomElement element = dayElement.firstChildElement("task");
+                    !element.isNull(); element = element.nextSiblingElement("task"))
+                    {
+                        //TODO: function to calculate duration.
+                        QVariant start = element.attribute("start");
+                        QVariant end = element.attribute("end");
+                        int seconds = start.toDateTime().secsTo(end.toDateTime());
+                        int minutes = seconds / 60;
+                        seconds %= 60;
+                        int hours = minutes / 60;
+                        minutes %= 60;
+
+                        totalHours += hours;
+                        totalMinutes += minutes;
+                        totalSeconds += seconds;
+                    }
+                }
+            }
+        }
+    }
+    QTime totalTime (totalHours, totalMinutes, totalSeconds);
+    return totalTime;
 }
 
 /* Returns the total time worked in a month. */
