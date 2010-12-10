@@ -68,6 +68,7 @@ public:
     QTime weekTotalTime(int hours);
     QTime monthTotalTime(int hours);
     QTime yearTotalTime(int hours);
+    int weekendDays(QDate currentDate, QDate endDate);
 
 public slots:
     QStringList ClientTasks(const QString &client);

@@ -684,19 +684,47 @@ QTime WhchTableModel::weekTotalTime(int hours)
 /* Returns total time to be worked in a month. */
 QTime WhchTableModel::monthTotalTime(int hours)
 {
-    /* TODO: Find proper rule.
-       general rule = totalDays - 8,
-       but still not proper for all cases. */
-    int totalDays = QDate::currentDate().daysInMonth();
-    QTime totalTime ((totalDays-8)*hours, 0, 0);
+    QDate currentDate(QDate::currentDate());
+    QDate endDate(currentDate.year(), currentDate.month(), currentDate.daysInMonth());
+    int totalDays = currentDate.daysTo(endDate);
+    int totalWeekendDays = weekendDays(currentDate, endDate);
+
+    QTime totalTime ((totalDays-totalWeekendDays)*hours, 0, 0);
     return totalTime;
 }
 
 /* Returns total time to be worked in a year. */
 QTime WhchTableModel::yearTotalTime(int hours)
 {
-    /* TODO: Find proper rule.*/
-    int totalDays = QDate::currentDate().daysInYear();
-    QTime totalTime ((totalDays-(8*12))*hours, 0, 0);
+    QDate currentDate(QDate::currentDate());
+    QDate endDate(currentDate.year(), 12, 31);
+    int totalDays = currentDate.daysTo(endDate);
+    int totalWeekendDays = weekendDays(currentDate, endDate);
+
+    QTime totalTime ((totalDays-totalWeekendDays)*hours, 0, 0);
     return totalTime;
 }
+
+/* Start: TEST function*/
+int WhchTableModel::weekendDays(QDate currentDate, QDate endDate)
+{
+    int sunday = 7;
+    int totalWeeks = currentDate.daysTo(endDate)/7;
+    int saturdays = totalWeeks;
+    int sundays = totalWeeks;
+    int currentDay = currentDate.dayOfWeek();
+    int endDay = endDate.dayOfWeek();
+
+    if (currentDay > endDay)
+    {
+        sundays++;
+        saturdays += (currentDay < sunday) ? 1 : 0;
+    }
+    else
+    {
+        if (currentDay < endDay)
+            saturdays += (endDay == sunday) ? 1 : 0;
+    }
+    return saturdays + sundays;
+}
+/* End: TEST function*/
