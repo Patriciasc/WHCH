@@ -63,6 +63,11 @@ public:
     QTime weekWorkedTime(QString currentDate);
     QTime monthWorkedTime(QString currentDate);
     QTime yearWorkedTime(QString currentDate);
+    QTime TotalTime(Period timePeriod, int hours);
+    QTime dayTotalTime(int hours);
+    QTime weekTotalTime(int hours);
+    QTime monthTotalTime(int hours);
+    QTime yearTotalTime(int hours);
 
 public slots:
     QStringList ClientTasks(const QString &client);

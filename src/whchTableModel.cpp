@@ -648,3 +648,52 @@ QTime WhchTableModel::yearWorkedTime(QString currentDate)
     QTime totalTime (totalHours, totalMinutes, totalSeconds);
     return totalTime;
 }
+
+/* Returns total time to be worked in a period. */
+QTime WhchTableModel::TotalTime(Period timePeriod, int hours)
+{
+    switch (timePeriod)
+    {
+        case PERIOD_DAY:
+            return dayTotalTime(hours);
+        case PERIOD_WEEK:
+            return weekTotalTime(hours);
+        case PERIOD_MONTH:
+            return monthTotalTime(hours);
+        case PERIOD_YEAR:
+            return yearTotalTime(hours);
+        default:
+            std::cout << "Failed calculating workedTime period" << std::endl;
+    }
+}
+
+/* Returns total time to be worked in a day. */
+QTime WhchTableModel::dayTotalTime(int hours)
+{
+    QTime totalTime (hours, 0, 0);
+    return totalTime;
+}
+
+/* Returns total time to be worked in a week. */
+QTime WhchTableModel::weekTotalTime(int hours)
+{
+    QTime totalTime (hours*5, 0, 0);
+    return totalTime;
+}
+
+/* Returns total time to be worked in a month. */
+QTime WhchTableModel::monthTotalTime(int hours)
+{
+    /* TODO: Find proper rule.
+       general rule = totalDays - 8,
+       but still not proper for all cases. */
+    int totalDays = QDate::currentDate().daysInMonth();
+    QTime totalTime ((totalDays-8)*hours, 0, 0);
+    return totalTime;
+}
+
+/* Returns total time to be worked in a year. */
+QTime WhchTableModel::yearTotalTime(int hours)
+{
+    /* TODO: Find proper rule.*/
+}
