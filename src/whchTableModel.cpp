@@ -696,4 +696,7 @@ QTime WhchTableModel::monthTotalTime(int hours)
 QTime WhchTableModel::yearTotalTime(int hours)
 {
     /* TODO: Find proper rule.*/
+    int totalDays = QDate::currentDate().daysInYear();
+    QTime totalTime ((totalDays-(8*12))*hours, 0, 0);
+    return totalTime;
 }
