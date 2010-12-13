@@ -29,6 +29,7 @@
 #include "whch.h"
 #include "ui_whch.h"
 #include "ui_dialogTasksClients.h"
+#include "whchSettings.h"
 #include <QDomDocument>
 #include <iostream>
 #include <QTextStream>
@@ -70,7 +71,7 @@ Whch::Whch(QWidget *parent) :
     QCoreApplication::setApplicationName("WHCH");
 
     whchSettings settings;
-    settings.setSettings(m_ui->statusBar, m_model);
+    settings.setSettings(m_ui->label, m_model);
 
     // Initialize LCD Timer.
     // TODO: Make this numbers more visible.
@@ -78,10 +79,8 @@ Whch::Whch(QWidget *parent) :
     m_timer->start(1000);
     onTimerTimeOut();
 
-    // Initialize status bar.
-    m_progressbar = new QProgressBar(m_ui->statusBar);
-    m_progressbar->hide();
-    m_ui->statusBar->addPermanentWidget(m_progressbar);
+    // Set up progressbar.
+    m_ui->progressBar->hide();
 
     // Set list of available tasks and give user a start point in the
     // usage of the app, which would be to add a task related to a client.
@@ -474,8 +473,7 @@ void Whch::on_actionExport_to_wiki_format_triggered()
 /* Shows progressbar. */
 void Whch::showProgressbar()
 {
-    m_progressbar->setRange(0,0);
-    m_progressbar->show();
+    m_ui->progressBar->show();
     connect(m_progress_timer, SIGNAL(timeout()), this, SLOT(hideProgressbar()));
     m_progress_timer->start(1500);
 }
@@ -485,8 +483,8 @@ void Whch::hideProgressbar()
 {
     /* Set progress bar. */
     m_progress_timer->stop();
-    m_progressbar->hide();
-    m_progressbar->reset();
+    m_ui->progressBar->hide();
+    m_ui->progressBar->reset();
 }
 
 /* Set up Configuration dialog */

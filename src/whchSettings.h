@@ -2,8 +2,9 @@
 #define WHCHSETTINGS_H
 
 #include "configDialog.h"
+#include "whchTableModel.h"
 #include <QSettings>
-#include <QStatusBar>
+#include <QLabel>
 
 enum Period
 {
@@ -12,8 +13,6 @@ enum Period
         PERIOD_MONTH,
         PERIOD_YEAR
 };
-
-class WhchTableModel;
 
 class whchSettings: public QSettings
 {
@@ -25,7 +24,7 @@ public:
     void setOverTimeMsg(bool setOverTimeMsg);
     void writeSettings();
     void readSettings();
-    void setSettings(QStatusBar *statusbar, WhchTableModel *model);
+    void setSettings(QLabel *statusText, WhchTableModel *model);
 
 private:
     int m_hours;

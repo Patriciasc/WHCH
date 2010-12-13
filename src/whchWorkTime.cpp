@@ -48,10 +48,6 @@ void  whchWorkTime::workedTime(Period timePeriod,   QDomDocument domFile)
 /* Returns the total time worked in a day. */
 void whchWorkTime::dayWorkedTime(QString currentDate,  QDomDocument domFile)
 {
-    int totalHours = 0;
-    int totalMinutes = 0;
-    int totalSeconds = 0;
-
     // Serach for the element in memory
     for (QDomElement domRoot = domFile.firstChildElement("year");
     !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
@@ -69,31 +65,21 @@ void whchWorkTime::dayWorkedTime(QString currentDate,  QDomDocument domFile)
                         //TODO: function to calculate duration.
                         QVariant start = element.attribute("start");
                         QVariant end = element.attribute("end");
-                        int seconds = start.toDateTime().secsTo(end.toDateTime());
-                        int minutes = seconds / 60;
-                        seconds %= 60;
-                        int hours = minutes / 60;
-                        minutes %= 60;
-
-                        totalHours += hours;
-                        totalMinutes += minutes;
-                        totalSeconds += seconds;
+                        m_seconds += start.toDateTime().secsTo(end.toDateTime());
                     }
                 }
             }
         }
     }
-    m_hours = totalHours;
-    m_minutes = totalMinutes;
-    m_seconds = totalSeconds;
+    m_minutes = m_seconds / 60;
+    m_seconds %= 60;
+    m_hours = m_minutes / 60;
+    m_minutes %= 60;
 }
 
 /* Returns the total time worked in a week. */
 void whchWorkTime::weekWorkedTime(QString currentDate, QDomDocument domFile)
 {
-    int totalHours = 0;
-    int totalMinutes = 0;
-    int totalSeconds = 0;
     int currentWeek = QDate::currentDate().weekNumber();
 
     // Serach for the element in memory
@@ -113,31 +99,21 @@ void whchWorkTime::weekWorkedTime(QString currentDate, QDomDocument domFile)
                         //TODO: function to calculate duration.
                         QVariant start = element.attribute("start");
                         QVariant end = element.attribute("end");
-                        int seconds = start.toDateTime().secsTo(end.toDateTime());
-                        int minutes = seconds / 60;
-                        seconds %= 60;
-                        int hours = minutes / 60;
-                        minutes %= 60;
-
-                        totalHours += hours;
-                        totalMinutes += minutes;
-                        totalSeconds += seconds;
+                        m_seconds = start.toDateTime().secsTo(end.toDateTime());
                     }
                 }
             }
         }
     }
-    m_hours = totalHours;
-    m_minutes = totalMinutes;
-    m_seconds = totalSeconds;
+    m_minutes = m_seconds / 60;
+    m_seconds %= 60;
+    m_hours = m_minutes / 60;
+    m_minutes %= 60;
 }
 
 /* Returns the total time worked in a month. */
 void whchWorkTime::monthWorkedTime(QString currentDate, QDomDocument domFile)
 {
-    int totalHours = 0;
-    int totalMinutes = 0;
-    int totalSeconds = 0;
     QString currentMonth = currentDate.section("/", 1,1);
 
     // Serach for the element in memory
@@ -158,32 +134,21 @@ void whchWorkTime::monthWorkedTime(QString currentDate, QDomDocument domFile)
                         //TODO: function to calculate duration.
                         QVariant start = element.attribute("start");
                         QVariant end = element.attribute("end");
-                        int seconds = start.toDateTime().secsTo(end.toDateTime());
-                        int minutes = seconds / 60;
-                        seconds %= 60;
-                        int hours = minutes / 60;
-                        minutes %= 60;
-
-                        totalHours += hours;
-                        totalMinutes += minutes;
-                        totalSeconds += seconds;
+                        m_seconds = start.toDateTime().secsTo(end.toDateTime());
                     }
                 }
             }
         }
     }
-    m_hours = totalHours;
-    m_minutes = totalMinutes;
-    m_seconds = totalSeconds;
+    m_minutes = m_seconds / 60;
+    m_seconds %= 60;
+    m_hours = m_minutes / 60;
+    m_minutes %= 60;
 }
 
 /* Returns the total time worked in a year. */
 void whchWorkTime::yearWorkedTime(QString currentDate, QDomDocument domFile)
 {
-    int totalHours = 0;
-    int totalMinutes = 0;
-    int totalSeconds = 0;
-
     // Serach for the element in memory
     for (QDomElement domRoot = domFile.firstChildElement("year");
     !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
@@ -199,22 +164,15 @@ void whchWorkTime::yearWorkedTime(QString currentDate, QDomDocument domFile)
                     //TODO: function to calculate duration.
                     QVariant start = element.attribute("start");
                     QVariant end = element.attribute("end");
-                    int seconds = start.toDateTime().secsTo(end.toDateTime());
-                    int minutes = seconds / 60;
-                    seconds %= 60;
-                    int hours = minutes / 60;
-                    minutes %= 60;
-
-                    totalHours += hours;
-                    totalMinutes += minutes;
-                    totalSeconds += seconds;
+                    m_seconds = start.toDateTime().secsTo(end.toDateTime());
                 }
             }
         }
     }
-    m_hours = totalHours;
-    m_minutes = totalMinutes;
-    m_seconds = totalSeconds;
+    m_minutes = m_seconds / 60;
+    m_seconds %= 60;
+    m_hours = m_minutes / 60;
+    m_minutes %= 60;
 }
 
 /* Returns total time to be worked in a period. */
@@ -223,7 +181,7 @@ void whchWorkTime::TotalTime(Period timePeriod, int hours)
     switch (timePeriod)
     {
         case PERIOD_DAY:
-            dayTotalTime(hours);
+            return dayTotalTime(hours);
         case PERIOD_WEEK:
             return weekTotalTime(hours);
         case PERIOD_MONTH:

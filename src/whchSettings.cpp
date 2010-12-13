@@ -1,9 +1,10 @@
 #include "whchSettings.h"
+#include "whchTableModel.h"
+#include "whchWorkTime.h"
 #include <iostream>
 #include <QDebug>
-
 #include <QCoreApplication>
-#include "whchTableModel.h"
+#include <QLabel>
 
 whchSettings::whchSettings():
         m_hours(7),
@@ -11,11 +12,9 @@ whchSettings::whchSettings():
         m_setBreakMsg("false"),
         m_setOverTimeMsg("false")
 {
-    QCoreApplication::setOrganizationName("Openismus");
+    /*QCoreApplication::setOrganizationName("Openismus");
     QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("WHCH");
-
-    writeSettings();
+    QCoreApplication::setApplicationName("WHCH");*/
 }
 
 void whchSettings::hours(int hours)
@@ -92,13 +91,31 @@ void whchSettings::readSettings()
 
 /* Still TESTING. */
 /* Set settings and update UI/Session components.*/
-void whchSettings::setSettings(QStatusBar *statusbar, WhchTableModel *model)
+void whchSettings::setSettings(QLabel *statusText, WhchTableModel *model)
 {
-    readSettings();
-    /* Total worked and left time. */
-    //QTime totalWorkedTime = model->workedTime(m_period, model);
-    //QTime workTimeLeft = model->TotalTime(m_period, m_hours);
+    /* Read content of already existent setting files. */
+    if (contains("hours"))
+        readSettings();
+
+    /* TODO: Update dialog UI. */
+
+    /* Calculate total worked and left time. */
+    whchWorkTime totalWorkTime;
+    totalWorkTime.workedTime(m_period, model->domFile());
+    whchWorkTime workTimeLeft;
+    workTimeLeft.TotalTime(m_period, m_hours);
+
     /* Set status bar. */
-    //statusbar->showMessage(QDate::currentDate().toString("ddMMM") + ", Total: " + totalWorkedTime.toString() + ", Left: " + workTimeLeft.toString());
+    /* TODO: calculate correctly the minutes/seconds. */
+    QString total = QString("%1h%2m%3s").
+                    arg(totalWorkTime.hours()).
+                    arg(totalWorkTime.minutes()).
+                    arg(totalWorkTime.seconds());
+    QString left = QString("%1h%2m%3s").
+                   arg(workTimeLeft.hours() - totalWorkTime.hours()).
+                   arg(workTimeLeft.minutes() - totalWorkTime.minutes()).
+                   arg(workTimeLeft.seconds() - totalWorkTime.seconds());
+
+    statusText->setText(QDate::currentDate().toString("ddMMM") + ", Total: "+ total + ", Left: " + left);
 }
 
