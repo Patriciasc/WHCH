@@ -3,15 +3,19 @@
 #include <QDebug>
 
 #include <QCoreApplication>
+#include "whchTableModel.h"
 
 whchSettings::whchSettings():
-        m_hours(0),
-        m_setBreakMsg(false),
-        m_setOverTimeMsg(false)
+        m_hours(7),
+        m_period(PERIOD_DAY),
+        m_setBreakMsg("false"),
+        m_setOverTimeMsg("false")
 {
     QCoreApplication::setOrganizationName("Openismus");
     QCoreApplication::setOrganizationDomain("openismus.com");
     QCoreApplication::setApplicationName("WHCH");
+
+    writeSettings();
 }
 
 void whchSettings::hours(int hours)
@@ -86,10 +90,15 @@ void whchSettings::readSettings()
     m_setOverTimeMsg = value("break_msg").toString();
 }
 
-void whchSettings::setSettings()
+/* Still TESTING. */
+/* Set settings and update UI/Session components.*/
+void whchSettings::setSettings(QStatusBar *statusbar, WhchTableModel *model)
 {
-    /* readSettings() */
-    /* set statusbar */
-    /* set notification messages */
+    readSettings();
+    /* Total worked and left time. */
+    QTime totalWorkedTime = model->workedTime(m_period);
+    QTime workTimeLeft = model->TotalTime(m_period, m_hours);
+    /* Set status bar. */
+    statusbar->showMessage(QDate::currentDate().toString("ddMMM") + ", Total: " + totalWorkedTime.toString() + ", Left: " + workTimeLeft.toString());
 }
 

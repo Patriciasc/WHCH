@@ -58,17 +58,8 @@ public:
     QStringList AttributesList(const QString &attribute);
     QString clientOfTask(const QString &task);
     bool isClient(const QString &client);
-    QTime workedTime(Period timePeriod);
-    QTime dayWorkedTime(QString currentDate);
-    QTime weekWorkedTime(QString currentDate);
-    QTime monthWorkedTime(QString currentDate);
-    QTime yearWorkedTime(QString currentDate);
+    QTime workedTime(Period timePeriod);   
     QTime TotalTime(Period timePeriod, int hours);
-    QTime dayTotalTime(int hours);
-    QTime weekTotalTime(int hours);
-    QTime monthTotalTime(int hours);
-    QTime yearTotalTime(int hours);
-    int weekendDays(QDate currentDate, QDate endDate);
 
 public slots:
     QStringList ClientTasks(const QString &client);
@@ -82,6 +73,15 @@ private:
     void loadXmlFile(const QString &filename);
     void writeInXmlFile(const QString &filename);
     QTime calculateDuration(QDomElement element);
+    QTime dayWorkedTime(QString currentDate);
+    QTime weekWorkedTime(QString currentDate);
+    QTime monthWorkedTime(QString currentDate);
+    QTime yearWorkedTime(QString currentDate);
+    QTime dayTotalTime(int hours);
+    QTime weekTotalTime(int hours);
+    QTime monthTotalTime(int hours);
+    QTime yearTotalTime(int hours);
+    int weekendDays(QDate currentDate, QDate endDate);
 };
 
 #endif // WHCHTABLEMODEL_H

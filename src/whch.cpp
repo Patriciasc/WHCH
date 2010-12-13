@@ -64,6 +64,14 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
+    // Read and set settings.
+    QCoreApplication::setOrganizationName("Openismus");
+    QCoreApplication::setOrganizationDomain("openismus.com");
+    QCoreApplication::setApplicationName("WHCH");
+
+    whchSettings settings;
+    settings.setSettings(m_ui->statusBar, m_model);
+
     // Initialize LCD Timer.
     // TODO: Make this numbers more visible.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));

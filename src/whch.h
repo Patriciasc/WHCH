@@ -1,10 +1,3 @@
-#ifndef WHCH_H
-#define WHCH_H
-
-#include <QMainWindow>
-#include "whchTableModel.h"
-#include <QFile>
-#include "configDialog.h"
 /*
  * ########################################################################
  * # File: WHCH (Working Hours Counter for Humans)- whch.h                #
@@ -33,6 +26,13 @@
  * ########################################################################
 */
 
+#ifndef WHCH_H
+#define WHCH_H
+
+#include <QMainWindow>
+#include "whchTableModel.h"
+#include <QFile>
+#include "configDialog.h"
 #include <QDomElement>
 #include <QDomDocument>
 #include <QDialog>
