@@ -60,6 +60,7 @@ public:
     bool isClient(const QString &client);
     QTime workedTime(Period timePeriod);   
     QTime TotalTime(Period timePeriod, int hours);
+    QDomDocument domFile();
 
 public slots:
     QStringList ClientTasks(const QString &client);

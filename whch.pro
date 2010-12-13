@@ -15,13 +15,15 @@ SOURCES += src/main.cpp\
            src/whchTableModel.cpp \
            src/whchTask.cpp \
            src/configDialog.cpp \
-    src/whchSettings.cpp
+    src/whchSettings.cpp \
+    src/whchWorkTime.cpp
 
 HEADERS += src/whch.h \
            src/whchTableModel.h \
            src/whchTask.h \
            src/configDialog.h \
-    src/whchSettings.h
+    src/whchSettings.h \
+    src/whchWorkTime.h
 
 FORMS   += ui/whch.ui \
     ui/configDialog.ui \

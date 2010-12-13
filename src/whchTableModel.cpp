@@ -735,3 +735,8 @@ int WhchTableModel::weekendDays(QDate currentDate, QDate endDate)
     return saturdays + sundays;
 }
 /* End: TEST function*/
+
+QDomDocument WhchTableModel::domFile()
+{
+    return m_domFile;
+}

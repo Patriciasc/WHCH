@@ -96,9 +96,9 @@ void whchSettings::setSettings(QStatusBar *statusbar, WhchTableModel *model)
 {
     readSettings();
     /* Total worked and left time. */
-    QTime totalWorkedTime = model->workedTime(m_period);
-    QTime workTimeLeft = model->TotalTime(m_period, m_hours);
+    //QTime totalWorkedTime = model->workedTime(m_period, model);
+    //QTime workTimeLeft = model->TotalTime(m_period, m_hours);
     /* Set status bar. */
-    statusbar->showMessage(QDate::currentDate().toString("ddMMM") + ", Total: " + totalWorkedTime.toString() + ", Left: " + workTimeLeft.toString());
+    //statusbar->showMessage(QDate::currentDate().toString("ddMMM") + ", Total: " + totalWorkedTime.toString() + ", Left: " + workTimeLeft.toString());
 }
 
