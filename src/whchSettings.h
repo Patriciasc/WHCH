@@ -22,9 +22,9 @@ public:
     void period(QString period);
     void setBreakMsg(bool setBreakMsg);
     void setOverTimeMsg(bool setOverTimeMsg);
-    void writeSettings();
-    void readSettings();
-    void setSettings(QLabel *statusText, WhchTableModel *model);
+    void write();
+    void read();
+    void set(QLabel *statusText, WhchTableModel *model);
 
 private:
     int m_hours;

@@ -51,7 +51,7 @@ void whchSettings::setOverTimeMsg(bool setOverTimeMsg)
 }
 
 /* Write new selected settings. */
-void whchSettings::writeSettings()
+void whchSettings::write()
 {
     setValue("hours", QString::number(m_hours));
     setValue("period", m_period);
@@ -60,7 +60,7 @@ void whchSettings::writeSettings()
 }
 
 /* Read settings. */
-void whchSettings::readSettings()
+void whchSettings::read()
 {
     int p;
 
@@ -91,11 +91,11 @@ void whchSettings::readSettings()
 
 /* Still TESTING. */
 /* Set settings and update UI/Session components.*/
-void whchSettings::setSettings(QLabel *statusText, WhchTableModel *model)
+void whchSettings::set(QLabel *statusText, WhchTableModel *model)
 {
     /* Read content of already existent setting files. */
     if (contains("hours"))
-        readSettings();
+        read();
 
     /* TODO: Update dialog UI. */
 

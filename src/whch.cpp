@@ -71,7 +71,7 @@ Whch::Whch(QWidget *parent) :
     QCoreApplication::setApplicationName("WHCH");
 
     whchSettings settings;
-    settings.setSettings(m_ui->label, m_model);
+    settings.set(m_ui->label, m_model);
 
     // Initialize LCD Timer.
     // TODO: Make this numbers more visible.

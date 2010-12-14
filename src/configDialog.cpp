@@ -31,7 +31,7 @@ void configDialog::on_buttonBox_clicked(QAbstractButton* button)
     settings.period(ui->comboBox->currentText());
     settings.setBreakMsg(ui->checkBox->isChecked());
     settings.setOverTimeMsg(ui->checkBox_2->isChecked());
-    settings.writeSettings();
+    settings.write();
 
     accept();
 }
