@@ -409,8 +409,6 @@ void Whch::on_actionTasks_triggered()
     // Insert new added clients always at the top.
     m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
-    //TODO: Load session data.
-
     // Load list of clients.
     QStringList clients(m_model->AttributesList("client"));
     if (!m_sessionData.isEmpty())
@@ -423,6 +421,7 @@ void Whch::on_actionTasks_triggered()
                 clients << sessionClientItem;
         }
     }
+
     clients << NEW_CLIENT;
     m_uiDialog->comboBox->addItems(clients);
 
@@ -534,11 +533,27 @@ void Whch::setStatusText()
 
 }
 
+/* Load session data from setting's file. */
 void  Whch::loadSessionData()
 {
+    QCoreApplication::setOrganizationName("Openismus");
+    QCoreApplication::setOrganizationDomain("openismus.com");
+    QCoreApplication::setApplicationName("WHCH");
+    whchSettings settings;
+    QStringList clients = settings.value("clients").toStringList();
+
+    if (!clients.isEmpty())
+    {
+        for (int i = 0; i < clients.size(); ++i)
+        {
+            QStringList tasks = settings.value(clients[i]).toStringList();
+            m_sessionData.insert(clients[i], tasks);
+        }
+    }
 
 }
 
+/* Saves session data into setting's file. */
 void  Whch::saveSessionData()
 {
 
