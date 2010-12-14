@@ -17,12 +17,12 @@ whchSettings::whchSettings():
     QCoreApplication::setApplicationName("WHCH");*/
 }
 
-void whchSettings::hours(int hours)
+void whchSettings::setHours(int hours)
 {
     m_hours = hours;
 }
 
-void whchSettings::period(QString period)
+void whchSettings::setPeriod(QString period)
 {
     if (period.compare("day") == 0)
         m_period = PERIOD_DAY;
@@ -48,6 +48,27 @@ void whchSettings::setOverTimeMsg(bool setOverTimeMsg)
         m_setOverTimeMsg = "true";
     else
         m_setOverTimeMsg = "false";
+}
+
+int whchSettings::hours()
+{
+    return m_hours;
+}
+
+Period whchSettings::period()
+{
+    return m_period;
+}
+
+QString whchSettings::breakMsg()
+{
+    return m_setBreakMsg;
+}
+
+QString whchSettings::overTimeMsg()
+{
+
+    return m_setOverTimeMsg;
 }
 
 /* Write new selected settings. */
@@ -88,40 +109,3 @@ void whchSettings::read()
     m_setBreakMsg = value("break_msg").toString();
     m_setOverTimeMsg = value("break_msg").toString();
 }
-
-/* Still TESTING. */
-/* Set settings and update UI/Session components.*/
-void whchSettings::set(QLabel *statusText, WhchTableModel *model)
-{
-    /* Read content of already existent setting files. */
-    if (contains("hours"))
-        read();
-
-    /* TODO: Update dialog UI. */
-
-    /* Calculate total worked and left time. */
-    whchWorkTime totalWorkTime;
-    totalWorkTime.workedTime(m_period, model->domFile());
-    whchWorkTime workTimeLeft;
-    workTimeLeft.TotalTime(m_period, m_hours);
-
-    int hours = workTimeLeft.hours();
-    int minutes = workTimeLeft.minutes();
-    if (totalWorkTime.minutes() > workTimeLeft.minutes())
-    {
-        hours -= 1;
-        minutes += 60;
-    }
-     minutes = minutes - totalWorkTime.minutes();
-     hours = hours - totalWorkTime.hours();
-
-     QString total = QString("%1h%2m").
-                     arg(totalWorkTime.hours()).
-                     arg(totalWorkTime.minutes());
-     QString left = QString("%1h%2m").
-                    arg(hours).arg(minutes);
-
-    statusText->setText(QDate::currentDate().toString("ddMMM") +
-                        ", Total: "+total + ", Left: " + left);
-}
-

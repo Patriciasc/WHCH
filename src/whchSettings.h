@@ -18,13 +18,17 @@ class whchSettings: public QSettings
 {
 public:
     whchSettings();
-    void hours(int hours);
-    void period(QString period);
+    void setHours(int hours);
+    void setPeriod(QString period);
     void setBreakMsg(bool setBreakMsg);
     void setOverTimeMsg(bool setOverTimeMsg);
+    int hours();
+    Period period();
+    QString breakMsg();
+    QString overTimeMsg();
     void write();
     void read();
-    void set(QLabel *statusText, WhchTableModel *model);
+    //void set(QLabel *statusText, WhchTableModel *model);
 
 private:
     int m_hours;

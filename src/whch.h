@@ -91,6 +91,7 @@ private slots:
     QStringList totalTasks();
     void showProgressbar();
     void hideProgressbar();
+    void setStatusText();
 };
 
 #endif // WHCH_H

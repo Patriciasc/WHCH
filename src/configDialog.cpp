@@ -27,8 +27,8 @@ void configDialog::on_buttonBox_clicked(QAbstractButton* button)
     QCoreApplication::setApplicationName("WHCH");
 
     whchSettings settings;
-    settings.hours(ui->spinBox->value());
-    settings.period(ui->comboBox->currentText());
+    settings.setHours(ui->spinBox->value());
+    settings.setPeriod(ui->comboBox->currentText());
     settings.setBreakMsg(ui->checkBox->isChecked());
     settings.setOverTimeMsg(ui->checkBox_2->isChecked());
     settings.write();

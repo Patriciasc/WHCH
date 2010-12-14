@@ -30,6 +30,7 @@
 #include "ui_whch.h"
 #include "ui_dialogTasksClients.h"
 #include "whchSettings.h"
+#include "whchWorkTime.h"
 #include <QDomDocument>
 #include <iostream>
 #include <QTextStream>
@@ -65,13 +66,8 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
-    // Read and set settings.
-    QCoreApplication::setOrganizationName("Openismus");
-    QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("WHCH");
-
-    whchSettings settings;
-    settings.set(m_ui->label, m_model);
+    // Set status text.
+    setStatusText();
 
     // Initialize LCD Timer.
     // TODO: Make this numbers more visible.
@@ -259,6 +255,9 @@ void Whch::onLineEditReturn()
         // Starts counting time spent on current task.
         m_seconds = 0;
         m_timer->start(1000);
+
+        // Calculate already and still to be worked time.
+        setStatusText();
     }
 }
 
@@ -491,4 +490,44 @@ void Whch::hideProgressbar()
 void Whch::on_actionPreferences_triggered()
 {
     m_uiConfigDialog->show();
+}
+
+/* Displays already and still to be worked time. */
+void Whch::setStatusText()
+{
+    /* Read current settings. */
+    QCoreApplication::setOrganizationName("Openismus");
+    QCoreApplication::setOrganizationDomain("openismus.com");
+    QCoreApplication::setApplicationName("WHCH");
+    whchSettings settings;
+
+    if (settings.contains("hours"))
+        settings.read();
+
+    /* Calculate already and still to be worked time.*/
+    whchWorkTime totalWorkTime;
+    totalWorkTime.workedTime(settings.period(), m_model->domFile());
+    whchWorkTime workTimeLeft;
+    workTimeLeft.TotalTime(settings.period(), settings.hours());
+
+    int hours = workTimeLeft.hours();
+    int minutes = workTimeLeft.minutes();
+    if (totalWorkTime.minutes() > workTimeLeft.minutes())
+    {
+        hours -= 1;
+        minutes += 60;
+    }
+     minutes = minutes - totalWorkTime.minutes();
+     hours = hours - totalWorkTime.hours();
+
+     QString total = QString("%1h%2m").
+                     arg(totalWorkTime.hours()).
+                     arg(totalWorkTime.minutes());
+     QString left = QString("%1h%2m").
+                    arg(hours).arg(minutes);
+
+     /* Display data. */
+     m_ui->label->setText(QDate::currentDate().toString("ddMMM") +
+                        ", Total: "+total + ", Left: " + left);
+
 }
