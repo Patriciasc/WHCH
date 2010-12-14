@@ -409,6 +409,8 @@ void Whch::on_actionTasks_triggered()
     // Insert new added clients always at the top.
     m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
+    //TODO: Load session data.
+
     // Load list of clients.
     QStringList clients(m_model->AttributesList("client"));
     if (!m_sessionData.isEmpty())
@@ -529,5 +531,15 @@ void Whch::setStatusText()
      /* Display data. */
      m_ui->label->setText(QDate::currentDate().toString("ddMMM") +
                         ", Total: "+total + ", Left: " + left);
+
+}
+
+void  Whch::loadSessionData()
+{
+
+}
+
+void  Whch::saveSessionData()
+{
 
 }

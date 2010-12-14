@@ -31,6 +31,7 @@
 
 #include <QMainWindow>
 #include "whchTableModel.h"
+#include <QCoreApplication>
 #include <QFile>
 #include "configDialog.h"
 #include <QDomElement>
@@ -60,6 +61,7 @@ private:
     /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;
+
     /* Track spent time on current task */
     int m_seconds;
     QTimer *m_timer;
@@ -92,6 +94,8 @@ private slots:
     void showProgressbar();
     void hideProgressbar();
     void setStatusText();
+    void loadSessionData();
+    void saveSessionData();
 };
 
 #endif // WHCH_H
