@@ -105,17 +105,23 @@ void whchSettings::setSettings(QLabel *statusText, WhchTableModel *model)
     whchWorkTime workTimeLeft;
     workTimeLeft.TotalTime(m_period, m_hours);
 
-    /* Set status bar. */
-    /* TODO: calculate correctly the minutes/seconds. */
-    QString total = QString("%1h%2m%3s").
-                    arg(totalWorkTime.hours()).
-                    arg(totalWorkTime.minutes()).
-                    arg(totalWorkTime.seconds());
-    QString left = QString("%1h%2m%3s").
-                   arg(workTimeLeft.hours() - totalWorkTime.hours()).
-                   arg(workTimeLeft.minutes() - totalWorkTime.minutes()).
-                   arg(workTimeLeft.seconds() - totalWorkTime.seconds());
+    int hours = workTimeLeft.hours();
+    int minutes = workTimeLeft.minutes();
+    if (totalWorkTime.minutes() > workTimeLeft.minutes())
+    {
+        hours -= 1;
+        minutes += 60;
+    }
+     minutes = minutes - totalWorkTime.minutes();
+     hours = hours - totalWorkTime.hours();
 
-    statusText->setText(QDate::currentDate().toString("ddMMM") + ", Total: "+ total + ", Left: " + left);
+     QString total = QString("%1h%2m").
+                     arg(totalWorkTime.hours()).
+                     arg(totalWorkTime.minutes());
+     QString left = QString("%1h%2m").
+                    arg(hours).arg(minutes);
+
+    statusText->setText(QDate::currentDate().toString("ddMMM") +
+                        ", Total: "+total + ", Left: " + left);
 }
 
