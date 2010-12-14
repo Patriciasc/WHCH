@@ -1,6 +1,7 @@
 #include "whchWorkTime.h"
 #include <iostream>
 #include <QDate>
+#include <QDebug>
 
 whchWorkTime::whchWorkTime():
         m_hours(0),
@@ -34,6 +35,7 @@ void  whchWorkTime::workedTime(Period timePeriod,   QDomDocument domFile)
         case PERIOD_DAY:
             return dayWorkedTime(currentDate, domFile);
         case PERIOD_WEEK:
+            std::cout << "aqui" << std::endl;
             return weekWorkedTime(currentDate, domFile);
         case PERIOD_MONTH:
             return monthWorkedTime(currentDate, domFile);
@@ -99,7 +101,8 @@ void whchWorkTime::weekWorkedTime(QString currentDate, QDomDocument domFile)
                         //TODO: function to calculate duration.
                         QVariant start = element.attribute("start");
                         QVariant end = element.attribute("end");
-                        m_seconds = start.toDateTime().secsTo(end.toDateTime());
+                        m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                        qDebug() << m_seconds;
                     }
                 }
             }
@@ -134,7 +137,7 @@ void whchWorkTime::monthWorkedTime(QString currentDate, QDomDocument domFile)
                         //TODO: function to calculate duration.
                         QVariant start = element.attribute("start");
                         QVariant end = element.attribute("end");
-                        m_seconds = start.toDateTime().secsTo(end.toDateTime());
+                        m_seconds += start.toDateTime().secsTo(end.toDateTime());
                     }
                 }
             }
@@ -164,7 +167,7 @@ void whchWorkTime::yearWorkedTime(QString currentDate, QDomDocument domFile)
                     //TODO: function to calculate duration.
                     QVariant start = element.attribute("start");
                     QVariant end = element.attribute("end");
-                    m_seconds = start.toDateTime().secsTo(end.toDateTime());
+                    m_seconds += start.toDateTime().secsTo(end.toDateTime());
                 }
             }
         }

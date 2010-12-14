@@ -31,7 +31,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Hours</string>
+          <string>    Hours/day      </string>
          </property>
         </widget>
        </item>
@@ -48,7 +48,7 @@
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>per</string>
+          <string>   per</string>
          </property>
         </widget>
        </item>
