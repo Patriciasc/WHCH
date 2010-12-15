@@ -96,6 +96,7 @@ private slots:
     void setStatusText();
     void loadSessionData();
     void saveSessionData();
+    void setComboboxTasks();
 };
 
 #endif // WHCH_H

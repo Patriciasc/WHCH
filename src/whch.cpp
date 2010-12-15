@@ -69,6 +69,9 @@ Whch::Whch(QWidget *parent) :
     // Set status text.
     setStatusText();
 
+    // Load session data.
+    loadSessionData();
+
     // Initialize LCD Timer.
     // TODO: Make this numbers more visible.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
@@ -78,31 +81,22 @@ Whch::Whch(QWidget *parent) :
     // Set up progressbar.
     m_ui->progressBar->hide();
 
-    // Set list of available tasks and give user a start point in the
-    // usage of the app, which would be to add a task related to a client.
-    m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
-    QStringList tasks = m_model->AttributesList("name") <<  NEW_TASK;
-    m_ui->comboBox->addItems(tasks);
-
-    if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
-        m_ui->lineEdit->setEnabled(false);
-
-    QObject::connect(m_ui->comboBox, SIGNAL(activated(QString)),
-              this, SLOT(onUiComboboxItemActivated(QString)));
+    // Set list of available tasks.
+    setComboboxTasks();
 
     // Resize start/end columns and rows.
     m_ui->tableView->resizeRowsToContents();
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
 
-    // Get current tasks paramenters and display new task.
-    // Clean displayed input.
+    // Get current tasks parameters and display new task.
     QObject::connect(m_ui->lineEdit, SIGNAL(returnPressed()),
               this, SLOT(onLineEditReturn()));
 }
 
 Whch::~Whch()
 {
+    saveSessionData();
     delete m_ui;
     delete m_uiDialog;
     delete m_uiConfigDialog;
@@ -556,5 +550,47 @@ void  Whch::loadSessionData()
 /* Saves session data into setting's file. */
 void  Whch::saveSessionData()
 {
+    QCoreApplication::setOrganizationName("Openismus");
+    QCoreApplication::setOrganizationDomain("openismus.com");
+    QCoreApplication::setApplicationName("WHCH");
+    whchSettings settings;
 
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
+    QStringList clientsList;
+    while (i != m_sessionData.constEnd())
+    {
+        clientsList << i.key();
+        settings.setValue(i.key(), i.value());
+        ++i;
+    }
+    settings.setValue("clients", clientsList);
+}
+
+void  Whch::setComboboxTasks()
+{
+    QStringList sessionDataValues;
+    QStringList tasks (m_model->AttributesList("name"));
+    m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
+
+    while (i != m_sessionData.constEnd())
+    {
+        sessionDataValues << i.value();
+        ++i;
+    }
+
+    for (int i=0; i < sessionDataValues.size(); ++i)
+    {
+        if (tasks.contains(sessionDataValues.at(i)) == NULL)
+            tasks << sessionDataValues.at(i);
+    }
+
+    tasks << NEW_TASK;
+    m_ui->comboBox->addItems(tasks);
+
+    if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
+        m_ui->lineEdit->setEnabled(false);
+
+    QObject::connect(m_ui->comboBox, SIGNAL(activated(QString)),
+              this, SLOT(onUiComboboxItemActivated(QString)));
 }
