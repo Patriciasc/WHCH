@@ -66,8 +66,10 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
-    // Set status text.
+    // Set status text and update when needed.
     setStatusText();
+    QObject::connect(m_uiConfigDialog, SIGNAL(accepted()),
+                     this, SLOT(setStatusText()));
 
     // Load session data.
     loadSessionData();
@@ -96,7 +98,9 @@ Whch::Whch(QWidget *parent) :
 
 Whch::~Whch()
 {
+    /* Save session data. */
     saveSessionData();
+
     delete m_ui;
     delete m_uiDialog;
     delete m_uiConfigDialog;
