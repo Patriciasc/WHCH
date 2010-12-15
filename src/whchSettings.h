@@ -29,7 +29,7 @@
 #ifndef WHCHSETTINGS_H
 #define WHCHSETTINGS_H
 
-#include "configDialog.h"
+#include "whchConfigDialog.h"
 #include "whchTableModel.h"
 #include <QSettings>
 #include <QLabel>

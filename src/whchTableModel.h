@@ -29,11 +29,11 @@
 #ifndef WHCHTABLEMODEL_H
 #define WHCHTABLEMODEL_H
 
+#include "whchTask.h"
 #include <QAbstractTableModel>
 #include <QList>
 #include <QDomDocument>
 #include <QStringList>
-#include "whchTask.h"
 
 class WhchTableModel : public QAbstractTableModel
 {

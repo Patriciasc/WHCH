@@ -26,8 +26,8 @@
  * ########################################################################
 */
 
-#include <QtGui/QApplication>
 #include "whch.h"
+#include <QtGui/QApplication>
 
 int main(int argc, char *argv[])
 {

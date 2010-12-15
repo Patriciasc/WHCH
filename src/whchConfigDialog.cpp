@@ -26,7 +26,7 @@
  * ########################################################################
 */
 
-#include "configDialog.h"
+#include "whchConfigDialog.h"
 #include "ui_configDialog.h"
 #include "whchSettings.h"
 #include <QSettings>

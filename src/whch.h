@@ -29,11 +29,12 @@
 #ifndef WHCH_H
 #define WHCH_H
 
-#include <QMainWindow>
+
 #include "whchTableModel.h"
+#include "whchConfigDialog.h"
+#include <QMainWindow>
 #include <QCoreApplication>
 #include <QFile>
-#include "configDialog.h"
 #include <QDomElement>
 #include <QDomDocument>
 #include <QDialog>
