@@ -71,7 +71,10 @@ private:
 
 private slots:
     /* Slots. */
-    void onLineEditReturn();
+    void on_lineEdit_returnPressed();
+    void on_StopButton_clicked();
+    void on_StartButton_clicked();
+    //void onLineEditReturn();
     void onDialogComboboxItemActivated(const QString &client);
     void onUiComboboxItemActivated(const QString &task);
     void onDialogTableCellChanged(QTableWidgetItem *item);
@@ -98,6 +101,7 @@ private slots:
     void loadSessionData();
     void saveSessionData();
     void setComboboxTasks();
+    void setCurrentTask();
 };
 
 #endif // WHCH_H

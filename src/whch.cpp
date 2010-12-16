@@ -75,9 +75,9 @@ Whch::Whch(QWidget *parent) :
 
     // Initialize LCD Timer.
     // TODO: Make this numbers more visible.
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
-    m_timer->start(1000);
-    onTimerTimeOut();
+    //connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
+    //m_timer->start(1000);
+    //onTimerTimeOut();
 
     // Set up progressbar.
     m_ui->progressBar->hide();
@@ -90,9 +90,9 @@ Whch::Whch(QWidget *parent) :
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
 
-    // Get current tasks parameters and display new task.
-    QObject::connect(m_ui->lineEdit, SIGNAL(returnPressed()),
-              this, SLOT(onLineEditReturn()));
+    m_ui->lineEdit->setEnabled(false);
+    m_ui->StopButton->setEnabled(false);
+    m_ui->lcdNumber->display("00:00:00");
 }
 
 Whch::~Whch()
@@ -215,49 +215,6 @@ QStringList Whch::totalTasks()
 /* SLOTS */
 /* ----- */
 
-// Sets a new task with current input parameters.
-void Whch::onLineEditReturn()
-{
-    WhchTask currentTask;
-    const QString lineEditText(m_ui->lineEdit->text());
-
-    // Do not admit empty detail's fields.
-    if (lineEditText.isEmpty() || lineEditText.compare(WARNING) == 0)
-        m_ui->lineEdit->setText(WARNING);
-    else
-    {
-        // Stop counting time spent on current task.
-        m_timer->stop();
-        m_ui->lcdNumber->display("00:00:00");
-
-        currentTask.m_details = lineEditText;
-        const QString text(m_ui->comboBox->currentText());
-        currentTask.m_name = text;
-
-        // Set task's related client.
-        currentTask.m_client = m_model->clientOfTask(text);
-        if (currentTask.m_client.compare("") == 0)
-            currentTask.m_client =  sessionClientOfTask(text);
-
-        //Display new task.
-        m_model->setNewTask(currentTask);
-
-        //Resize start and end columns
-        m_ui->tableView->resizeColumnToContents(0);
-        m_ui->tableView->resizeColumnToContents(1);
-
-        // Clear input.
-        m_ui->lineEdit->clear();
-
-        // Starts counting time spent on current task.
-        m_seconds = 0;
-        m_timer->start(1000);
-
-        // Calculate already and still to be worked time.
-        setStatusText();
-    }
-}
-
 // Shows the related tasks of the selected client.
 void Whch::onDialogComboboxItemActivated(const QString &client)
 {
@@ -320,8 +277,6 @@ void Whch::onUiComboboxItemActivated(const QString &task)
         m_ui->lineEdit->setEnabled(false);
         on_actionTasks_triggered();
     }
-    else
-        m_ui->lineEdit->setEnabled(true);
 }
 
 // Makes last row editable.
@@ -596,4 +551,71 @@ void  Whch::setComboboxTasks()
 
     QObject::connect(m_ui->comboBox, SIGNAL(activated(QString)),
               this, SLOT(onUiComboboxItemActivated(QString)));
+}
+
+/* Starts timer. */
+/* TODO: use QIcon for this button. */
+void Whch::on_StartButton_clicked()
+{
+    m_ui->StartButton->setEnabled(false);
+    m_ui->StopButton->setEnabled(true);
+    m_ui->lineEdit->setEnabled(true);
+
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
+    m_timer->start(1000);
+    onTimerTimeOut();
+}
+
+/* Stops timer and saves new introduced task. */
+/* TODO: use QIcon for this button. */
+void Whch::on_StopButton_clicked()
+{
+    const QString lineEditText(m_ui->lineEdit->text());
+
+    // Do not admit empty detail's fields.
+    if (lineEditText.isEmpty() || lineEditText.compare(WARNING) == 0)
+        m_ui->lineEdit->setText(WARNING);
+    else
+    {
+        m_timer->stop();
+        m_seconds = 0;
+        m_ui->lcdNumber->display("00:00:00");
+        m_ui->StopButton->setEnabled(false);
+
+        setCurrentTask();
+
+        //Resize start and end columns
+        m_ui->tableView->resizeColumnToContents(0);
+        m_ui->tableView->resizeColumnToContents(1);
+
+        // Clear input and enable start button.
+        m_ui->lineEdit->clear();
+        m_ui->lineEdit->setEnabled(false);
+        m_ui->StartButton->setEnabled(true);
+
+        // Calculate already and still to be worked time.
+        setStatusText();
+    }
+}
+
+void Whch::setCurrentTask()
+{
+    WhchTask currentTask;
+
+    currentTask.m_details = m_ui->lineEdit->text();
+    const QString text(m_ui->comboBox->currentText());
+    currentTask.m_name = text;
+
+    // Set task's related client.
+    currentTask.m_client = m_model->clientOfTask(text);
+    if (currentTask.m_client.compare("") == 0)
+        currentTask.m_client =  sessionClientOfTask(text);
+
+    //Display new task.
+    m_model->setNewTask(currentTask);
+}
+
+void Whch::on_lineEdit_returnPressed()
+{
+    on_StopButton_clicked();
 }
