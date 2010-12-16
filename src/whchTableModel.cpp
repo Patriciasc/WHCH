@@ -79,15 +79,22 @@ int WhchTableModel::rowCount(const QModelIndex &parent) const
     int rowCount = 0;
 
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
         if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
-            for (QDomElement dayElement = domRoot.firstChildElement("day");
-                 !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            for (QDomElement weekElement = domRoot.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                if (dayElement.attribute("date").compare(currentDate) == 0)
-                    rowCount = +dayElement.elementsByTagName("task").count();
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
+                {
+                    for (QDomElement dayElement = weekElement.firstChildElement("day");
+                    !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+                    {
+                        if (dayElement.attribute("date").compare(currentDate) == 0)
+                            rowCount = +dayElement.elementsByTagName("task").count();
+                    }
+                }
             }
         }
     }
@@ -110,12 +117,13 @@ QVariant WhchTableModel::data(const QModelIndex &index,
 
         // Search for the element in memory.
         for (QDomElement domRoot = m_domFile.firstChildElement("year");
-             !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+        !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
         {
-            if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
+            for (QDomElement weekElement = domRoot.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                for (QDomElement dayElement = domRoot.firstChildElement("day");
-                     !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+                for (QDomElement dayElement = weekElement.firstChildElement("day");
+                !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
                 {
                     if (dayElement.attribute("date").compare(currentDate) == 0)
                     {
@@ -123,8 +131,9 @@ QVariant WhchTableModel::data(const QModelIndex &index,
                         break;
                     }
                 }
+
             }
-         }
+        }
 
         for (int i=1; i<=index.row(); i++ )
             element = element.nextSiblingElement("task");
@@ -222,12 +231,13 @@ bool WhchTableModel::setData(const QModelIndex &index,
 
         // Serach for the element in memory
         for (QDomElement domRoot = m_domFile.firstChildElement("year");
-             !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+        !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
         {
-            if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
+            for (QDomElement weekElement = domRoot.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                for (QDomElement dayElement = domRoot.firstChildElement("day");
-                     !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+                for (QDomElement dayElement = weekElement.firstChildElement("day");
+                !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
                 {
                     if (dayElement.attribute("date").compare(currentDate) == 0)
                     {
@@ -236,7 +246,7 @@ bool WhchTableModel::setData(const QModelIndex &index,
                     }
                 }
             }
-         }
+        }
 
         for (int i=1; i<=index.row(); i++)
             element = element.nextSiblingElement("task");
@@ -277,18 +287,22 @@ QStringList WhchTableModel::AttributesList(const QString &attribute)
     QStringList attributes;
 
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        for (QDomElement dayElement = domRoot.firstChildElement("day");
-             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+        for (QDomElement weekElement = domRoot.firstChildElement("week");
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
         {
-            for (QDomElement element = dayElement.firstChildElement("task");
-                 !element.isNull(); element = element.nextSiblingElement("task"))
+            for (QDomElement dayElement = weekElement.firstChildElement("day");
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
             {
-                const QString attributeName = element.attribute(attribute);
-                // Do not repeat attributes in the list.
-                if (attributes.filter(attributeName).empty())
-                    attributes << attributeName;
+                for (QDomElement element = dayElement.firstChildElement("task");
+                !element.isNull(); element = element.nextSiblingElement("task"))
+                {
+                    const QString attributeName = element.attribute(attribute);
+                    // Do not repeat attributes in the list.
+                    if (attributes.filter(attributeName).empty())
+                        attributes << attributeName;
+                }
             }
         }
     }
@@ -301,16 +315,20 @@ QString WhchTableModel::clientOfTask(const QString &task)
     QString client;
 
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        for (QDomElement dayElement = domRoot.firstChildElement("day");
-             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+        for (QDomElement weekElement = domRoot.firstChildElement("week");
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
         {
-            for (QDomElement element = dayElement.firstChildElement("task");
-                 !element.isNull(); element = element.nextSiblingElement("task"))
+            for (QDomElement dayElement = weekElement.firstChildElement("day");
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
             {
-                if (element.attribute("name").compare(task) == 0)
-                    return client = element.attribute("client");
+                for (QDomElement element = dayElement.firstChildElement("task");
+                !element.isNull(); element = element.nextSiblingElement("task"))
+                {
+                    if (element.attribute("name").compare(task) == 0)
+                        return client = element.attribute("client");
+                }
             }
         }
 
@@ -321,16 +339,20 @@ QString WhchTableModel::clientOfTask(const QString &task)
 bool WhchTableModel::isClient(const QString &client)
 {
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        for (QDomElement dayElement = domRoot.firstChildElement("day");
-             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+        for (QDomElement weekElement = domRoot.firstChildElement("week");
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
         {
-            for (QDomElement element = dayElement.firstChildElement("task");
-                 !element.isNull(); element = element.nextSiblingElement("task"))
+            for (QDomElement dayElement = weekElement.firstChildElement("day");
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
             {
-                if (element.attribute("client").compare(client) == 0)
-                    return true;
+                for (QDomElement element = dayElement.firstChildElement("task");
+                !element.isNull(); element = element.nextSiblingElement("task"))
+                {
+                    if (element.attribute("client").compare(client) == 0)
+                        return true;
+                }
             }
         }
     }
@@ -353,20 +375,24 @@ QStringList WhchTableModel::ClientTasks(const QString &client)
     QStringList clientTasks;
 
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
-         !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        for (QDomElement dayElement = domRoot.firstChildElement("day");
-             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+        for (QDomElement weekElement = domRoot.firstChildElement("week");
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
         {
-            for (QDomElement element = dayElement.firstChildElement("task");
-                 !element.isNull(); element = element.nextSiblingElement("task"))
+            for (QDomElement dayElement = weekElement.firstChildElement("day");
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
             {
-                if (element.attribute("client").compare(client) == 0)
+                for (QDomElement element = dayElement.firstChildElement("task");
+                !element.isNull(); element = element.nextSiblingElement("task"))
                 {
-                    const QString taskName = element.attribute("name");
-                    /* Not repeat tasks in the list. */
-                    if (clientTasks.filter(taskName).empty())
-                        clientTasks << taskName;
+                    if (element.attribute("client").compare(client) == 0)
+                    {
+                        const QString taskName = element.attribute("name");
+                        /* Not repeat tasks in the list. */
+                        if (clientTasks.filter(taskName).empty())
+                            clientTasks << taskName;
+                    }
                 }
             }
         }
@@ -374,7 +400,7 @@ QStringList WhchTableModel::ClientTasks(const QString &client)
     return clientTasks;
 }
 
-/* FIXME: Refactorize. */
+/* TODO: Refactorize. */
 void WhchTableModel::setNewTask(WhchTask currentTask)
 {
     QString currentDate (QDate::currentDate().toString("yyyy/MM/dd"));
@@ -385,8 +411,24 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
     {
         if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
+            // Look if the current week already exists in memory.
+            QDomElement weekElement = domRoot.firstChildElement("week");
+            for (; !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+            {
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
+                    break;
+            }
+
+            // Create current week in memory.
+            if (weekElement.isNull())
+            {
+                weekElement = m_domFile.createElement("week");
+                weekElement.setAttribute("number", QDate::currentDate().weekNumber());
+                domRoot.appendChild(weekElement);
+            }
+
             // Look if the current day already exists in memory
-            QDomElement dayElement = domRoot.firstChildElement("day");
+            QDomElement dayElement = weekElement.firstChildElement("day");
             for (; !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
             {
                 if (dayElement.attribute("date").compare(currentDate) == 0)
@@ -398,8 +440,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             {
                 dayElement = m_domFile.createElement("day");
                 dayElement.setAttribute("date", QDate::currentDate().toString("yyyy/MM/dd"));
-                dayElement.setAttribute("week", QDate::currentDate().weekNumber());
-                m_domFile.appendChild(dayElement);
+                weekElement.appendChild(dayElement);
             }
 
             // Set data for the new task. (FUNCION SET TASK)
@@ -414,7 +455,6 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 
             // Add elements in memory.
             dayElement.appendChild(m_task);
-            domRoot.appendChild(dayElement);
 
             // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
             writeInXmlFile (FILENAME);

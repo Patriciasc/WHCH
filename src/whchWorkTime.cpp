@@ -82,18 +82,25 @@ void whchWorkTime::dayWorkedTime(QString currentDate,  QDomDocument domFile)
     {
         if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
-            for (QDomElement dayElement = domRoot.firstChildElement("day");
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            for (QDomElement weekElement = domRoot.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                if (dayElement.attribute("date").compare(currentDate) == 0)
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
                 {
-                    for (QDomElement element = dayElement.firstChildElement("task");
-                    !element.isNull(); element = element.nextSiblingElement("task"))
+                    for (QDomElement dayElement = weekElement.firstChildElement("day");
+                    !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
                     {
-                        //TODO: function to calculate duration.
-                        QVariant start = element.attribute("start");
-                        QVariant end = element.attribute("end");
-                        m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                        if (dayElement.attribute("date").compare(currentDate) == 0)
+                        {
+                            for (QDomElement element = dayElement.firstChildElement("task");
+                            !element.isNull(); element = element.nextSiblingElement("task"))
+                            {
+                                //TODO: function to calculate duration.
+                                QVariant start = element.attribute("start");
+                                QVariant end = element.attribute("end");
+                                m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                            }
+                        }
                     }
                 }
             }
@@ -116,18 +123,25 @@ void whchWorkTime::weekWorkedTime(QString currentDate, QDomDocument domFile)
     {
         if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
-            for (QDomElement dayElement = domRoot.firstChildElement("day");
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            for (QDomElement weekElement = domRoot.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                if (dayElement.attribute("week").toInt() == currentWeek)
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
                 {
-                    for (QDomElement element = dayElement.firstChildElement("task");
-                    !element.isNull(); element = element.nextSiblingElement("task"))
+                    for (QDomElement dayElement = weekElement.firstChildElement("day");
+                    !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
                     {
-                        //TODO: function to calculate duration.
-                        QVariant start = element.attribute("start");
-                        QVariant end = element.attribute("end");
-                        m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                        if (dayElement.attribute("week").toInt() == currentWeek)
+                        {
+                            for (QDomElement element = dayElement.firstChildElement("task");
+                            !element.isNull(); element = element.nextSiblingElement("task"))
+                            {
+                                //TODO: function to calculate duration.
+                                QVariant start = element.attribute("start");
+                                QVariant end = element.attribute("end");
+                                m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                            }
+                        }
                     }
                 }
             }
@@ -150,19 +164,26 @@ void whchWorkTime::monthWorkedTime(QString currentDate, QDomDocument domFile)
     {
         if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
-            for (QDomElement dayElement = domRoot.firstChildElement("day");
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            for (QDomElement weekElement = domRoot.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                QString dayMonth = dayElement.attribute("date").section("/", 1,1);
-                if (dayMonth.compare(currentMonth) == 0)
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
                 {
-                    for (QDomElement element = dayElement.firstChildElement("task");
-                    !element.isNull(); element = element.nextSiblingElement("task"))
+                    for (QDomElement dayElement = weekElement.firstChildElement("day");
+                    !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
                     {
-                        //TODO: function to calculate duration.
-                        QVariant start = element.attribute("start");
-                        QVariant end = element.attribute("end");
-                        m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                        QString dayMonth = dayElement.attribute("date").section("/", 1,1);
+                        if (dayMonth.compare(currentMonth) == 0)
+                        {
+                            for (QDomElement element = dayElement.firstChildElement("task");
+                            !element.isNull(); element = element.nextSiblingElement("task"))
+                            {
+                                //TODO: function to calculate duration.
+                                QVariant start = element.attribute("start");
+                                QVariant end = element.attribute("end");
+                                m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                            }
+                        }
                     }
                 }
             }
@@ -183,16 +204,23 @@ void whchWorkTime::yearWorkedTime(QString currentDate, QDomDocument domFile)
     {
         if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
-            for (QDomElement dayElement = domRoot.firstChildElement("day");
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            for (QDomElement weekElement = domRoot.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                for (QDomElement element = dayElement.firstChildElement("task");
-                !element.isNull(); element = element.nextSiblingElement("task"))
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
                 {
-                    //TODO: function to calculate duration.
-                    QVariant start = element.attribute("start");
-                    QVariant end = element.attribute("end");
-                    m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                    for (QDomElement dayElement = weekElement.firstChildElement("day");
+                    !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+                    {
+                        for (QDomElement element = dayElement.firstChildElement("task");
+                        !element.isNull(); element = element.nextSiblingElement("task"))
+                        {
+                            //TODO: function to calculate duration.
+                            QVariant start = element.attribute("start");
+                            QVariant end = element.attribute("end");
+                            m_seconds += start.toDateTime().secsTo(end.toDateTime());
+                        }
+                    }
                 }
             }
         }
