@@ -8,13 +8,16 @@
 <xsl:template match="/">
 <xsl:text>{| border="1" cellpadding="4" class="wikitable"
 </xsl:text>
-<xsl:text>! Client!! Duration!! Task!! Details</xsl:text>
-<xsl:for-each select="year/day/task">
+<xsl:text>! Date!! Client!! Duration!! Task!! Details</xsl:text>
+<xsl:for-each select="year/week">
+<xsl:for-each select="day/task">
 <xsl:sort select="@client"/>
 <xsl:text>
 |-
 </xsl:text>
 <xsl:text>|</xsl:text>
+<xsl:value-of select="@start"/>
+<xsl:text>||</xsl:text>
 <xsl:value-of select="@client"/>
 <xsl:text>||</xsl:text>
 <!-- Format this in a more human readable format. -->
@@ -24,6 +27,17 @@
 <xsl:value-of select="@name"/>
 <xsl:text>||</xsl:text>
 <xsl:value-of select="details"/>
+</xsl:for-each>
+<xsl:text>
+|-
+</xsl:text>
+<xsl:text>| colspan="4" bgcolor="#dddddd" | Total hours (week </xsl:text>
+<xsl:value-of select="@number"/>
+<xsl:text>):</xsl:text>
+<!-- How to do this?
+<xsl:variable name="total" select="xs:dateTime(day/task/@end) - xs:dateTime(day/task/@start)"/>
+<xsl:value-of select="sum(3)"/>
+-->
 </xsl:for-each>
 <xsl:text>
 |}</xsl:text>
