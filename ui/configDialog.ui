@@ -22,7 +22,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>You want to see your application settings in</string>
+        <string>Time periods</string>
        </property>
       </widget>
      </item>
@@ -31,7 +31,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>    Hours/day      </string>
+          <string> Hours</string>
          </property>
         </widget>
        </item>
@@ -48,7 +48,7 @@
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>   per</string>
+          <string>per</string>
          </property>
         </widget>
        </item>
@@ -101,14 +101,14 @@
      <item>
       <widget class="QCheckBox" name="checkBox">
        <property name="text">
-        <string>Show &quot;make a break&quot; messages.</string>
+        <string>Show &quot;take a break&quot; messages.</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="checkBox_2">
        <property name="text">
-        <string>Show message when starting overhours</string>
+        <string>Show message when starting overtime</string>
        </property>
       </widget>
      </item>

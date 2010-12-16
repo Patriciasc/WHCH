@@ -275,7 +275,7 @@
   </action>
   <action name="actionTasks">
    <property name="text">
-    <string>Tasks and Clients</string>
+    <string>Clients and Tasks</string>
    </property>
   </action>
   <action name="actionAbout_whch">

@@ -20,7 +20,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Set tasks and clients</string>
+   <string>Clients and Tasks</string>
   </property>
   <property name="modal">
    <bool>true</bool>
