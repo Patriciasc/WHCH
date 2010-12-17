@@ -406,7 +406,7 @@ void Whch::on_actionExport_to_wiki_format_triggered()
 
     QXmlQuery query(QXmlQuery::XSLT20);
     query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
-    query.setQuery(QUrl("whch_log.xslt"));
+    query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
     QFile file("whch_wikimedia_format");
     if (!file.open(QIODevice::WriteOnly))

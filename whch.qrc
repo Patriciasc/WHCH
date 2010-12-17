@@ -1,6 +1,7 @@
 <RCC>
-   <qresource prefix="/">
-      <file>ui/images/process_start.png</file>
-      <file>ui/images/process_stop.png</file>
-   </qresource>
+    <qresource prefix="/">
+        <file>ui/images/process_start.png</file>
+        <file>ui/images/process_stop.png</file>
+        <file>whch_log.xslt</file>
+    </qresource>
 </RCC>

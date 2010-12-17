@@ -11,7 +11,10 @@ TEMPLATE = app
 
 CONFIG += qt warn_on debug
 
-SOURCES += src/main.cpp\
+target.path += $${PREFIX}/bin
+INSTALLS += target
+
+SOURCES += src/main.cpp \
            src/whch.cpp \
            src/whchTableModel.cpp \
            src/whchTask.cpp
@@ -24,6 +27,7 @@ FORMS   += ui/whch.ui \
            ui/dialogTasksClients.ui
 
 OTHER_FILES += ui/images/process_start.png \
-               ui/imames/process_stop.png
+               ui/imames/process_stop.png \
+               whch_log.xslt
 
 RESOURCES += whch.qrc
