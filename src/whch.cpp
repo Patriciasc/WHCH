@@ -44,6 +44,7 @@
 #include <QComboBox>
 #include <QtXmlPatterns>
 #include <QSettings>
+#include <QDebug>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr("Add new task"));
@@ -210,20 +211,8 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     {
         m_uiDialog->comboBox->setEditable(true);
         m_uiDialog->comboBox->clearEditText();
-        QLineEdit *lineEdit = m_uiDialog->comboBox->lineEdit();
-
-        // Update session data.
-        const QString newClient = lineEdit->text();
-        if (newClient.compare("") != 0)
-        {
-            QStringList clients(m_model->AttributesList("client"));
-
-            if (!clients.contains(newClient))
-            {
-                QStringList tasks;
-                m_sessionData.insert(newClient, tasks);
-            }
-        }
+        QObject::connect(m_uiDialog->comboBox->lineEdit(), SIGNAL(returnPressed()),
+                         this, SLOT(onDialogComboboxLineEditReturn()));
     }
     else
         m_uiDialog->comboBox->setEditable(false);
@@ -250,6 +239,23 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
     {
         QTableWidgetItem *newItem = new QTableWidgetItem(clientTasks.at(i));
         m_uiDialog->tableWidget->setItem(i, 0, newItem);
+    }
+}
+
+// Update session data.
+void Whch::onDialogComboboxLineEditReturn()
+{
+    QString newClient = m_uiDialog->comboBox->currentText();
+
+    if (newClient.compare("") != 0)
+    {
+        QStringList clients(m_model->AttributesList("client"));
+
+        if (!clients.contains(newClient))
+        {
+            QStringList tasks;
+            m_sessionData.insert(newClient, tasks);
+        }
     }
 }
 
