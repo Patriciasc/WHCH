@@ -31,7 +31,6 @@
 
 
 #include "whchTableModel.h"
-#include "whchConfigDialog.h"
 #include <QMainWindow>
 #include <QCoreApplication>
 #include <QFile>

@@ -29,7 +29,6 @@
 #include "whch.h"
 #include "ui_whch.h"
 #include "ui_dialogTasksClients.h"
-#include "whchWorkTime.h"
 #include "whchTask.h"
 #include "whchTableModel.h"
 #include <QDomDocument>
