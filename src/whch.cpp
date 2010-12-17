@@ -283,48 +283,49 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 {
     const QString itemText (item->text());
-
-    if (itemText.compare("") != 0)
+    if (m_uiDialog->comboBox->currentText().compare("") != 0)
     {
-        // Update task's combobox.
-        if (!totalTasks().contains(itemText))
+        if (itemText.compare("") != 0)
         {
-            m_ui->comboBox->clear();
-            QStringList tasks;
-            tasks << itemText << totalTasks() <<  NEW_TASK;
-            m_ui->comboBox->addItems(tasks);
-        }
+            // Update task's combobox.
+            if (!totalTasks().contains(itemText))
+            {
+                m_ui->comboBox->clear();
+                QStringList tasks;
+                tasks << itemText << totalTasks() <<  NEW_TASK;
+                m_ui->comboBox->addItems(tasks);
+            }
 
-        // Save data into session structure.
-        const QString currentClient(m_uiDialog->comboBox->currentText());
+            // Save data into session structure.
+            const QString currentClient(m_uiDialog->comboBox->currentText());
 
-        // Do not repeat tasks.
-        if(!clientTotalTasks(currentClient).contains(itemText))
-        {
-            // FIXME: Commented code is for testing still.
-            // This code should give feedback to the user
-            // when introducing an already existent task.
-            // Still not working.
-            //std::cout << "if" << std::endl;
+            // Do not repeat tasks.
+            if(!clientTotalTasks(currentClient).contains(itemText))
+            {
+                // FIXME: Commented code is for testing still.
+                // This code should give feedback to the user
+                // when introducing an already existent task.
+                // Still not working.
+                //std::cout << "if" << std::endl;
 
-            // Change color back to white (for repeated elements).
-           /* if (item->backgroundColor() != Qt::white)
+                // Change color back to white (for repeated elements).
+                /* if (item->backgroundColor() != Qt::white)
             {
                 const QColor warningColor (Qt::white);
                 item->setBackgroundColor(warningColor);
             }*/
 
-            // Add new task as session data.
-            QStringList tasks(m_sessionData.value(currentClient));
-            tasks << itemText;
-            m_sessionData.insert(currentClient, tasks);
+                // Add new task as session data.
+                QStringList tasks(m_sessionData.value(currentClient));
+                tasks << itemText;
+                m_sessionData.insert(currentClient, tasks);
 
-            // Insert new empty element.
-            m_uiDialog->tableWidget->setRowCount(clientTotalTasks(currentClient).count()+1);
-            QTableWidgetItem *newItem = new QTableWidgetItem("");
-            m_uiDialog->tableWidget->setItem(clientTotalTasks(currentClient).count(), 0, newItem);
-        }
-        /*else
+                // Insert new empty element.
+                m_uiDialog->tableWidget->setRowCount(clientTotalTasks(currentClient).count()+1);
+                QTableWidgetItem *newItem = new QTableWidgetItem("");
+                m_uiDialog->tableWidget->setItem(clientTotalTasks(currentClient).count(), 0, newItem);
+            }
+            /*else
         {
             // Give feedback to the user on repeated elements.
             std::cout << "else" << std::endl;
@@ -333,6 +334,7 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
             item->setBackgroundColor(warningColor);
             item->setSelected(false);
         }*/
+        }
     }
 }
 
