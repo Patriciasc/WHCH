@@ -30,7 +30,7 @@ FORMS   += ui/whch.ui \
            ui/configDialog.ui \
            ui/dialogTasksClients.ui
 
-OTHER_FILES += ui/images/start.png \
-               ui/imames/stop.png
+OTHER_FILES += ui/images/process_start.png \
+               ui/imames/process_stop.png
 
 RESOURCES += whch.qrc

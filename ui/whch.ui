@@ -147,7 +147,7 @@
         </property>
         <property name="icon">
          <iconset>
-          <activeon>:/ui/images/start.png</activeon>
+          <activeon>:/ui/images/process_start.png</activeon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -165,7 +165,7 @@
         </property>
         <property name="icon">
          <iconset>
-          <activeon>:/ui/images/stop.png</activeon>
+          <activeon>:/ui/images/process_stop.png</activeon>
          </iconset>
         </property>
         <property name="iconSize">
