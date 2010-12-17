@@ -9,6 +9,7 @@ QT       += core gui xml xmlpatterns
 TARGET = whch
 TEMPLATE = app
 
+CONFIG += qt warn_on debug
 
 SOURCES += src/main.cpp\
            src/whch.cpp \
@@ -28,3 +29,8 @@ HEADERS += src/whch.h \
 FORMS   += ui/whch.ui \
            ui/configDialog.ui \
            ui/dialogTasksClients.ui
+
+OTHER_FILES += ui/images/start.png \
+               ui/imames/stop.png
+
+RESOURCES += whch.qrc
