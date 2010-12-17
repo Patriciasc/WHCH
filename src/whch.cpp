@@ -29,7 +29,6 @@
 #include "whch.h"
 #include "ui_whch.h"
 #include "ui_dialogTasksClients.h"
-#include "whchSettings.h"
 #include "whchWorkTime.h"
 #include "whchTask.h"
 #include "whchTableModel.h"
@@ -44,6 +43,7 @@
 #include <QTimer>
 #include <QComboBox>
 #include <QtXmlPatterns>
+#include <QSettings>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr("Add new task"));
@@ -53,7 +53,6 @@ Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::whch),
     m_uiDialog(new Ui::Dialog),
-    m_uiConfigDialog(new configDialog),
     m_seconds(0),
     m_timer(new QTimer),
     m_progress_timer(new QTimer)
@@ -65,19 +64,8 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
-    // Set status text and update when needed.
-    setStatusText();
-    QObject::connect(m_uiConfigDialog, SIGNAL(accepted()),
-                     this, SLOT(setStatusText()));
-
     // Load session data.
     loadSessionData();
-
-    // Initialize LCD Timer.
-    // TODO: Make this numbers more visible.
-    //connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
-    //m_timer->start(1000);
-    //onTimerTimeOut();
 
     // Set up progressbar.
     m_ui->progressBar->hide();
@@ -102,7 +90,6 @@ Whch::~Whch()
 
     delete m_ui;
     delete m_uiDialog;
-    delete m_uiConfigDialog;
 }
 
 /* ------------------- */
@@ -439,59 +426,13 @@ void Whch::hideProgressbar()
     m_ui->progressBar->reset();
 }
 
-/* Set up Configuration dialog */
-void Whch::on_actionPreferences_triggered()
-{
-    m_uiConfigDialog->show();
-}
-
-/* Displays already and still to be worked time. */
-void Whch::setStatusText()
-{
-    /* Read current settings. */
-    QCoreApplication::setOrganizationName("Openismus");
-    QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("WHCH");
-    whchSettings settings;
-
-    if (settings.contains("hours"))
-        settings.read();
-
-    /* Calculate already and still to be worked time.*/
-    whchWorkTime totalWorkTime;
-    totalWorkTime.workedTime(settings.period(), m_model->domFile());
-    whchWorkTime workTimeLeft;
-    workTimeLeft.TotalTime(settings.period(), settings.hours());
-
-    int hours = workTimeLeft.hours();
-    int minutes = workTimeLeft.minutes();
-    if (totalWorkTime.minutes() > workTimeLeft.minutes())
-    {
-        hours -= 1;
-        minutes += 60;
-    }
-     minutes = minutes - totalWorkTime.minutes();
-     hours = hours - totalWorkTime.hours();
-
-     QString total = QString("%1h%2m").
-                     arg(totalWorkTime.hours()).
-                     arg(totalWorkTime.minutes());
-     QString left = QString("%1h%2m").
-                    arg(hours).arg(minutes);
-
-     /* Display data. */
-     m_ui->label->setText(QDate::currentDate().toString("ddMMM") +
-                        ", Total: "+total + ", Left: " + left);
-
-}
-
 /* Load session data from setting's file. */
 void  Whch::loadSessionData()
 {
     QCoreApplication::setOrganizationName("Openismus");
     QCoreApplication::setOrganizationDomain("openismus.com");
     QCoreApplication::setApplicationName("WHCH");
-    whchSettings settings;
+    QSettings settings;
     QStringList clients = settings.value("clients").toStringList();
 
     if (!clients.isEmpty())
@@ -511,7 +452,7 @@ void  Whch::saveSessionData()
     QCoreApplication::setOrganizationName("Openismus");
     QCoreApplication::setOrganizationDomain("openismus.com");
     QCoreApplication::setApplicationName("WHCH");
-    whchSettings settings;
+    QSettings settings;
 
     MapQStringToList::const_iterator i = m_sessionData.constBegin();
     QStringList clientsList;
@@ -592,9 +533,6 @@ void Whch::on_StopButton_clicked()
         m_ui->lineEdit->clear();
         m_ui->lineEdit->setEnabled(false);
         m_ui->StartButton->setEnabled(true);
-
-        // Calculate already and still to be worked time.
-        setStatusText();
     }
 }
 

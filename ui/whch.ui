@@ -223,13 +223,6 @@
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
@@ -248,7 +241,6 @@
      <string>Settings</string>
     </property>
     <addaction name="actionTasks"/>
-    <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">

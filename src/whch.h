@@ -54,10 +54,37 @@ public:
     explicit Whch(QWidget *parent = 0);
     ~Whch();
 
+private slots:
+    void onUiComboboxItemActivated(const QString &task);
+    void onDialogComboboxItemActivated(const QString &client);
+    void onDialogTableCellChanged(QTableWidgetItem *item);
+    void onDialogTableItemChanged(QTableWidgetItem *item);
+    void on_lineEdit_returnPressed();
+    void on_StartButton_clicked();
+    void on_StopButton_clicked();
+
+    void on_actionAbout_whch_triggered();
+    void on_actionTasks_triggered();
+    void on_actionQuit_triggered();
+    void on_actionExport_to_wiki_format_triggered();
+
+    void onTimerTimeOut();
+    void hideProgressbar();
+    QStringList sessionTasks();
+    QString sessionClientOfTask(const QString &task);
+    QStringList sessionClientTasks(const QString &client);
+    bool isSessionClient(const QString &client);
+    QStringList clientTotalTasks(const QString &client);
+    QStringList totalTasks();
+    void showProgressbar();
+    void loadSessionData();
+    void saveSessionData();
+    void setComboboxTasks();
+    void setCurrentTask();
+
 private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
-    configDialog *m_uiConfigDialog;
     WhchTableModel *m_model;
     /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
@@ -68,40 +95,6 @@ private:
     QTimer *m_timer;
     QTimer *m_progress_timer;
     QProgressBar *m_progressbar;
-
-private slots:
-    /* Slots. */
-    void on_lineEdit_returnPressed();
-    void on_StopButton_clicked();
-    void on_StartButton_clicked();
-    //void onLineEditReturn();
-    void onDialogComboboxItemActivated(const QString &client);
-    void onUiComboboxItemActivated(const QString &task);
-    void onDialogTableCellChanged(QTableWidgetItem *item);
-    void onDialogTableItemChanged(QTableWidgetItem *item);
-
-    /* Action slots. */
-    void on_actionAbout_whch_triggered();
-    void on_actionTasks_triggered();
-    void on_actionQuit_triggered();
-    void on_actionExport_to_wiki_format_triggered();
-    void on_actionPreferences_triggered();
-
-    /* Auxiliary functions */
-    void onTimerTimeOut();
-    QStringList sessionTasks();
-    QString sessionClientOfTask(const QString &task);
-    QStringList sessionClientTasks(const QString &client);
-    bool isSessionClient(const QString &client);
-    QStringList clientTotalTasks(const QString &client);
-    QStringList totalTasks();
-    void showProgressbar();
-    void hideProgressbar();
-    void setStatusText();
-    void loadSessionData();
-    void saveSessionData();
-    void setComboboxTasks();
-    void setCurrentTask();
 };
 
 #endif // WHCH_H
