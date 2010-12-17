@@ -437,7 +437,7 @@ void  Whch::loadSessionData()
 {
     QCoreApplication::setOrganizationName("Openismus");
     QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("WHCH");
+    QCoreApplication::setApplicationName("whch");
     QSettings settings;
     QStringList clients = settings.value("clients").toStringList();
 
@@ -457,7 +457,7 @@ void  Whch::saveSessionData()
 {
     QCoreApplication::setOrganizationName("Openismus");
     QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("WHCH");
+    QCoreApplication::setApplicationName("whch");
     QSettings settings;
 
     MapQStringToList::const_iterator i = m_sessionData.constBegin();
