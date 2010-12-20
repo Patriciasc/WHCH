@@ -404,7 +404,7 @@ void Whch::on_actionExport_to_wiki_format_triggered()
     showProgressbar();
 
     QXmlQuery query(QXmlQuery::XSLT20);
-    query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
+    query.setFocus(QUrl("../whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
     QFile file("whch_wikimedia_format");
