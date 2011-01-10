@@ -401,18 +401,22 @@ void Whch::on_actionAbout_whch_triggered()
 void Whch::on_actionExport_to_wiki_format_triggered()
 {
     /* Set progress bar. */
-    showProgressbar();
+    //showProgressbar();
 
     QXmlQuery query(QXmlQuery::XSLT20);
-    query.setFocus(QUrl("../whch_log.xml"));
+    query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
-    QFile file("whch_wikimedia_format");
-    if (!file.open(QIODevice::WriteOnly))
-        std::cout << "Problem creating wikimedia format from .xml file" << std::endl;
+    QString fileName = QFileDialog::getSaveFileName(this);
+    if (fileName.isEmpty())
+        std::cout << "Filename is empty." << std::endl;
 
-    query.evaluateTo(&file);
-
+    QFile file(fileName);
+    if (file.open(QFile::WriteOnly | QFile::Text))
+    {
+        query.evaluateTo(&file);
+        setWindowFilePath(fileName);
+    }
     file.close();
 }
 
