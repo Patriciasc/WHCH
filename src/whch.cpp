@@ -54,8 +54,7 @@ Whch::Whch(QWidget *parent) :
     m_ui(new Ui::whch),
     m_uiDialog(new Ui::Dialog),
     m_seconds(0),
-    m_timer(new QTimer),
-    m_progress_timer(new QTimer)
+    m_timer(new QTimer)
 {
     // Set GUI.
     m_ui->setupUi(this);
@@ -66,9 +65,6 @@ Whch::Whch(QWidget *parent) :
 
     // Load session data.
     loadSessionData();
-
-    // Set up progressbar.
-    m_ui->progressBar->hide();
 
     // Set list of available tasks.
     setComboboxTasks();
@@ -400,9 +396,6 @@ void Whch::on_actionAbout_whch_triggered()
 /* Exports the .xml file to a wikimedia format. */
 void Whch::on_actionExport_to_wiki_format_triggered()
 {
-    /* Set progress bar. */
-    //showProgressbar();
-
     QXmlQuery query(QXmlQuery::XSLT20);
     query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
@@ -418,23 +411,6 @@ void Whch::on_actionExport_to_wiki_format_triggered()
         setWindowFilePath(fileName);
     }
     file.close();
-}
-
-/* Shows progressbar. */
-void Whch::showProgressbar()
-{
-    m_ui->progressBar->show();
-    connect(m_progress_timer, SIGNAL(timeout()), this, SLOT(hideProgressbar()));
-    m_progress_timer->start(1500);
-}
-
-/* Hides progressbar.*/
-void Whch::hideProgressbar()
-{
-    /* Set progress bar. */
-    m_progress_timer->stop();
-    m_ui->progressBar->hide();
-    m_ui->progressBar->reset();
 }
 
 /* Load session data from setting's file. */

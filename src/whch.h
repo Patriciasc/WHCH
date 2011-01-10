@@ -69,14 +69,12 @@ private slots:
     void on_actionExport_to_wiki_format_triggered();
 
     void onTimerTimeOut();
-    void hideProgressbar();
     QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
     QStringList sessionClientTasks(const QString &client);
     bool isSessionClient(const QString &client);
     QStringList clientTotalTasks(const QString &client);
     QStringList totalTasks();
-    void showProgressbar();
     void loadSessionData();
     void saveSessionData();
     void setComboboxTasks();
@@ -93,8 +91,6 @@ private:
     /* Track spent time on current task */
     int m_seconds;
     QTimer *m_timer;
-    QTimer *m_progress_timer;
-    QProgressBar *m_progressbar;
 };
 
 #endif // WHCH_H
