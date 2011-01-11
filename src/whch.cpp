@@ -404,7 +404,7 @@ void Whch::on_actionExport_to_wiki_format_triggered()
     query.setFocus(QUrl("whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Export to wiki format..."));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export To Mediawiki Format"));
 
     if (!fileName.isEmpty())
     {
