@@ -262,7 +262,7 @@ void Whch::onUiComboboxItemActivated(const QString &task)
     {
         // Displays "Add tasks/clients" dialog.
         m_ui->lineEdit->clear();
-        m_ui->lineEdit->setEnabled(false);
+        //m_ui->lineEdit->setEnabled(false);
         on_actionTasks_triggered();
     }
 }
@@ -396,12 +396,12 @@ void Whch::on_actionAbout_whch_triggered()
                   "Development is just starting and thus WHCH is not yet useful."));
 }
 
-/* FIXME: change paths where files are saved. */
 /* Exports the .xml file to a wikimedia format. */
 void Whch::on_actionExport_to_wiki_format_triggered()
 {
     QXmlQuery query(QXmlQuery::XSLT20);
-    query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
+    /* FIXME: Look for right installation path. */
+    query.setFocus(QUrl("whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export to wiki format..."));
@@ -510,21 +510,26 @@ void Whch::on_StopButton_clicked()
         m_ui->lineEdit->setText(WARNING);
     else
     {
-        m_timer->stop();
-        m_seconds = 0;
-        m_ui->lcdNumber->display("00:00:00");
-        m_ui->StopButton->setEnabled(false);
+        if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
+            m_ui->lineEdit->setText("Select a task first.");
+        else
+        {
+            m_timer->stop();
+            m_seconds = 0;
+            m_ui->lcdNumber->display("00:00:00");
+            m_ui->StopButton->setEnabled(false);
 
-        setCurrentTask();
+            setCurrentTask();
 
-        //Resize start and end columns
-        m_ui->tableView->resizeColumnToContents(0);
-        m_ui->tableView->resizeColumnToContents(1);
+            //Resize start and end columns
+            m_ui->tableView->resizeColumnToContents(0);
+            m_ui->tableView->resizeColumnToContents(1);
 
-        // Clear input and enable start button.
-        m_ui->lineEdit->clear();
-        m_ui->lineEdit->setEnabled(false);
-        m_ui->StartButton->setEnabled(true);
+            // Clear input and enable start button.
+            m_ui->lineEdit->clear();
+            m_ui->lineEdit->setEnabled(false);
+            m_ui->StartButton->setEnabled(true);
+        }
     }
 }
 
