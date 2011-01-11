@@ -389,11 +389,10 @@ void Whch::on_actionTasks_triggered()
 
 void Whch::on_actionAbout_whch_triggered()
 {
-    QMessageBox::about(this, tr("WHCH (Working Hours Counter for Humans"),
+    QMessageBox::about(this, tr("WHCH (Working Hours Counter for Humans)"),
                tr("WHCH stands for '<b>Working Hours Counter for Humans</b>'. "
                   "This is an application for tracking the time spent on "
-                  "individual projects. "
-                  "Development is just starting and thus WHCH is not yet useful."));
+                  "individual projects."));
 }
 
 /* Exports the .xml file to a wikimedia format. */
