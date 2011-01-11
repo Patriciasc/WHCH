@@ -400,17 +400,18 @@ void Whch::on_actionExport_to_wiki_format_triggered()
     query.setFocus(QUrl("../whch-build-desktop/whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
-    QString fileName = QFileDialog::getSaveFileName(this);
-    if (fileName.isEmpty())
-        std::cout << "Filename is empty." << std::endl;
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export to wiki format..."));
 
-    QFile file(fileName);
-    if (file.open(QFile::WriteOnly | QFile::Text))
+    if (!fileName.isEmpty())
     {
-        query.evaluateTo(&file);
-        setWindowFilePath(fileName);
+        QFile file(fileName);
+        if (file.open(QFile::WriteOnly | QFile::Text))
+        {
+            query.evaluateTo(&file);
+            setWindowFilePath(fileName);
+        }
+        file.close();
     }
-    file.close();
 }
 
 /* Load session data from setting's file. */
