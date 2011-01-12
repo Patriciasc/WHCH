@@ -400,7 +400,7 @@ void Whch::on_actionExport_to_wiki_format_triggered()
 {
     QXmlQuery query(QXmlQuery::XSLT20);
     /* FIXME: Look for right installation path. */
-    query.setFocus(QUrl("whch_log.xml"));
+    query.setFocus(QUrl(QDir::homePath() + "/" + "." + "whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export To Mediawiki Format"));

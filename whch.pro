@@ -12,7 +12,7 @@ TEMPLATE = app
 
 TARGET = whch
 
-target.path += $$[PREFIX]/bin
+target.path += $${PREFIX}/bin
 INSTALLS += target
 
 SOURCES += src/main.cpp \

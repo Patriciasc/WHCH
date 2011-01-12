@@ -34,6 +34,7 @@
 #include <QTextStream>
 #include <QDateTime>
 #include <QDebug>
+#include <QDir>
 
 static const QString FILENAME = "whch_log.xml";
 
@@ -45,7 +46,8 @@ WhchTableModel::WhchTableModel(QObject *parent)
     m_task.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     /* Create .xml file if it does not exist. */
-    QFile file(FILENAME);
+
+    QFile file(QDir::homePath() + "/" + "." + FILENAME);
     if (!file.exists())
     {
         m_domFile = QDomDocument("WHCH");
@@ -478,15 +480,24 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 // Load .xml file's content (data) in memory.
 void WhchTableModel::loadXmlFile(const QString &filename)
 {
-    QFile file(filename);
+    QFile file(QDir::homePath() + "/" + "." + filename);
 
     if (!file.open(QIODevice::ReadOnly))
-        std::cout << "Could not open file" << std::endl;
-
-    if (!m_domFile.setContent(&file))
     {
-        std::cout << "Problem setting content" << std::endl;
+        qDebug() << "Error. Could not open file: " << filename
+                << "in" << QDir::current().absolutePath();
+        return;
+    }
+
+    QString setContentError;
+    if (!m_domFile.setContent(&file, &setContentError))
+    {
+        qDebug() << "Error. Could not set content for file: " << filename
+                << "in" << QDir::current().absolutePath();
+        qDebug() << "Error message: " << setContentError;
+
         file.close();
+        return;
     }
 
     file.close();
@@ -495,11 +506,13 @@ void WhchTableModel::loadXmlFile(const QString &filename)
 // Update .xml file's content with the data in memory.
 void WhchTableModel::writeInXmlFile (const QString &filename)
 {
-    QFile file(filename);
+    QFile file(QDir::homePath() + "/" + "." + filename);
 
     if (!file.open(QIODevice::WriteOnly))
-        std::cout << "Problem updating .xml file's data from memory" << std::endl;
-
+    {
+        qDebug() << " Error updating memory data from file: " << filename;
+        return;
+    }
     QTextStream ts(&file);
     ts << m_domFile.toString();
 
