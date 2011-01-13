@@ -20,6 +20,7 @@
    |  * Using WHCH                        |
    |    + How To Use 'WHCH?'              |
    |    + Installation                    |
+   |    + FIXMEs and TODOs                |
    +--------------------------------------+
 
      ----------------------------------------------------------------------
@@ -32,8 +33,6 @@ WHCH stands for "Working Hours Counter for Humans".
 This is an application for tracking the time spent on
 individual projects.
 
-Development is just starting and thus WHCH is not yet useful.
-
 
 License:
 
@@ -45,7 +44,51 @@ License:
 
                                 Using WHCH
 
-How To Use 'WHCH?' (TODO)
+How To Use 'WHCH?'
+
+Step 1.
+Add new clients or tasks associated with clients under "Task->Add new task"
+in the main window or from the top menu under "Settings->Clients and tasks".
+
+Step 2. 
+Click on "Start" button to  indicate that you are going to start a task and
+go on working on the task.
+
+Step 3. 
+When finished with the current task, select a task from the "Task" list in
+the main window.
+
+Step 4.
+Write a detailed description in the "Details" field in the main window for the
+task you were working on.
+
+Step 5. 
+Click on "Stop" button and the task will be shown in the main window and saved
+automatically. Edition of start/end time and details is possible by clicking
+on those fields.
+
+Step 6 [Optional].
+Export the list of tasks to Wikimedia format under "File->Export To Wikimedia 
+Format ..." in the top menu.
+
+In case you need or you want to edit the .xml file containing the generated list
+of tasks yourself, you can find it under /home/user/.whch_log.xml.
 
 
-Installation: (TODO)
+Installation:
+
+This project uses the qmake build system. To install it, follow the next steps:
+
+qmake PREFIX=/wanted/prefix
+make
+make install
+
+For development using QtCreator (2.0+) and opening whch.pro is recommended.
+
+
+FIXMEs and TODOs:
+See FIXME and TODO comments in the code or follow the project's
+lists in GitHub [1][2].
+
+[1]: https://github.com/Patriciasc/WHCH/wiki/FIXMEs
+[2]: https://github.com/Patriciasc/WHCH/wiki/TODOs
