@@ -8,11 +8,12 @@ QT       += core gui xml xmlpatterns
 
 CONFIG += qt warn_on debug
 
+VERSION = 0.1
+
 TEMPLATE = app
 
 TARGET = whch
-
-target.path += $${PREFIX}/bin
+target.path = $${PREFIX}/bin
 INSTALLS += target
 
 SOURCES += src/main.cpp \
@@ -30,5 +31,9 @@ FORMS   += ui/whch.ui \
 OTHER_FILES += ui/images/process_start.png \
                ui/images/process_stop.png \
                whch_log.xslt
+
+DISTFILES += ui/images/process_start.png \
+             ui/images/process_stop.png \
+             whch_log.xslt
 
 RESOURCES += whch.qrc
