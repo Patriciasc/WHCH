@@ -34,6 +34,7 @@ OTHER_FILES += ui/images/process_start.png \
 
 DISTFILES += ui/images/process_start.png \
              ui/images/process_stop.png \
-             whch_log.xslt
+             whch_log.xslt \
+             README
 
 RESOURCES += whch.qrc

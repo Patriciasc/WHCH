@@ -458,7 +458,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             // Add elements in memory.
             dayElement.appendChild(m_task);
 
-            // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
+            // Write result to an .xml file.
             writeInXmlFile (XML_FILENAME);
 
             // Refresh view.
