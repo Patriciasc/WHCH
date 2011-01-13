@@ -390,9 +390,9 @@ void Whch::on_actionTasks_triggered()
 void Whch::on_actionAbout_whch_triggered()
 {
     QMessageBox::about(this, tr("WHCH (Working Hours Counter for Humans)"),
-               tr("WHCH stands for '<b>Working Hours Counter for Humans</b>'. "
-                  "This is an application for tracking the time spent on "
-                  "individual projects."));
+                 tr("WHCH stands for '<b>Working Hours Counter for Humans</b>'. "
+                    "This is an application for tracking the time spent on "
+                    "individual projects."));
 }
 
 /* Exports the .xml file to a wikimedia format. */
@@ -486,7 +486,6 @@ void  Whch::setComboboxTasks()
 }
 
 /* Starts timer. */
-/* TODO: use QIcon for this button. */
 void Whch::on_StartButton_clicked()
 {
     m_ui->StartButton->setEnabled(false);
@@ -499,7 +498,6 @@ void Whch::on_StartButton_clicked()
 }
 
 /* Stops timer and saves new introduced task. */
-/* TODO: use QIcon for this button. */
 void Whch::on_StopButton_clicked()
 {
     const QString lineEditText(m_ui->lineEdit->text());

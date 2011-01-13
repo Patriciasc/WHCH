@@ -36,7 +36,7 @@
 #include <QDebug>
 #include <QDir>
 
-static const QString FILENAME = "whch_log.xml";
+static const QString XML_FILENAME = "whch_log.xml";
 
 WhchTableModel::WhchTableModel(QObject *parent)
     :QAbstractTableModel(parent)
@@ -47,7 +47,7 @@ WhchTableModel::WhchTableModel(QObject *parent)
 
     /* Create .xml file if it does not exist. */
 
-    QFile file(QDir::homePath() + "/" + "." + FILENAME);
+    QFile file(QDir::homePath() + "/" + "." + XML_FILENAME);
     if (!file.exists())
     {
         m_domFile = QDomDocument("WHCH");
@@ -70,7 +70,7 @@ WhchTableModel::WhchTableModel(QObject *parent)
     }
 
     /* Load .xml file in memory. */
-    loadXmlFile(FILENAME);
+    loadXmlFile(XML_FILENAME);
 }
 
 int WhchTableModel::rowCount(const QModelIndex &parent) const
@@ -278,7 +278,7 @@ bool WhchTableModel::setData(const QModelIndex &index,
 
         // Update change in .xml file.
         if (changed)
-            writeInXmlFile(FILENAME);
+            writeInXmlFile(XML_FILENAME);
     }
     return changed;
 }
@@ -459,12 +459,12 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             dayElement.appendChild(m_task);
 
             // Write result to an .xml file. (FUNCION WRITE_XML_FILE)
-            writeInXmlFile (FILENAME);
+            writeInXmlFile (XML_FILENAME);
 
             // Refresh view.
             reset();
 
-            loadXmlFile(FILENAME);
+            loadXmlFile(XML_FILENAME);
 
             // Set start time and restart timer for the next task.
             m_task = m_domFile.createElement("task");
@@ -478,13 +478,13 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 /* ------------------- */
 
 // Load .xml file's content (data) in memory.
-void WhchTableModel::loadXmlFile(const QString &filename)
+void WhchTableModel::loadXmlFile(const QString &fileName)
 {
-    QFile file(QDir::homePath() + "/" + "." + filename);
+    QFile file(QDir::homePath() + "/" + "." + fileName);
 
     if (!file.open(QIODevice::ReadOnly))
     {
-        qDebug() << "Error. Could not open file: " << filename
+        qDebug() << "Error. Could not open file: " << fileName
                 << "in" << QDir::current().absolutePath();
         return;
     }
@@ -492,7 +492,7 @@ void WhchTableModel::loadXmlFile(const QString &filename)
     QString setContentError;
     if (!m_domFile.setContent(&file, &setContentError))
     {
-        qDebug() << "Error. Could not set content for file: " << filename
+        qDebug() << "Error. Could not set content for file: " << fileName
                 << "in" << QDir::current().absolutePath();
         qDebug() << "Error message: " << setContentError;
 
@@ -504,13 +504,13 @@ void WhchTableModel::loadXmlFile(const QString &filename)
 }
 
 // Update .xml file's content with the data in memory.
-void WhchTableModel::writeInXmlFile (const QString &filename)
+void WhchTableModel::writeInXmlFile (const QString &fileName)
 {
-    QFile file(QDir::homePath() + "/" + "." + filename);
+    QFile file(QDir::homePath() + "/" + "." + fileName);
 
     if (!file.open(QIODevice::WriteOnly))
     {
-        qDebug() << " Error updating memory data from file: " << filename;
+        qDebug() << " Error updating memory data from file: " << fileName;
         return;
     }
     QTextStream ts(&file);

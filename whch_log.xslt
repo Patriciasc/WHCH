@@ -20,7 +20,7 @@
 <xsl:text>||</xsl:text>
 <xsl:value-of select="@client"/>
 <xsl:text>||</xsl:text>
-<!-- Format this in a more human readable format. -->
+<!-- FIXME: Format this in a more human readable format. -->
 <xsl:variable name="duration" select="xs:dateTime(@end) - xs:dateTime(@start)"/>
 <xsl:value-of select="$duration"/>
 <xsl:text>||</xsl:text>
@@ -34,7 +34,7 @@
 <xsl:text>| colspan="4" bgcolor="#dddddd" | Total hours (week </xsl:text>
 <xsl:value-of select="@number"/>
 <xsl:text>):</xsl:text>
-<!-- How to do this?
+<!-- FIXME: How to calculate total hours in every week?
 <xsl:variable name="total" select="xs:dateTime(day/task/@end) - xs:dateTime(day/task/@start)"/>
 <xsl:value-of select="sum(3)"/>
 -->
