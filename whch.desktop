@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=whch
+GenericName=Working Hours Counter for Humans
+Comment=Tracks the time spent on individual projects.
+Exec=whch
+Icon=whch
+Terminal=false
+Type=Application
+Categories=Office;
+
