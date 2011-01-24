@@ -1,0 +1,873 @@
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Jan 24 17:22:20 2011 +0100
+
+    Added COPYING, AUTHORS and ChangeLog files.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Jan 14 10:40:22 2011 +0100
+
+    Removed unused status bar.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Jan 13 16:33:02 2011 +0100
+
+    Distributing README file in .pro file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Jan 13 14:30:01 2011 +0100
+
+    Updated .pro file for distributing resources.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Jan 13 11:24:50 2011 +0100
+
+    Updated README file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Jan 13 10:51:38 2011 +0100
+
+    Added/Removed/Changed some comments and variables.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Jan 12 15:58:17 2011 +0100
+
+    Using new path for .xml file. This enables custom prefix installation.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 17:28:12 2011 +0100
+
+    Changed menu item name.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 17:21:10 2011 +0100
+
+    Changed about dialog text.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 17:17:49 2011 +0100
+
+    Changed file chooser dialog title.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 13:44:03 2011 +0100
+
+    Solved small bug.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 12:41:25 2011 +0100
+
+    Realocated Start/Stop button, lineEdit and time counter in the UI.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 10:29:42 2011 +0100
+
+    Ended "Export to wiki format" menu item with "..." to indicate that the
+    user will still have a chance to cancel it.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 10:26:50 2011 +0100
+
+    Added new about dialog with small application description.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Jan 11 10:16:29 2011 +0100
+
+    Added title to file chooser dialog.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Jan 10 17:34:12 2011 +0100
+
+    Removed progress bar related to "Export to wiki format" functionality.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Jan 10 17:26:04 2011 +0100
+
+    Added file chooser dialog for exported wiki format files.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Dec 20 14:57:14 2010 +0100
+
+    INSTALL target for .pro file is installing. Still not finished.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 20:22:31 2010 +0100
+
+    Removed unnecessary headers.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 16:26:48 2010 +0100
+
+    added INSTALL target and .xslt template as resource.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 15:35:38 2010 +0100
+
+    Do not allow introducing tasks without a related client.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 15:13:26 2010 +0100
+
+    Changed settings file name.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 15:06:26 2010 +0100
+
+    Adding to setting's file clients that are not related to tasks.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 13:39:07 2010 +0100
+
+    Removed features (part 2)
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 13:36:01 2010 +0100
+
+    Removed features in order to have a more clean and stable 1st version.
+
+Author: Murray Cumming <murrayc@murrayc.com>
+Date:   Thu Dec 16 16:04:49 2010 +0100
+
+    English string corrections.
+    
+    And do not use spaces for layout.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 12:18:28 2010 +0100
+
+    Changed image's names
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 17 12:12:12 2010 +0100
+
+    Added images as resources for the "Start" and "Stop" button.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 16 17:52:53 2010 +0100
+
+    Added "Start" and "Stop" buttons for making the UI more usable.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 16 15:50:52 2010 +0100
+
+    Removed empty toolbar from main window.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 16 15:30:52 2010 +0100
+
+    Made changes in xslt template.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 16 12:44:18 2010 +0100
+
+    Added "week" element in code and .xml file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Dec 15 16:29:09 2010 +0100
+
+    Renamed some files for convention reasons.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Dec 15 16:21:39 2010 +0100
+
+    Added some comments.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Dec 15 16:13:32 2010 +0100
+
+    Updating Status text when needed.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Dec 15 15:38:15 2010 +0100
+
+    Now using QSettings for session data.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Dec 14 17:17:07 2010 +0100
+
+    Implemented function for loading session data from the setting's file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Dec 14 16:52:30 2010 +0100
+
+    Added skeleton for saving session data in the settings file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Dec 14 15:36:42 2010 +0100
+
+    Corrected some work time calculations.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Dec 14 14:59:56 2010 +0100
+
+    Status text is updating every time a new task is added.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Dec 14 12:20:00 2010 +0100
+
+    Changed some function names.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Dec 14 12:11:06 2010 +0100
+
+    Resume of already and still to be worked hours is working.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Dec 13 16:54:20 2010 +0100
+
+    Replaced Status bar with Status area and added notificacion label.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Dec 13 14:36:49 2010 +0100
+
+    Created a new class for the management of the working time.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Dec 13 13:58:07 2010 +0100
+
+    Started process and skeleton for setting the settings up.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Dec 13 11:31:51 2010 +0100
+
+    Made changes in functions for calculating time to work in a period.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 10 17:17:03 2010 +0100
+
+    Added function for retrieving weekend days in a certain period. Still
+    testing it.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 10 13:34:46 2010 +0100
+
+    Added function for calculating total time in a year to be worked.
+    
+    This is still in testing phase since I need to find a proper function
+    for calculating the real total time. I am currently using a general rule.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 10 12:22:44 2010 +0100
+
+    Added functions for calculating total time to be worked in a period time.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 10 11:22:09 2010 +0100
+
+    Added function for calculating worked hours in a week.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 10 11:13:45 2010 +0100
+
+    Added 'week' attribute to day elements in the .xml file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Dec 10 10:54:38 2010 +0100
+
+    Added function for calculating worked hours in a month.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 9 17:28:08 2010 +0100
+
+    Added function for calculating worked hours in a day.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 9 17:17:47 2010 +0100
+
+    Added skeleton for calculating worked hours per period.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 9 16:53:38 2010 +0100
+
+    Added function for calculating worked time in a year period.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 9 15:49:03 2010 +0100
+
+    created a new class for the Settings.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 9 12:36:24 2010 +0100
+
+    Replaced botton main window section for a Statusbar.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Dec 9 12:07:21 2010 +0100
+
+    Added non intentionally removed dialog for tasks and clients.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Wed Dec 8 18:25:19 2010 +0100
+
+    Added function skeleton for setting the settings up.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Wed Dec 8 18:18:35 2010 +0100
+
+    Introduced QSettings read function.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Wed Dec 8 17:55:53 2010 +0100
+
+    Introduced QSettings write function.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Wed Dec 8 14:24:30 2010 +0100
+
+    Added configuration dialog's ui draft.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Wed Dec 8 14:03:18 2010 +0100
+
+    Changed function names.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Wed Dec 8 13:40:57 2010 +0100
+
+    Added progressbar for feedback when exporting .xml file to wikimedia format.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Wed Dec 8 11:54:31 2010 +0100
+
+    Exporting .xml file to mediawiki format is working. Still need to
+    look in better paths.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Tue Dec 7 16:33:16 2010 +0100
+
+    Added option for exporting .xml file to mediawiki format. Still testing.
+
+Author: Patricia Santana Cruz <patriciasantanacruz@gmail.com>
+Date:   Tue Dec 7 13:38:20 2010 +0100
+
+    Transforming .xml file to wikimedia format using .xslt template works. Still
+    need to find a good algorithm to calculate time difference manually, since
+    xs:dateTime is still not supported in the current Qt version.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Dec 1 17:51:46 2010 +0100
+
+    Calculating difference in time manually  on the .xslt template.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Dec 1 16:21:01 2010 +0100
+
+    Changes in .xslt template.
+
+Author: Patricia <patmistika@andromeda.(none)>
+Date:   Tue Nov 30 19:25:38 2010 +0100
+
+    Changes in .xslt template.
+
+Author: Patricia <patmistika@andromeda.(none)>
+Date:   Tue Nov 30 14:12:37 2010 +0100
+
+    Replaced "Play" with "Use" in README file.
+
+Author: Patricia <patmistika@andromeda.(none)>
+Date:   Tue Nov 30 14:10:31 2010 +0100
+
+    Changed .xslt table style.
+
+Author: Patricia <patmistika@andromeda.(none)>
+Date:   Tue Nov 30 13:22:33 2010 +0100
+
+    Changed .xslt format for mediawiki one.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 29 15:35:36 2010 +0100
+
+    .xslt template displays .xml data in a table.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 26 16:59:56 2010 +0100
+
+    Created skeleton for XSLT template file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 26 14:58:40 2010 +0100
+
+    Changed format for displaying Start and End dates. Fixed related bug.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 26 12:52:49 2010 +0100
+
+    Replaced logic for setting task's related client.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 25 17:21:21 2010 +0100
+
+    Tasks' combobox in main window show "Add new task" always as last element.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 25 17:03:25 2010 +0100
+
+    Changed directory structure.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 25 16:39:44 2010 +0100
+
+    Added some comments.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 25 16:20:51 2010 +0100
+
+    Changed wrong comment.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 25 16:15:10 2010 +0100
+
+    New tasks are inserted before "Add new task" in the main
+    window task's combobox.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 25 15:00:07 2010 +0100
+
+    Solved app segmentation fault described in FIXMEs wiki.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 24 17:24:05 2010 +0100
+
+    Give feedback to user when a task is added twice.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 24 15:31:14 2010 +0100
+
+    When a new task is added, a new empty editable line in the QTableWidget is created.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 24 11:22:21 2010 +0100
+
+    Changed DOM file's name for a more suitable one: WHCH.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 24 10:44:37 2010 +0100
+
+    Changed variable's name.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 24 10:41:58 2010 +0100
+
+    Do not admit empty or default warning message as detail's input.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 23 16:46:15 2010 +0100
+
+    Removed and added some comments explaining code functionality.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 23 16:41:08 2010 +0100
+
+    Removed some headers I am not using any more.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 23 16:40:10 2010 +0100
+
+    Added a comment.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 23 16:38:09 2010 +0100
+
+    Replaced some code with a function tha had same functinality.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 23 16:28:47 2010 +0100
+
+    Made some code style changes.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 23 16:25:28 2010 +0100
+
+    Removed unused variable.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 23 16:23:36 2010 +0100
+
+    Changed structure in order to be able to manage more than one day
+    and keep track of history in every year in the .xml file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 14:47:22 2010 +0100
+
+    Changed structure of the model in order to check the date and work
+    with data concerning to the current date.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 15:54:49 2010 +0100
+
+    Load data just from the current day.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 15:13:39 2010 +0100
+
+    Changed central widget layout's margins.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 15:12:04 2010 +0100
+
+    Part 2 (added UI): Added LCD counter in order to give some feedback
+    to the user.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 15:09:25 2010 +0100
+
+    Added LCD counter in order to give some feedback to the user.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 11:29:10 2010 +0100
+
+    Added a comment.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 10:47:54 2010 +0100
+
+    Made some QString const.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 22 10:31:15 2010 +0100
+
+    Removed odd space.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 19 16:44:32 2010 +0100
+
+    Added a comment.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 19 16:24:38 2010 +0100
+
+    Solved some style problems.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 19 15:47:58 2010 +0100
+
+    Do not let the user add empty detail's fields.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 19 15:29:09 2010 +0100
+
+    User can add now new tasks/clients from the main window using the
+    task's checkbox. If "Add new task" is selected then QLineEdit in the
+    main window will be disabled.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 19 14:13:55 2010 +0100
+
+    Enabled translation for QString.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 19 12:19:54 2010 +0100
+
+    declared inside, a variable used in a for scope that was declared outside of it before.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 19 12:14:42 2010 +0100
+
+    Changed QMap long type declaration for a typedef.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 12 16:05:14 2010 +0100
+
+    Created a variable for "Add new client". Magic value.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 12 15:59:46 2010 +0100
+
+    Updated README file with some basic information.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 12 12:32:14 2010 +0100
+
+    Added license introduction in every source file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 12 12:03:58 2010 +0100
+
+    Changed variable name.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 12 12:00:44 2010 +0100
+
+    Data synchronization between main window and QDialog is working.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 11 17:23:43 2010 +0100
+
+    Removed already included clients from the combobox.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 11 15:00:56 2010 +0100
+
+    Removed Accept and Cancel buttons from QDialog. Changes are saved
+    automatically.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 11 14:41:39 2010 +0100
+
+    Made comboboxes adjustable to contents.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 11 14:39:10 2010 +0100
+
+    Client's name is shown automatically when selecting the task.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 10 15:26:17 2010 +0100
+
+    Changed tab order for dialog.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 10 15:06:48 2010 +0100
+
+    Updating Task's combobox in the main view.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 10 11:14:04 2010 +0100
+
+    Removed some unnecessary debug/print data lines.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 10 11:12:18 2010 +0100
+
+    Removed duplicated tasks in QDialog's tableWidget.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 9 17:15:12 2010 +0100
+
+    Replaced SessionData structure with QMap.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 9 11:28:21 2010 +0100
+
+    Renamed member variables with prefix "m_".
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 9 11:23:56 2010 +0100
+
+    Added new structure for managing user's session data.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 9 11:07:26 2010 +0100
+
+    Named all slots as handlers of the signals.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 8 16:34:14 2010 +0100
+
+    Set last element in the dialog's table editable.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 8 11:22:30 2010 +0100
+
+    Saving user new added clients in the current session, in an internal
+    list structure.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 5 17:15:08 2010 +0100
+
+    Made QComboBox for adding clients editable.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 5 13:12:27 2010 +0100
+
+    Task's combobox shows current available tasks in .xml file.
+    Dialog shows related tasks for initial client.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Nov 5 11:53:29 2010 +0100
+
+    Followed http://qt.gitorious.org/qt/pages/QtCodingStyle for code style.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 4 14:24:07 2010 +0100
+
+    Client combobox and table widget were set up in the m_ui_dialog.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 4 10:51:01 2010 +0100
+
+    Using function for calling SLOT clear() for lineEdit.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 4 10:24:14 2010 +0100
+
+    Added m_ui_dialog to the destructor too.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Nov 4 10:21:39 2010 +0100
+
+    Using m_ prefix for member variables in whch.h and whch.cpp.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 3 17:50:22 2010 +0100
+
+    Connected ui_dialog for tasks with the app.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 3 16:49:56 2010 +0100
+
+    Redesigned dialog for adding new tasks and clients.
+    Deleted some default parameters.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 3 15:10:21 2010 +0100
+
+    Cleaned white spaces and worked on some code style.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Nov 3 14:59:23 2010 +0100
+
+    Replaced QTime for QDateTime in start and end time.
+    Duration time is now working and being updated automatically.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Nov 2 19:34:53 2010 +0100
+
+    Set up of start time, end time and duration. Update of duration in view
+    when editing start or end time still does not work.
+
+Author: Patricia <patmistika@andromeda.(none)>
+Date:   Tue Nov 2 14:55:27 2010 +0100
+
+    User input for name and task details is shown in view.
+    Redesigned dialog for adding new tasks.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 1 17:05:54 2010 +0100
+
+    Removed New file and Open file actions. User will just work with one
+    log file.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 1 14:34:22 2010 +0100
+
+    "New file", "Quit" and "About dialog" actions were set up.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 1 13:25:26 2010 +0100
+
+    Added skeleton for Actions' slots.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 1 11:55:08 2010 +0100
+
+    Removed "Save" from the File Menu. Changes are saved automatically.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Nov 1 11:45:06 2010 +0100
+
+    Made "Details" field in the table view editable.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Oct 29 16:29:02 2010 +0200
+
+    Connected TextLine with view and model.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Oct 29 11:52:55 2010 +0200
+
+    Replaced WPlainTextEdit with QLineEdit.
+    Added dialog.ui (skeleton) for  adding future tasks.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Oct 28 16:44:37 2010 +0200
+
+    Removed function for checking input time format. Now using Qtime,
+    since the QTableView takes care about the format itself.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Oct 28 15:48:02 2010 +0200
+
+    Changed comment.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Oct 28 15:45:53 2010 +0200
+
+    Alternating row colors in the table view.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Oct 28 14:48:03 2010 +0200
+
+    Constricted input values for the editable time fields.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Oct 28 12:21:21 2010 +0200
+
+    Changed some code style.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Oct 28 12:19:21 2010 +0200
+
+    Fixed setData function. Now it updates .xml file's content.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 27 17:04:49 2010 +0200
+
+    Implemented setData() function for editing table view.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 27 16:32:23 2010 +0200
+
+    Implemented flags() function for making editable the table model.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 27 16:17:22 2010 +0200
+
+    Usage of automatic resizing for table rows.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 27 15:39:05 2010 +0200
+
+    data() function for the table model is working.
+    xml file's data is loaded in the table view correctly.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Oct 26 18:09:34 2010 +0200
+
+    Changed .xml file format.
+    Implemented table model's rowcount, and constructors functions.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Oct 25 15:04:11 2010 +0200
+
+    Added test structure (whch_task) for testing XML DOM.
+    Reading and writing from and to .xml test file works.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Oct 22 17:35:43 2010 +0200
+
+    Startd XML DOM skeleton.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Oct 22 13:50:12 2010 +0200
+
+    Connected table model with table view UI file instance.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Oct 21 17:00:39 2010 +0200
+
+    Test table model: works. Still needs to be integrated in the UI.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 20 17:06:49 2010 +0200
+
+    Stablished Tab Order.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 20 16:49:37 2010 +0200
+
+    Implemented TableModel's functions with test data.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 20 16:13:06 2010 +0200
+
+    Added TableModel skeleton.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 20 14:39:34 2010 +0200
+
+    GUI draft.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Oct 20 13:19:34 2010 +0200
+
+    Initialization of whch skeleton.
