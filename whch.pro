@@ -8,7 +8,7 @@ QT       += core gui xml xmlpatterns
 
 CONFIG += qt warn_on debug
 
-VERSION = 0.1
+VERSION = -0.2
 
 TEMPLATE = app
 
