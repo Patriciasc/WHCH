@@ -14,7 +14,7 @@ TEMPLATE = app
 
 TARGET = whch
 target.path = $${PREFIX}/bin
-icon.files = whch.png
+icon.files = data/icons/16x16/whch.png
 icon.path = $${PREFIX}/share/icons
 desktop.files = whch.desktop
 desktop.path = $${PREFIX}/share/applications
@@ -30,15 +30,17 @@ HEADERS += src/whch.h \
            src/whchTableModel.h \
            src/whchTask.h
 
-FORMS   += ui/whch.ui \
-           ui/dialogTasksClients.ui
+FORMS   += data/ui/whch.ui \
+           data/ui/dialogTasksClients.ui
 
-OTHER_FILES += ui/images/process_start.png \
-               ui/images/process_stop.png \
+OTHER_FILES += data/ui/images/process_start.png \
+               data/ui/images/process_stop.png \
                whch_log.xslt
 
-DISTFILES += ui/images/process_start.png \
-             ui/images/process_stop.png \
+DISTFILES += data/ui/images/process_start.png \
+             data/ui/images/process_stop.png \
+             whch.desktop \
+             data/icons/16x16/whch.png \
              whch_log.xslt \
              README
 
