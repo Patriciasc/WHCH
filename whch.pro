@@ -14,7 +14,12 @@ TEMPLATE = app
 
 TARGET = whch
 target.path = $${PREFIX}/bin
-INSTALLS += target
+icon.files = whch.png
+icon.path = $${PREFIX}/share/icons
+desktop.files = whch.desktop
+desktop.path = $${PREFIX}/share/applications
+
+INSTALLS += target icon desktop
 
 SOURCES += src/main.cpp \
            src/whch.cpp \
