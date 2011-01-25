@@ -42,6 +42,9 @@ DISTFILES += data/ui/images/process_start.png \
              whch.desktop \
              data/icons/16x16/whch.png \
              whch_log.xslt \
-             README
+             README \
+             COPYING \
+             AUTHORS \
+             ChangeLog
 
 RESOURCES += whch.qrc
