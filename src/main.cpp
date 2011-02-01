@@ -28,10 +28,27 @@
 
 #include "whch.h"
 #include <QtGui/QApplication>
+#include <QSharedMemory>
+#include <QMessageBox>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // START Check for another instance of whch
+    // GUID: http://www.guidgenerator.com/online-guid-generator.aspx
+    QSharedMemory shared("c53e2474-1d05-4351-bd18-4f4e46490437");
+    if( !shared.create( 512, QSharedMemory::ReadWrite) )
+    {
+        QMessageBox msgBox;
+        msgBox.setText( QObject::tr("Can't start more than one instance of the application.") );
+        msgBox.setIcon( QMessageBox::Critical );
+        msgBox.exec();
+        exit(0);
+    }
+    // END Check for another instance of whch
+
     Whch w;
     w.show();
 
