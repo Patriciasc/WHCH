@@ -447,7 +447,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
 
             // Set data for the new task. (FUNCION SET TASK)
             m_task.setAttribute("end", QDateTime::currentDateTime().toString(Qt::ISODate));
-            m_task.setAttribute("name", currentTask.m_name);
+            m_task.setAttribute("name", currentTask.m_name.section(" (", 0,0));
             m_task.setAttribute("client", currentTask.m_client);
 
             QDomElement detailsTag = m_domFile.createElement("details");

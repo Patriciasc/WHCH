@@ -278,7 +278,8 @@ void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 {
     const QString itemText (item->text());
-    if (m_uiDialog->comboBox->currentText().compare("") != 0)
+    QString selectedClient (m_uiDialog->comboBox->currentText());
+    if (selectedClient.compare("") != 0)
     {
         if (itemText.compare("") != 0)
         {
@@ -286,9 +287,21 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
             if (!totalTasks().contains(itemText))
             {
                 m_ui->comboBox->clear();
-                QStringList tasks;
-                tasks << itemText << totalTasks() <<  NEW_TASK;
-                m_ui->comboBox->addItems(tasks);
+                QStringList comboboxTasks;
+                QStringList totalListTasks (totalTasks());
+                QStringList taskClientList;
+                for (int i=0; i < totalListTasks.size(); ++i)
+                {
+                    QString currentTask (totalListTasks.at(i));
+                    QString taskClient (m_model->clientOfTask(currentTask));
+                    if (taskClient.compare("") == 0)
+                        taskClient = sessionClientOfTask(currentTask);
+
+                    taskClientList << currentTask + " (" + taskClient + ")";
+                }
+
+                comboboxTasks << itemText + " (" + selectedClient + ")" << taskClientList <<  NEW_TASK;
+                m_ui->comboBox->addItems(comboboxTasks);
             }
 
             // Save data into session structure.
@@ -456,27 +469,41 @@ void  Whch::saveSessionData()
     settings.setValue("clients", clientsList);
 }
 
+/* Initialize the list of available tasks. */
 void  Whch::setComboboxTasks()
 {
     QStringList sessionDataValues;
     QStringList tasks (m_model->AttributesList("name"));
-    m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
-    MapQStringToList::const_iterator i = m_sessionData.constBegin();
+    QStringList tasksClients;
+    m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);    
 
+    /* Retrieve tasks that already exist in the .xml file. */
+    for (int i=0; i<tasks.size(); ++i)
+    {
+        tasksClients << tasks.at(i) + " (" + m_model->clientOfTask(tasks.at(i)) + ")";
+    }
+
+    /* Retrieve current session tasks. */
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
     while (i != m_sessionData.constEnd())
     {
-        sessionDataValues << i.value();
+        QStringList currentElementTasks (i.value());
+        for (int j = 0; j < currentElementTasks.size(); ++j)
+            sessionDataValues << currentElementTasks.at(j) +
+                                 " (" + i.key() + ")";
         ++i;
     }
 
+    /* Do not repeat tasks. */
     for (int i=0; i < sessionDataValues.size(); ++i)
     {
-        if (tasks.contains(sessionDataValues.at(i)) == NULL)
-            tasks << sessionDataValues.at(i);
+        if (tasksClients.contains(sessionDataValues.at(i)) == NULL)
+            tasksClients << sessionDataValues.at(i);
     }
 
-    tasks << NEW_TASK;
-    m_ui->comboBox->addItems(tasks);
+    /* Update combobox. */
+    tasksClients << NEW_TASK;
+    m_ui->comboBox->addItems(tasksClients);
 
     if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
         m_ui->lineEdit->setEnabled(false);
