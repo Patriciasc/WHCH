@@ -4,6 +4,8 @@
 #
 #-------------------------------------------------
 
+include(../qt-solutions/qtsingleapplication/src/qtsingleapplication.pri)
+
 QT       += core gui xml xmlpatterns
 
 CONFIG += qt warn_on debug
