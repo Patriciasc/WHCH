@@ -3,5 +3,6 @@
         <file>data/ui/images/process_stop.png</file>
         <file>data/ui/images/process_start.png</file>
         <file>whch_log.xslt</file>
+        <file>data/icons/16x16/whch.png</file>
     </qresource>
 </RCC>

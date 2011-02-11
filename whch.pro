@@ -44,6 +44,7 @@ FORMS   += data/ui/whch.ui \
 
 OTHER_FILES += data/ui/images/process_start.png \
                data/ui/images/process_stop.png \
+               data/icons/16x16/whch.png \
                whch_log.xslt \
 
 DISTFILES += data/ui/images/process_start.png \

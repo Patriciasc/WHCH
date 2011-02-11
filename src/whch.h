@@ -39,6 +39,7 @@
 #include <QDialog>
 #include <QTableWidgetItem>
 #include <QProgressBar>
+#include <QSystemTrayIcon>
 
 namespace Ui {
     class whch;
@@ -79,6 +80,11 @@ private slots:
     void saveSessionData();
     void setComboboxTasks();
     void setCurrentTask();
+    void createTrayIconMenuActions();
+    void createTrayIcon();
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void showMessage();
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::whch *m_ui;
@@ -87,6 +93,12 @@ private:
     /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;
+
+    /* Tray icon. */
+    QSystemTrayIcon *m_trayIcon;
+    QMenu *m_trayIconMenu;
+    QAction *restoreAction;
+    QAction *quitAction;
 
     /* Track spent time on current task */
     int m_seconds;

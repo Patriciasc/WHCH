@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Feb 11 17:25:40 2011 +0100
+
+    Added system tray icon and structure. 
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Fri Feb 11 13:01:30 2011 +0100
 
     Using QtSingleApplication. 

@@ -44,6 +44,7 @@
 #include <QtXmlPatterns>
 #include <QSettings>
 #include <QDebug>
+#include <QCloseEvent>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr("Add new task"));
@@ -62,6 +63,12 @@ Whch::Whch(QWidget *parent) :
     // Set model/view.
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
+
+    // TESTING: Set system try icon.
+    createTrayIconMenuActions();
+    createTrayIcon();
+    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(onTrayIconActivated(QSystemTrayIcon::ActivationReason)));
 
     // Load session data.
     loadSessionData();
@@ -192,6 +199,72 @@ QStringList Whch::totalTasks()
             totalTasks << sessionTaskItem;
     }
     return totalTasks;
+}
+
+// TODO: System try icon functions are working,
+// but still under testing status.
+// TODO: Create a class.
+void Whch::createTrayIconMenuActions()
+{
+    restoreAction = new QAction(tr("&Restore"), this);
+    connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
+
+    quitAction = new QAction(tr("&Quit"), this);
+    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+}
+
+void Whch::createTrayIcon()
+{
+    m_trayIconMenu = new QMenu(this);
+    m_trayIconMenu->addAction(restoreAction);
+    m_trayIconMenu->addSeparator();
+    m_trayIconMenu->addAction(quitAction);
+
+    m_trayIcon = new QSystemTrayIcon(this);
+    m_trayIcon->setContextMenu(m_trayIconMenu);
+    QIcon icon = QIcon(":/data/icons/16x16/whch.png");
+    m_trayIcon->setIcon(icon);
+    m_trayIcon->setVisible(true);
+    setWindowIcon(icon);
+    m_trayIcon->setToolTip("testing tooltip");
+}
+
+void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason)
+    {
+        case QSystemTrayIcon::DoubleClick:
+            showNormal();
+            break;
+        case QSystemTrayIcon::MiddleClick:
+        case QSystemTrayIcon::Trigger:
+            showMessage();
+         break;
+        default:
+            ;
+    }
+}
+
+
+void Whch::showMessage()
+{
+    QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information;
+    m_trayIcon->showMessage("Current task status", "testing", icon, 1000);
+}
+
+void Whch::closeEvent(QCloseEvent *event)
+{
+
+    if (m_trayIcon->isVisible())
+    {
+        QMessageBox::information(this, tr("Systray"),
+                                 tr("The program will keep running in the "
+                                    "system tray. To terminate the program, "
+                                    "choose <b>Quit</b> in the context menu "
+                                    "of the system tray entry."));
+        hide();
+        event->ignore();
+    }
 }
 
 /* ----- */
