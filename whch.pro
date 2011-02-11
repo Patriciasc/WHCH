@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-include(../qt-solutions/qtsingleapplication/src/qtsingleapplication.pri)
-
-QT       += core gui xml xmlpatterns
+QT += core gui xml xmlpatterns network
 
 CONFIG += qt warn_on debug
 
@@ -23,24 +21,36 @@ desktop.path = $${PREFIX}/share/applications
 
 INSTALLS += target icon desktop
 
+INCLUDEPATH += src/qtsingleapplication
 SOURCES += src/main.cpp \
            src/whch.cpp \
            src/whchTableModel.cpp \
-           src/whchTask.cpp
+           src/whchTask.cpp \
+           src/qtsingleapplication/qtsingleapplication.cpp \
+           src/qtsingleapplication/qtlocalpeer.cpp \
+           src/qtsingleapplication/qtlockedfile.cpp \
+           src/qtsingleapplication/qtlockedfile_win.cpp \
+           src/qtsingleapplication/qtlockedfile_unix.cpp
 
 HEADERS += src/whch.h \
            src/whchTableModel.h \
-           src/whchTask.h
+           src/whchTask.h \
+           src/qtsingleapplication/qtsingleapplication.h \
+           src/qtsingleapplication/qtlocalpeer.h \
+           src/qtsingleapplication/qtlockedfile.h
 
 FORMS   += data/ui/whch.ui \
            data/ui/dialogTasksClients.ui
 
 OTHER_FILES += data/ui/images/process_start.png \
                data/ui/images/process_stop.png \
-               whch_log.xslt
+               whch_log.xslt \
 
 DISTFILES += data/ui/images/process_start.png \
              data/ui/images/process_stop.png \
+             src/qtsingleapplication/qtlockedfile.cpp \
+             src/qtsingleapplication/qtlockedfile_win.cpp \
+             src/qtsingleapplication/qtlockedfile_unix.cpp \
              whch.desktop \
              data/icons/16x16/whch.png \
              whch_log.xslt \

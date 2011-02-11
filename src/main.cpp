@@ -31,7 +31,7 @@
 #include <QSharedMemory>
 #include <QMessageBox>
 #include <QDebug>
-#include <qtsingleapplication.h>
+#include "qtsingleapplication/qtsingleapplication.h"
 
 int main(int argc, char *argv[])
 {

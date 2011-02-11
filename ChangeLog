@@ -1,4 +1,14 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Feb 11 13:01:30 2011 +0100
+
+    Using QtSingleApplication. 
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Feb 10 17:21:58 2011 +0100
+
+    Replaced QSharedMemory for QtSingleApplication. 
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Tue Feb 01 14:45:30 2011 +0100
 
     Made whch a single-instance application.
