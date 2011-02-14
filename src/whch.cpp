@@ -111,6 +111,9 @@ void Whch::onTimerTimeOut()
     QString text = time->toString("HH:mm:ss");
 
     m_ui->lcdNumber->display(text);
+
+    // Update tooltip status.
+    m_trayIcon->setToolTip("Spent time on task:\n"+ text);
 }
 
 /* List of new added tasks. */
@@ -226,7 +229,7 @@ void Whch::createTrayIcon()
     m_trayIcon->setIcon(icon);
     m_trayIcon->setVisible(true);
     setWindowIcon(icon);
-    m_trayIcon->setToolTip("testing tooltip");
+    m_trayIcon->setToolTip("Spent time on task:\n 00:00:00");
 }
 
 void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -249,7 +252,7 @@ void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 void Whch::showMessage()
 {
     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information;
-    m_trayIcon->showMessage("Current task status", "testing", icon, 1000);
+    m_trayIcon->showMessage("WHCH", "Tracks the time spent on your projects.", icon, 7000);
 }
 
 void Whch::closeEvent(QCloseEvent *event)
