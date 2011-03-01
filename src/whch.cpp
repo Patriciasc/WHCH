@@ -64,11 +64,8 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
-    // TESTING: Set system try icon.
-    createTrayIconMenuActions();
-    createTrayIcon();
-    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(onTrayIconActivated(QSystemTrayIcon::ActivationReason)));
+    // Set system try icon.
+    setTryIcon();
 
     // Load session data.
     loadSessionData();
@@ -204,9 +201,6 @@ QStringList Whch::totalTasks()
     return totalTasks;
 }
 
-// TODO: System try icon functions are working,
-// but still under testing status.
-// TODO: Create a class.
 void Whch::createTrayIconMenuActions()
 {
     restoreAction = new QAction(tr("&Restore"), this);
@@ -248,6 +242,13 @@ void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+void Whch::setTryIcon()
+{
+    createTrayIconMenuActions();
+    createTrayIcon();
+    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(onTrayIconActivated(QSystemTrayIcon::ActivationReason)));
+}
 
 void Whch::showMessage()
 {

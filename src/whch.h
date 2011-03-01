@@ -83,6 +83,7 @@ private slots:
     void createTrayIconMenuActions();
     void createTrayIcon();
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void setTryIcon();
     void showMessage();
     void closeEvent(QCloseEvent *event);
 
