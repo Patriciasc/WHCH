@@ -153,11 +153,13 @@ QString Whch::sessionClientOfTask(const QString &task)
     return sessionClient;
 }
 
+// Return the tasks of a session client.
 QStringList Whch::sessionClientTasks(const QString &client)
 {
     return m_sessionData[client];
 }
 
+// Looks if a client is a session client or not.
 bool Whch::isSessionClient(const QString &client)
 {
     if (m_sessionData.contains(client))
@@ -201,6 +203,7 @@ QStringList Whch::totalTasks()
     return totalTasks;
 }
 
+// Creates menu actions for the system tray icon.
 void Whch::createTrayIconMenuActions()
 {
     restoreAction = new QAction(tr("&Restore"), this);
@@ -210,6 +213,7 @@ void Whch::createTrayIconMenuActions()
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 
+// Creates system tray icon.
 void Whch::createTrayIcon()
 {
     m_trayIconMenu = new QMenu(this);
@@ -226,6 +230,7 @@ void Whch::createTrayIcon()
     m_trayIcon->setToolTip("Spent time on task:\n 00:00:00");
 }
 
+// Handler for tray icon's activation.
 void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason)
@@ -242,6 +247,7 @@ void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+// Sets up the tray icon.
 void Whch::setTryIcon()
 {
     createTrayIconMenuActions();
@@ -250,12 +256,14 @@ void Whch::setTryIcon()
             this, SLOT(onTrayIconActivated(QSystemTrayIcon::ActivationReason)));
 }
 
+// Shows tray icon message.
 void Whch::showMessage()
 {
     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information;
     m_trayIcon->showMessage("WHCH", "Tracks the time spent on your projects.", icon, 7000);
 }
 
+// Overriden function. Leaves the app accesible from the tray icon.
 void Whch::closeEvent(QCloseEvent *event)
 {
 
