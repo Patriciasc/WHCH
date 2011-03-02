@@ -2,45 +2,62 @@
 <xsl:stylesheet version="2.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
 <xsl:output method="text"/>
 
 <xsl:template match="/">
 <xsl:text>{| border="1" cellpadding="4" class="wikitable"
 </xsl:text>
 <xsl:text>! Date!! Client!! Duration!! Task!! Details</xsl:text>
-<xsl:for-each select="year/week">
+<xsl:apply-templates select="year/week"/>
+<xsl:text>
+|}</xsl:text>
+</xsl:template>
+
+<xsl:template match="year/week">
 <xsl:for-each select="day/task">
 <xsl:sort select="@client"/>
 <xsl:text>
 |-
 </xsl:text>
 <xsl:text>|</xsl:text>
-<xsl:value-of select="@start"/>
+<xsl:value-of select="substring(@start,0,11)"/>
+<xsl:text>||</xsl:text>
+<xsl:value-of select="substring(@end,0,11)"/>
 <xsl:text>||</xsl:text>
 <xsl:value-of select="@client"/>
 <xsl:text>||</xsl:text>
-<!-- FIXME: Format this in a more human readable format. -->
-<xsl:variable name="duration" select="xs:dateTime(@end) - xs:dateTime(@start)"/>
-<xsl:value-of select="$duration"/>
+<xsl:call-template name="task_duration"/>
 <xsl:text>||</xsl:text>
 <xsl:value-of select="@name"/>
 <xsl:text>||</xsl:text>
 <xsl:value-of select="details"/>
 </xsl:for-each>
+
 <xsl:text>
 |-
 </xsl:text>
 <xsl:text>| colspan="4" bgcolor="#dddddd" | Total hours (week </xsl:text>
 <xsl:value-of select="@number"/>
 <xsl:text>):</xsl:text>
-<!-- FIXME: How to calculate total hours in every week?
-<xsl:variable name="total" select="xs:dateTime(day/task/@end) - xs:dateTime(day/task/@start)"/>
-<xsl:value-of select="sum(3)"/>
--->
-</xsl:for-each>
-<xsl:text>
-|}</xsl:text>
-</xsl:template>
-</xsl:stylesheet>
 
+<xsl:for-each select="day/task">
+<xsl:call-template name="total_duration"/>
+</xsl:for-each>
+</xsl:template>
+
+<xsl:template name="task_duration">
+<xsl:variable name="duration" select="xs:dateTime(@end) - xs:dateTime(@start)"/>
+<xsl:value-of select="hours-from-duration($duration)"/><xsl:text>h</xsl:text>
+<xsl:value-of select="minutes-from-duration($duration)"/><xsl:text>m</xsl:text>
+<xsl:value-of select="seconds-from-duration($duration)"/><xsl:text>s</xsl:text>
+</xsl:template>
+
+<!-- FIXME:The returned value is not summing, but appending the results. -->
+<xsl:template name="total_duration">
+<xsl:variable name="duration" select="xs:dateTime(@end) - xs:dateTime(@start)"/>
+<xsl:value-of select="sum(hours-from-duration($duration))"/><xsl:text>h</xsl:text>
+<xsl:value-of select="sum(minutes-from-duration($duration))"/><xsl:text>m</xsl:text>
+<xsl:value-of select="sum(seconds-from-duration($duration))"/><xsl:text>s</xsl:text>
+</xsl:template>
+
+</xsl:stylesheet>
