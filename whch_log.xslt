@@ -52,7 +52,7 @@
 <xsl:value-of select="seconds-from-duration($duration)"/><xsl:text>s</xsl:text>
 </xsl:template>
 
-<!-- FIXME:The returned value is not summing, but appending the results. -->
+<!-- FIXME:The returned value is not summing, but appending the results.-->
 <xsl:template name="total_duration">
 <xsl:variable name="duration" select="xs:dateTime(@end) - xs:dateTime(@start)"/>
 <xsl:value-of select="sum(hours-from-duration($duration))"/><xsl:text>h</xsl:text>
@@ -60,4 +60,15 @@
 <xsl:value-of select="sum(seconds-from-duration($duration))"/><xsl:text>s</xsl:text>
 </xsl:template>
 
+<!--
+<xsl:template name="task_duration">
+<xsl:value-of select="@duration"/>
+</xsl:template>
+
+<xsl:template name="total_duration">
+<xsl:value-of select="sum(hours)"/><xsl:text>h</xsl:text>
+<xsl:value-of select="sum(minutes)"/><xsl:text>m</xsl:text>
+<xsl:value-of select="sum(seconds)"/><xsl:text>s</xsl:text>
+</xsl:template>
+-->
 </xsl:stylesheet>

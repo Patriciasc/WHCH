@@ -496,8 +496,104 @@ void Whch::on_actionAbout_whch_triggered()
 /* Exports the .xml file to a wikimedia format. */
 void Whch::on_actionExport_to_wiki_format_triggered()
 {
+    /*
+    // ### START-Test ###
+    // Re-parse .xml file to add duration nodes.
+    // This is necessary for the .xslt file to calculate
+    // the total number of hours worked per week.
+
+    QFile file(QDir::homePath() + "/" + "." + "whch_log.xml");
+    if (file.copy(QDir::homePath() + "/" + "." + "whch_log_with_duration.xml"))
+        qDebug() << "It was copied";
+
+    QString durationFileName (QDir::homePath() + "/" + "." + "whch_log_with_duration.xml");
+    QFile fileWithDuration(durationFileName);
+    if (!fileWithDuration.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Error. Could not open file: " << durationFileName
+                << "in" << QDir::current().absolutePath();
+        return;
+    }
+
+    QDomDocument domFile ("WHCHDuration");
+    QString setContentError;
+    if (!domFile.setContent(&fileWithDuration, &setContentError))
+    {
+        qDebug() << "Error. Could not set content for file: " << durationFileName
+                << "in" << QDir::current().absolutePath();
+        qDebug() << "Error message: " << setContentError;
+
+        fileWithDuration.close();
+        return;
+    }
+
+    fileWithDuration.close();
+
+    // Add duration
+    for (QDomElement domRoot = domFile.firstChildElement("year");
+    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    {
+        for (QDomElement weekElement = domRoot.firstChildElement("week");
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
+        {
+            for (QDomElement dayElement = weekElement.firstChildElement("day");
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+            {
+                for (QDomElement element = dayElement.firstChildElement("task");
+                !element.isNull(); element = element.nextSiblingElement("task"))
+                {
+                    QVariant start = element.attribute("start");
+                    QVariant end = element.attribute("end");
+                    int seconds = start.toDateTime().secsTo(end.toDateTime());
+                    int minutes = seconds / 60;
+                    seconds %= 60;
+                    int hours = minutes / 60;
+                    minutes %= 60;
+                    qDebug () << "element";
+
+                    element.setAttribute("duration", QString("%1h%2m%3s").
+                                         arg(hours).arg(minutes).arg(seconds));
+
+                    QDomElement hoursTag = domFile.createElement("hours");
+                    QDomText hoursText = domFile.createTextNode(QString("%1").arg(hours));
+                    hoursTag.appendChild(hoursText);
+                    element.appendChild(hoursTag);
+
+                    QDomElement minsTag = domFile.createElement("minutes");
+                    QDomText minsText = domFile.createTextNode(QString("%1").arg(minutes));
+                    minsTag.appendChild(minsText);
+                    element.appendChild(minsTag);
+
+                    QDomElement secsTag = domFile.createElement("seconds");
+                    QDomText secsText = domFile.createTextNode(QString("%1").arg(seconds));
+                    secsTag.appendChild(secsText);
+                    element.appendChild(secsTag);
+
+                    element.setAttribute("duration", QString("%1h%2m%3s").
+                                         arg(hours).arg(minutes).arg(seconds));
+                    element.setAttribute("hours", QString("%1").arg(hours));
+                    element.setAttribute("minutes", QString("%1").arg(minutes));
+                    element.setAttribute("seconds", QString("%1").arg(seconds));
+                }
+            }
+        }
+    }
+
+
+    if (!fileWithDuration.open(QIODevice::WriteOnly))
+    {
+        qDebug() << " Error updating memory data from file: " << durationFileName;
+        return;
+    }
+    QTextStream ts(&fileWithDuration);
+    ts << domFile.toString();
+
+    fileWithDuration.close();
+    // ##### END-Test ###
+    */
+
     QXmlQuery query(QXmlQuery::XSLT20);
-    /* FIXME: Look for right installation path. */
+    //query.setFocus(QUrl(durationFileName));
     query.setFocus(QUrl(QDir::homePath() + "/" + "." + "whch_log.xml"));
     query.setQuery(QUrl("qrc:/whch_log.xslt"));
 
