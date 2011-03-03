@@ -1,10 +1,20 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
-Date:   Mar Mar 02 11:39:20 2011 +0100
+Date:   Thu Mar 03 13:11:20 2011 +0100
+
+    Exporting to wikimedia format working entirely.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Mar 02 12:39:20 2011 +0100
+
+    Added test code for parsing .xslt.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Mar 02 11:39:20 2011 +0100
 
     .xslt file calculates total duration time/week.
 
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
-Date:   Mar Mar 02 11:36:20 2011 +0100
+Date:   Wed Mar 02 11:36:20 2011 +0100
 
     Added some comments.
 
