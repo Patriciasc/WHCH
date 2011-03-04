@@ -86,28 +86,22 @@
              <bool>false</bool>
             </attribute>
            </widget>
-           <zorder>tableView</zorder>
-           <zorder>tableView</zorder>
-           <zorder>tableView</zorder>
-           <zorder>tableView</zorder>
-           <zorder>tableView</zorder>
           </widget>
           <widget class="QWidget" name="page_4">
-           <widget class="QSplitter" name="splitter">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>691</width>
-              <height>291</height>
-             </rect>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <widget class="QTreeView" name="treeView"/>
-            <widget class="QTableView" name="tableView_2"/>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QSplitter" name="splitter">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="handleWidth">
+               <number>6</number>
+              </property>
+              <widget class="QTreeView" name="treeView"/>
+              <widget class="QTableView" name="tableView_2"/>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
