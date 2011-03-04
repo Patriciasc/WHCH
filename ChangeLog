@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Mar 04 16:35:20 2011 +0100
+
+    Added skeleton for whch tree model.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Fri Mar 04 16:30:20 2011 +0100
 
     Made QStackedWidget resizable within the main window.
