@@ -9,9 +9,9 @@ class WhchTreeNode
 public:
     WhchTreeNode(QDomNode &node, int row, WhchTreeNode *parent = 0);
     ~WhchTreeNode();
+    QDomNode node() const;
     WhchTreeNode *child(int i);
     WhchTreeNode *parent();
-    QDomNode node() const;
     int row();
 
 private:
