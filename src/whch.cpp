@@ -87,6 +87,8 @@ Whch::Whch(QWidget *parent) :
     m_ui->tableView->resizeRowsToContents();
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
+    // FIXME: Scroll view. Not working.
+    m_ui->tableView->scrollToBottom();
 
     m_ui->lineEdit->setEnabled(false);
     m_ui->StopButton->setEnabled(false);
@@ -639,7 +641,8 @@ void Whch::on_StopButton_clicked()
 
             setCurrentTask();
 
-            //Resize start and end columns
+            //Scroll window and resize start and end columns.
+            m_ui->tableView->scrollToBottom();
             m_ui->tableView->resizeColumnToContents(0);
             m_ui->tableView->resizeColumnToContents(1);
 
@@ -684,6 +687,7 @@ void Whch::on_actionHistory_View_triggered(bool checked)
     {
         m_ui->stackedWidget->setCurrentWidget(m_ui->page_3);
         enableWidgets(true);
+        m_ui->tableView->scrollToBottom();
     }
 }
 
