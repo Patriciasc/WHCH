@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Mar 10 12:49:20 2011 +0100
+
+    Disabled widgets for history view.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Thu Mar 10 10:33:20 2011 +0100
 
     Connected TreeModel with TreeView.

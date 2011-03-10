@@ -676,7 +676,37 @@ void Whch::on_lineEdit_returnPressed()
 void Whch::on_actionHistory_View_triggered(bool checked)
 {
     if(checked)
+    {
         m_ui->stackedWidget->setCurrentWidget(m_ui->page_4);
+        enableWidgets(false);
+    }
     else
+    {
         m_ui->stackedWidget->setCurrentWidget(m_ui->page_3);
+        enableWidgets(true);
+    }
+}
+
+void Whch::enableWidgets(bool enabled)
+{
+    if(enabled)
+    {
+        m_ui->comboBox->show();
+        m_ui->StartButton->show();
+        m_ui->StopButton->show();
+        m_ui->lineEdit->show();
+        m_ui->lcdNumber->show();
+        m_ui->label_3->show();
+        m_ui->label_4->show();
+    }
+    else
+    {
+        m_ui->comboBox->hide();
+        m_ui->StartButton->hide();
+        m_ui->StopButton->hide();
+        m_ui->lineEdit->hide();
+        m_ui->lcdNumber->hide();
+        m_ui->label_3->hide();
+        m_ui->label_4->hide();
+    }
 }

@@ -88,6 +88,7 @@ private slots:
     void setTryIcon();
     void showMessage();
     void closeEvent(QCloseEvent *event);
+    void enableWidgets(bool enabled);
 
 private:
     Ui::whch *m_ui;

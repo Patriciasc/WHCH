@@ -28,15 +28,12 @@ QVariant WhchTreeModel::data(const QModelIndex &index,
     QStringList attributes;
     QDomNamedNodeMap attributeMap = node.attributes();
 
-    if (node.nodeName().compare("task") != 0)
+    if (index.column() == 0)
     {
-        if (index.column() == 0)
+        for (int i = 0; i < attributeMap.count(); ++i)
         {
-            for (int i = 0; i < attributeMap.count(); ++i)
-            {
-                QDomNode attribute = attributeMap.item(i);
-                attributes << attribute.nodeName() + " " + attribute.nodeValue();
-            }
+            QDomNode attribute = attributeMap.item(i);
+            attributes << attribute.nodeName() + " " + attribute.nodeValue();
         }
         return attributes;
     }
