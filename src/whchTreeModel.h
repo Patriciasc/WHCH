@@ -1,6 +1,7 @@
 #ifndef WHCHTREEMODEL_H
 #define WHCHTREEMODEL_H
 
+#include "whchTreeNode.h"
 #include <QDomDocument>
 #include <QAbstractItemModel>
 
@@ -24,7 +25,7 @@ public:
 
 private:
     QDomDocument m_domDocument;
-    WhchTreeModel *m_root;
+    WhchTreeNode *m_root;
 };
 
 #endif // WHCHTREEMODEL_H

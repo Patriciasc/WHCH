@@ -3,7 +3,7 @@
 WhchTreeNode::WhchTreeNode(QDomNode &node, int row,
                            WhchTreeNode *parent)
 {
-    m_node = node;
+    m_domNode = node;
     m_row = row;
     m_parent = parent;
 }
@@ -11,13 +11,13 @@ WhchTreeNode::WhchTreeNode(QDomNode &node, int row,
 WhchTreeNode::~WhchTreeNode()
 {
     QHash<int,WhchTreeNode*>::iterator i;
-    for (i = m_children.begin(); i != m_children.end(); ++i)
+    for (i = m_child.begin(); i != m_child.end(); ++i)
         delete i.value();
 }
 
 QDomNode WhchTreeNode::node() const
 {
-    return m_node;
+    return m_domNode;
 }
 
 WhchTreeNode *WhchTreeNode::parent()
@@ -25,16 +25,16 @@ WhchTreeNode *WhchTreeNode::parent()
     return m_parent;
 }
 
-WhchTreeNode *WhchTreeNode::child(int i)
+WhchTreeNode *WhchTreeNode::child(int rowNumber)
 {
-    if (m_children.contains(i))
-        return m_children[i];
+    if (m_child.contains(rowNumber))
+        return m_child[rowNumber];
 
-    if (i >= 0 && i < m_node.childNodes().count())
+    if (rowNumber >= 0 && rowNumber < m_domNode.childNodes().count())
     {
-        QDomNode newChildNode = m_node.childNodes().item(i);
-        WhchTreeNode *childNode = new WhchTreeNode(newChildNode, i, this);
-        m_children[i] = childNode;
+        QDomNode newChildNode = m_domNode.childNodes().item(rowNumber);
+        WhchTreeNode *childNode = new WhchTreeNode(newChildNode, rowNumber, this);
+        m_child[rowNumber] = childNode;
         return childNode;
     }
     return 0;

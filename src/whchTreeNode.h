@@ -10,13 +10,13 @@ public:
     WhchTreeNode(QDomNode &node, int row, WhchTreeNode *parent = 0);
     ~WhchTreeNode();
     QDomNode node() const;
-    WhchTreeNode *child(int i);
+    WhchTreeNode *child(int rowNumber);
     WhchTreeNode *parent();
     int row();
 
 private:
-    QDomNode m_node;
-    QHash<int,WhchTreeNode*> m_children;
+    QDomNode m_domNode;
+    QHash<int,WhchTreeNode*> m_child;
     WhchTreeNode *m_parent;
     int m_row;
 };
