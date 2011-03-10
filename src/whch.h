@@ -31,6 +31,7 @@
 
 
 #include "whchTableModel.h"
+#include "whchTreeModel.h"
 #include <QMainWindow>
 #include <QCoreApplication>
 #include <QFile>
@@ -55,6 +56,7 @@ public:
     ~Whch();
 
 private slots:
+    void on_actionHistory_View_triggered(bool checked);
     void onUiComboboxItemActivated(const QString &task);
     void onDialogComboboxItemActivated(const QString &client);
     void onDialogTableCellChanged(QTableWidgetItem *item);
@@ -90,7 +92,8 @@ private slots:
 private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
-    WhchTableModel *m_model;
+    WhchTableModel *m_tableModel;
+    WhchTreeModel *m_treeModel;
     /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;

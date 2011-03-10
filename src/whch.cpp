@@ -61,8 +61,18 @@ Whch::Whch(QWidget *parent) :
     m_ui->setupUi(this);
 
     // Set model/view.
-    m_model = new WhchTableModel();
-    m_ui->tableView->setModel(m_model);
+    m_tableModel = new WhchTableModel();
+    m_ui->tableView->setModel(m_tableModel);
+
+    QFile file(QDir::homePath() + "/" + "." + "whch_log.xml");
+    if (file.open(QIODevice::ReadOnly)) {
+        QDomDocument document;
+        if (document.setContent(&file)) {
+            m_treeModel = new WhchTreeModel(document, this);
+            m_ui->treeView->setModel(m_treeModel);
+        }
+        file.close();
+    }
 
     // Set system try icon.
     setTryIcon();
@@ -173,8 +183,8 @@ QStringList Whch::clientTotalTasks(const QString &client)
 {
     QStringList clientTasks;
 
-    if (m_model->isClient(client))
-        clientTasks << m_model->ClientTasks(client);
+    if (m_tableModel->isClient(client))
+        clientTasks << m_tableModel->ClientTasks(client);
     if (m_sessionData.contains(client))
     {
         QStringList sessionClientTasks(m_sessionData.value(client));
@@ -191,7 +201,7 @@ QStringList Whch::clientTotalTasks(const QString &client)
 // Return total tasks (session and .xml file ones).
 QStringList Whch::totalTasks()
 {
-    QStringList totalTasks (m_model->AttributesList("name"));
+    QStringList totalTasks (m_tableModel->AttributesList("name"));
     QStringList newTasks (sessionTasks());
 
     for (int i = 0; i < newTasks.count(); ++i)
@@ -298,7 +308,7 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
         m_uiDialog->comboBox->setEditable(false);
 
     // Set current available tasks and new line for new task.
-    QStringList clientTasks(m_model->ClientTasks(client));
+    QStringList clientTasks(m_tableModel->ClientTasks(client));
     if (m_sessionData.contains(client))
     {
         QStringList sessionClientTasks(m_sessionData.value(client));
@@ -329,7 +339,7 @@ void Whch::onDialogComboboxLineEditReturn()
 
     if (newClient.compare("") != 0)
     {
-        QStringList clients(m_model->AttributesList("client"));
+        QStringList clients(m_tableModel->AttributesList("client"));
 
         if (!clients.contains(newClient))
         {
@@ -378,7 +388,7 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
                 for (int i=0; i < totalListTasks.size(); ++i)
                 {
                     QString currentTask (totalListTasks.at(i));
-                    QString taskClient (m_model->clientOfTask(currentTask));
+                    QString taskClient (m_tableModel->clientOfTask(currentTask));
                     if (taskClient.compare("") == 0)
                         taskClient = sessionClientOfTask(currentTask);
 
@@ -450,7 +460,7 @@ void Whch::on_actionTasks_triggered()
     m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
     // Load list of clients.
-    QStringList clients(m_model->AttributesList("client"));
+    QStringList clients(m_tableModel->AttributesList("client"));
     if (!m_sessionData.isEmpty())
     {
         QStringList sessionClients (m_sessionData.keys());
@@ -557,14 +567,14 @@ void  Whch::saveSessionData()
 void  Whch::setComboboxTasks()
 {
     QStringList sessionDataValues;
-    QStringList tasks (m_model->AttributesList("name"));
+    QStringList tasks (m_tableModel->AttributesList("name"));
     QStringList tasksClients;
     m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);    
 
     /* Retrieve tasks that already exist in the .xml file. */
     for (int i=0; i<tasks.size(); ++i)
     {
-        tasksClients << tasks.at(i) + " (" + m_model->clientOfTask(tasks.at(i)) + ")";
+        tasksClients << tasks.at(i) + " (" + m_tableModel->clientOfTask(tasks.at(i)) + ")";
     }
 
     /* Retrieve current session tasks. */
@@ -650,15 +660,23 @@ void Whch::setCurrentTask()
     currentTask.m_name = text;
 
     // Set task's related client.
-    currentTask.m_client = m_model->clientOfTask(text);
+    currentTask.m_client = m_tableModel->clientOfTask(text);
     if (currentTask.m_client.compare("") == 0)
         currentTask.m_client =  sessionClientOfTask(text);
 
     //Display new task.
-    m_model->setNewTask(currentTask);
+    m_tableModel->setNewTask(currentTask);
 }
 
 void Whch::on_lineEdit_returnPressed()
 {
     on_StopButton_clicked();
+}
+
+void Whch::on_actionHistory_View_triggered(bool checked)
+{
+    if(checked)
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page_4);
+    else
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page_3);
 }
