@@ -680,12 +680,12 @@ void Whch::on_actionHistory_View_triggered(bool checked)
 {
     if(checked)
     {
-        m_ui->stackedWidget->setCurrentWidget(m_ui->page_4);
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
         enableWidgets(false);
     }
     else
     {
-        m_ui->stackedWidget->setCurrentWidget(m_ui->page_3);
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page);
         enableWidgets(true);
         m_ui->tableView->scrollToBottom();
     }
