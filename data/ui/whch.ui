@@ -240,7 +240,14 @@
               <enum>Qt::Horizontal</enum>
              </property>
              <widget class="QTreeView" name="treeView"/>
-             <widget class="QTableView" name="tableView_2"/>
+             <widget class="QTableView" name="tableView_2">
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderStretchLastSection">
+               <bool>false</bool>
+              </attribute>
+             </widget>
             </widget>
            </item>
           </layout>

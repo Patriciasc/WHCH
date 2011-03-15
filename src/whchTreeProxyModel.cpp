@@ -1,7 +1,6 @@
 #include "whchTreeProxyModel.h"
 #include "whchTreeNode.h"
 #include <QStringList>
-#include <QDebug>
 
 WhchTreeProxyModel::WhchTreeProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)

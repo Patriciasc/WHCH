@@ -72,9 +72,16 @@ Whch::Whch(QWidget *parent) :
         {
             m_treeModel = new WhchTreeModel(document, this);
             m_treeProxyModel = new WhchTreeProxyModel(this);
+            m_tableProxyModel = new WhchTableProxyModel (this);
+
             m_treeProxyModel->setSourceModel(m_treeModel);
+            m_tableProxyModel->setSourceModel(m_treeModel);
+
             m_ui->treeView->setModel(m_treeProxyModel);
-            m_ui->tableView_2->setModel(m_treeModel);
+            m_ui->tableView_2->setModel(m_tableProxyModel);
+
+            /*connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
+                    m_ui->tableView_2, SLOT(setRootIndex(QModelIndex)));*/
         }
         file.close();
     }
