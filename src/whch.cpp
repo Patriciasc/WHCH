@@ -65,11 +65,16 @@ Whch::Whch(QWidget *parent) :
     m_ui->tableView->setModel(m_tableModel);
 
     QFile file(QDir::homePath() + "/" + "." + "whch_log.xml");
-    if (file.open(QIODevice::ReadOnly)) {
+    if (file.open(QIODevice::ReadOnly))
+    {
         QDomDocument document;
-        if (document.setContent(&file)) {
+        if (document.setContent(&file))
+        {
             m_treeModel = new WhchTreeModel(document, this);
-            m_ui->treeView->setModel(m_treeModel);
+            m_treeProxyModel = new WhchTreeProxyModel(this);
+            m_treeProxyModel->setSourceModel(m_treeModel);
+            m_ui->treeView->setModel(m_treeProxyModel);
+            m_ui->tableView_2->setModel(m_treeModel);
         }
         file.close();
     }

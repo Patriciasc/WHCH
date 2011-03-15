@@ -32,6 +32,7 @@
 
 #include "whchTableModel.h"
 #include "whchTreeModel.h"
+#include "whchTreeProxyModel.h"
 #include <QMainWindow>
 #include <QCoreApplication>
 #include <QFile>
@@ -95,6 +96,7 @@ private:
     Ui::Dialog *m_uiDialog;
     WhchTableModel *m_tableModel;
     WhchTreeModel *m_treeModel;
+    WhchTreeProxyModel *m_treeProxyModel;
     /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;
