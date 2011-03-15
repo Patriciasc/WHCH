@@ -1,5 +1,6 @@
 #include "whchTreeModel.h"
 #include <QStringList>
+#include <QDateTime>
 
 WhchTreeModel::WhchTreeModel(QDomDocument document,
                              QObject *parent)
@@ -28,14 +29,44 @@ QVariant WhchTreeModel::data(const QModelIndex &index,
     QStringList attributes;
     QDomNamedNodeMap attributeMap = node.attributes();
 
-    if (index.column() == 0)
+    switch (index.column())
     {
-        for (int i = 0; i < attributeMap.count(); ++i)
-        {
-            QDomNode attribute = attributeMap.item(i);
-            attributes << attribute.nodeName() + " " + attribute.nodeValue();
-        }
-        return attributes;
+        case 0:
+            for (int i = 0; i < attributeMap.count(); ++i)
+            {
+                QDomNode attribute = attributeMap.item(i);
+                attributes << attribute.nodeName() + " " + attribute.nodeValue();
+            }
+            return attributes;
+        case 1:
+            {
+                QString time = attributeMap.namedItem("start").nodeValue();
+                return QDateTime::fromString(time, Qt::ISODate);
+            }
+        case 2:
+            {
+                QString time = attributeMap.namedItem("end").nodeValue();
+                return QDateTime::fromString(time, Qt::ISODate);
+            }
+        case 3:
+            {
+                QVariant start = attributeMap.namedItem("start").nodeValue();
+                QVariant end = attributeMap.namedItem("end").nodeValue();
+                int seconds = start.toDateTime().secsTo(end.toDateTime());
+                int minutes = seconds / 60;
+                seconds %= 60;
+                int hours = minutes / 60;
+                minutes %= 60;
+                return QString("%1h%2m%3s").arg(hours).arg(minutes).arg(seconds);
+            }
+        case 4:
+            return attributeMap.namedItem("client").nodeValue();
+        case 5:
+            return attributeMap.namedItem("name").nodeValue();;
+        case 6:
+            return node.firstChildElement("details").text();
+        default:
+            return QVariant();
     }
 }
 
@@ -57,6 +88,18 @@ QVariant WhchTreeModel::headerData(int section,
         {
         case 0:
             return tr("History");
+        case 1:
+            return tr("Start");
+        case 2:
+            return tr("End");
+        case 3:
+            return tr("Duration");
+        case 4:
+            return tr("Client");
+        case 5:
+            return tr("Task");
+        case 6:
+            return tr("Details");
         default:
             return QVariant();
         }
@@ -115,5 +158,5 @@ int WhchTreeModel::rowCount(const QModelIndex &parent) const
 
 int WhchTreeModel::columnCount(const QModelIndex &parent) const
 {
-    return 1;
+    return 7;
 }
