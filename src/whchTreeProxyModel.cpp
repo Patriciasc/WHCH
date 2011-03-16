@@ -1,6 +1,7 @@
 #include "whchTreeProxyModel.h"
 #include "whchTreeNode.h"
 #include <QStringList>
+#include <QDebug>
 
 WhchTreeProxyModel::WhchTreeProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
@@ -18,10 +19,19 @@ bool WhchTreeProxyModel::filterAcceptsRow(int sourceRow,
     return true;
 }
 
-bool WhchTreeProxyModel::filterAcceptsColumn (int source_column,
-                                              const QModelIndex & source_parent ) const
+bool WhchTreeProxyModel::filterAcceptsColumn (int sourceColumn,
+                                              const QModelIndex & sourceParent ) const
 {
-    if (source_column != 0)
+    Q_UNUSED(sourceParent);
+
+    if (sourceColumn != 0)
         return false;
     return true;
+}
+
+//test
+void WhchTreeProxyModel::onItemClicked(const QModelIndex &index)
+{
+    qDebug() << "TreeProxyModel: on ItemClicked";
+    emit clicked(mapToSource(index));
 }

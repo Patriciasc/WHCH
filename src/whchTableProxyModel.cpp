@@ -1,14 +1,24 @@
 #include "whchTableProxyModel.h"
+#include <QDebug>
 
 WhchTableProxyModel::WhchTableProxyModel(QObject *parent) :
         QSortFilterProxyModel(parent)
 {
 }
 
-bool WhchTableProxyModel::filterAcceptsColumn (int source_column,
-                          const QModelIndex & source_parent ) const
+bool WhchTableProxyModel::filterAcceptsColumn (int sourceColumn,
+                          const QModelIndex & sourceParent ) const
 {
-    if (source_column == 0)
+    Q_UNUSED(sourceParent);
+
+    if (sourceColumn == 0)
         return false;
     return true;
+}
+
+//test
+void WhchTableProxyModel::onItemClicked(const QModelIndex &index)
+{
+    qDebug() << "TableProxyModel: onItemClicked";
+    emit clicked(mapFromSource(index));
 }

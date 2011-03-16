@@ -5,12 +5,19 @@
 
 class WhchTableProxyModel :  public QSortFilterProxyModel
 {
+    Q_OBJECT
 public:
     WhchTableProxyModel(QObject *parent = 0);
 
+public slots:
+    void onItemClicked(const QModelIndex &index);
+
 protected:
-    bool filterAcceptsColumn (int source_column,
-                              const QModelIndex & source_parent ) const;
+    bool filterAcceptsColumn (int sourceColumn,
+                              const QModelIndex & sourceParent ) const;
+
+signals:
+     void clicked(const QModelIndex &index);
 };
 
 #endif // WHCHTABLEPROXYMODEL_H

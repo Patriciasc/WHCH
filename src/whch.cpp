@@ -80,8 +80,14 @@ Whch::Whch(QWidget *parent) :
             m_ui->treeView->setModel(m_treeProxyModel);
             m_ui->tableView_2->setModel(m_tableProxyModel);
 
-            /*connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
-                    m_ui->tableView_2, SLOT(setRootIndex(QModelIndex)));*/
+            connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
+                    m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
+
+            connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
+                    m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
+
+            connect(m_tableProxyModel, SIGNAL(clicked(QModelIndex)),
+                    this, SLOT(onClickedViewIndex(QModelIndex)));
         }
         file.close();
     }
@@ -453,6 +459,12 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
         }*/
         }
     }
+}
+
+void Whch::onClickedViewIndex(const QModelIndex &index)
+{
+    m_ui->tableView_2->setRootIndex(index);
+    m_ui->tableView_2->reset();
 }
 
 /* ------------- */

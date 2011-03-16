@@ -67,6 +67,7 @@ private slots:
     void on_StartButton_clicked();
     void on_StopButton_clicked();
     void onDialogComboboxLineEditReturn();
+    void onClickedViewIndex(const QModelIndex &index);
 
     void on_actionAbout_whch_triggered();
     void on_actionTasks_triggered();
