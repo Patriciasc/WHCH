@@ -6,6 +6,7 @@ WhchTableProxyModel::WhchTableProxyModel(QObject *parent) :
 {
 }
 
+/*
 bool WhchTableProxyModel::filterAcceptsColumn (int sourceColumn,
                           const QModelIndex & sourceParent ) const
 {
@@ -15,10 +16,11 @@ bool WhchTableProxyModel::filterAcceptsColumn (int sourceColumn,
         return false;
     return true;
 }
+*/
 
 //test
 void WhchTableProxyModel::onItemClicked(const QModelIndex &index)
 {
-    qDebug() << "TableProxyModel: onItemClicked";
-    emit clicked(mapFromSource(index));
+    QModelIndex sourceIndex = mapFromSource(index);
+    emit retrieve_children(sourceIndex);
 }

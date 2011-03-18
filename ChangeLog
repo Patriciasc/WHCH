@@ -1,5 +1,10 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
-Date:   Ed Mar 16 13:27:20 2011 +0100
+Date:   Fri Mar 18 15:07:20 2011 +0100
+
+    Removed filtering columns option for table view.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Mar 16 13:27:20 2011 +0100
 
     Connected Tree View with Table View. Still in test.
 

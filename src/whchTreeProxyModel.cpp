@@ -32,6 +32,5 @@ bool WhchTreeProxyModel::filterAcceptsColumn (int sourceColumn,
 //test
 void WhchTreeProxyModel::onItemClicked(const QModelIndex &index)
 {
-    qDebug() << "TreeProxyModel: on ItemClicked";
     emit clicked(mapToSource(index));
 }

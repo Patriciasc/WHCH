@@ -11,13 +11,13 @@ public:
 
 public slots:
     void onItemClicked(const QModelIndex &index);
-
+/*
 protected:
     bool filterAcceptsColumn (int sourceColumn,
                               const QModelIndex & sourceParent ) const;
-
+*/
 signals:
-     void clicked(const QModelIndex &index);
+     void retrieve_children(const QModelIndex &index);
 };
 
 #endif // WHCHTABLEPROXYMODEL_H

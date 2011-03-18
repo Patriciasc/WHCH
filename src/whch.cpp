@@ -86,7 +86,7 @@ Whch::Whch(QWidget *parent) :
             connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
                     m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
 
-            connect(m_tableProxyModel, SIGNAL(clicked(QModelIndex)),
+            connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
                     this, SLOT(onClickedViewIndex(QModelIndex)));
         }
         file.close();
@@ -464,7 +464,6 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 void Whch::onClickedViewIndex(const QModelIndex &index)
 {
     m_ui->tableView_2->setRootIndex(index);
-    m_ui->tableView_2->reset();
 }
 
 /* ------------- */
