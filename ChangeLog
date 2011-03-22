@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Mar 22 16:50:20 2011 +0100
+
+    Changed TableModel for TableProxyModel in general view.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Tue Mar 22 15:48:20 2011 +0100
 
     Added addNewTaskElement function.

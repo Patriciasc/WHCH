@@ -61,8 +61,8 @@ Whch::Whch(QWidget *parent) :
     m_ui->setupUi(this);
 
     // Set model/view.
-    m_tableModel = new WhchTableModel();
-    m_ui->tableView->setModel(m_tableModel);
+    //m_tableModel = new WhchTableModel();
+    //m_ui->tableView->setModel(m_tableModel);
 
 
     m_treeModel = new WhchTreeModel();
@@ -74,6 +74,7 @@ Whch::Whch(QWidget *parent) :
 
     m_ui->treeView->setModel(m_treeProxyModel);
     m_ui->tableView_2->setModel(m_tableProxyModel);
+    m_ui->tableView->setModel(m_tableProxyModel);
 
     connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
             m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
@@ -84,14 +85,16 @@ Whch::Whch(QWidget *parent) :
     connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
             this, SLOT(onClickedViewIndex(QModelIndex)));
 
+    //Set m_ui->tableView_2 rootindex as the current day.
+
     // Set system try icon.
     setTryIcon();
 
     // Load session data.
-    loadSessionData();
+    //loadSessionData();
 
     // Set list of available tasks.
-    setComboboxTasks();
+    //setComboboxTasks();
 
     // Resize start/end columns and rows.
     m_ui->tableView->resizeRowsToContents();
