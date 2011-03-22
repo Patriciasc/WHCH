@@ -2,6 +2,7 @@
 #define WHCHTREEMODEL_H
 
 #include "whchTreeNode.h"
+#include "whchTask.h"
 #include <QDomDocument>
 #include <QAbstractItemModel>
 #include <QFile>
@@ -25,9 +26,13 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+public slots:
+    void addNewTaskElement(WhchTask currentTask);
+
 private:
     QDomDocument m_domFile;
     WhchTreeNode *m_root;
+    QDomElement m_taskNode;
 
     void loadXmlFile(const QString &filename);
     void writeInXmlFile(const QString &filename);

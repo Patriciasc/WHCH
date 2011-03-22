@@ -233,6 +233,61 @@ bool WhchTreeModel::setData(const QModelIndex &index,
     return changed;
 }
 
+/* -------------------- */
+/* --- PUBLIC SLOTS --- */
+/* -------------------- */
+void WhchTreeModel::addNewTaskElement(WhchTask currentTask)
+{
+    QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
+
+    QDomElement yearNode = m_root->node().lastChildElement("year");
+    QString yearDate(currentDate.section("/", 0, 0));
+    if (yearNode.attribute("year").compare(yearDate) != 0)
+    {
+        yearNode = m_domFile.createElement("year");
+        yearNode.setAttribute("year", yearDate);
+        m_domFile.appendChild(yearNode);
+    }
+
+    QDomElement weekNode = yearNode.lastChildElement("week");
+    int weekNumber = QDate::currentDate().weekNumber();
+    if(weekNode.attribute("week").toInt() != weekNumber)
+    {
+        //Create week node and assign it as week node.
+        weekNode = m_domFile.createElement("year");
+        weekNode.setAttribute("week",  weekNumber);
+        m_domFile.appendChild(weekNode);
+    }
+
+    QDomElement dayNode = weekNode.lastChildElement("day");
+    if(dayNode.attribute("date").compare(currentDate) != 0)
+    {
+        //Create day node and assign it as day node.
+        dayNode = m_domFile.createElement("year");
+        dayNode.setAttribute("date", currentDate);
+        m_domFile.appendChild(dayNode);
+    }
+
+    //Create a new task node.
+    m_taskNode.setAttribute("end", QDateTime::currentDateTime().toString(Qt::ISODate));
+    m_taskNode.setAttribute("name", currentTask.m_name.section(" (", 0,0));
+    m_taskNode.setAttribute("client", currentTask.m_client);
+
+    QDomElement detailsTag = m_domFile.createElement("details");
+    QDomText detailsText = m_domFile.createTextNode(currentTask.m_details);
+    detailsTag.appendChild(detailsText);
+    m_taskNode.appendChild(detailsTag);
+
+    dayNode.appendChild(m_taskNode);
+
+    //Write data in .xml file.
+    writeInXmlFile (XML_FILENAME);
+
+    //Reset view.
+    reset();
+    loadXmlFile(XML_FILENAME);
+}
+
 /* --------------------------- */
 /* --- AUXILIARY FUNCTIONS --- */
 /* --------------------------- */
