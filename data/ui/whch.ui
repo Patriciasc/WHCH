@@ -241,6 +241,9 @@
              </property>
              <widget class="QTreeView" name="treeView"/>
              <widget class="QTableView" name="tableView_2">
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>

@@ -64,33 +64,25 @@ Whch::Whch(QWidget *parent) :
     m_tableModel = new WhchTableModel();
     m_ui->tableView->setModel(m_tableModel);
 
-    QFile file(QDir::homePath() + "/" + "." + "whch_log.xml");
-    if (file.open(QIODevice::ReadOnly))
-    {
-        QDomDocument document;
-        if (document.setContent(&file))
-        {
-            m_treeModel = new WhchTreeModel(document, this);
-            m_treeProxyModel = new WhchTreeProxyModel(this);
-            m_tableProxyModel = new WhchTableProxyModel (this);
 
-            m_treeProxyModel->setSourceModel(m_treeModel);
-            m_tableProxyModel->setSourceModel(m_treeModel);
+    m_treeModel = new WhchTreeModel();
+    m_treeProxyModel = new WhchTreeProxyModel();
+    m_tableProxyModel = new WhchTableProxyModel ();
 
-            m_ui->treeView->setModel(m_treeProxyModel);
-            m_ui->tableView_2->setModel(m_tableProxyModel);
+    m_treeProxyModel->setSourceModel(m_treeModel);
+    m_tableProxyModel->setSourceModel(m_treeModel);
 
-            connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
-                    m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
+    m_ui->treeView->setModel(m_treeProxyModel);
+    m_ui->tableView_2->setModel(m_tableProxyModel);
 
-            connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
-                    m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
+    connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
+            m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
 
-            connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
-                    this, SLOT(onClickedViewIndex(QModelIndex)));
-        }
-        file.close();
-    }
+    connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
+            m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
+
+    connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
+            this, SLOT(onClickedViewIndex(QModelIndex)));
 
     // Set system try icon.
     setTryIcon();

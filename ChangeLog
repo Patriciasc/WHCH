@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Mar 22 13:59:20 2011 +0100
+
+    Made Tree Model editable.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Fri Mar 18 15:07:20 2011 +0100
 
     Removed filtering columns option for table view.

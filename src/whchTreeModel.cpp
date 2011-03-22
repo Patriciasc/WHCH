@@ -1,12 +1,36 @@
 #include "whchTreeModel.h"
 #include <QStringList>
 #include <QDateTime>
+#include <QDir>
+#include <QDebug>
 
-WhchTreeModel::WhchTreeModel(QDomDocument document,
-                             QObject *parent)
-                                 : QAbstractItemModel(parent), m_domDocument(document)
+static const QString XML_FILENAME = "whch_log.xml";
+
+//FIXME: refactorize WRITE and LOAD functions.
+WhchTreeModel::WhchTreeModel(QObject *parent) : QAbstractItemModel(parent)
 {
-    m_root = new WhchTreeNode(m_domDocument, 0);
+    m_domFile = QDomDocument("WHCH");
+    QString fileName(QDir::homePath() + "/" + "." + XML_FILENAME);
+    QFile file(fileName);
+
+    // Create a new .xml file.
+    if (!file.exists())
+    {
+        // Initialize root element in memory.
+        QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
+        QDomElement root = m_domFile.createElement("year");
+        root.setAttribute("year",currentDate.section("/", 0, 0));
+        m_root = new WhchTreeNode(root, 0);
+        m_domFile.appendChild(m_root->node());
+
+        // Write memory data in the .xml file.
+        writeInXmlFile(XML_FILENAME);
+    }
+    else
+        m_root = new WhchTreeNode(m_domFile, 0);
+
+    // Load .xml file's content in memory.
+    loadXmlFile(XML_FILENAME);
 }
 
 WhchTreeModel::~WhchTreeModel()
@@ -17,20 +41,16 @@ WhchTreeModel::~WhchTreeModel()
 QVariant WhchTreeModel::data(const QModelIndex &index,
                              int role) const
 {
-    if (!index.isValid())
-        return QVariant();
-
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    WhchTreeNode *indexNode = static_cast<WhchTreeNode*>(index.internalPointer());
-
-    QDomNode node = indexNode->node();
-    QStringList attributes;
-    QDomNamedNodeMap attributeMap = node.attributes();
-
-    switch (index.column())
+    if ((index.isValid()) && ((role == Qt::DisplayRole) || (role == Qt::EditRole)))
     {
+        WhchTreeNode *indexNode = static_cast<WhchTreeNode*>(index.internalPointer());
+
+        QDomNode node = indexNode->node();
+        QStringList attributes;
+        QDomNamedNodeMap attributeMap = node.attributes();
+
+        switch (index.column())
+        {
         case 0:
             for (int i = 0; i < attributeMap.count(); ++i)
             {
@@ -65,9 +85,12 @@ QVariant WhchTreeModel::data(const QModelIndex &index,
             return attributeMap.namedItem("name").nodeValue();;
         case 6:
             return node.firstChildElement("details").text();
+            return "";
         default:
             return QVariant();
+        }
     }
+    return QVariant();
 }
 
 Qt::ItemFlags WhchTreeModel::flags(const QModelIndex &index) const
@@ -75,7 +98,14 @@ Qt::ItemFlags WhchTreeModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if ((index.column() == 1) || (index.column() == 2) || (index.column() == 6))
+    {
+        return Qt::ItemIsEnabled | Qt::ItemIsEditable;
+    }
+    else
+    {
+        return Qt::ItemIsEnabled;
+    }
 }
 
 QVariant WhchTreeModel::headerData(int section,
@@ -158,5 +188,94 @@ int WhchTreeModel::rowCount(const QModelIndex &parent) const
 
 int WhchTreeModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 7;
 }
+
+bool WhchTreeModel::setData(const QModelIndex &index,
+                            const QVariant &value,
+                            int role)
+{
+    bool changed = false;
+
+    if (index.isValid() && role == Qt::EditRole)
+    {
+
+        WhchTreeNode *indexNode = static_cast<WhchTreeNode*>(index.internalPointer());
+        QDomNode node = indexNode->node();
+        QDomNamedNodeMap attributeMap = node.attributes();
+
+        switch (index.column())
+        {
+        case 1:
+            attributeMap.namedItem("start").setNodeValue(value.toDateTime().toString(Qt::ISODate));
+            emit dataChanged(index, index);
+            changed = true;
+            break;
+        case 2:
+            attributeMap.namedItem("end").setNodeValue(value.toDateTime().toString(Qt::ISODate));
+            emit dataChanged(index, index);
+            changed = true;
+            break;
+        case 6:
+            node.firstChildElement("details").firstChild().toText().setNodeValue(value.toString());
+            emit dataChanged(index, index);
+            changed = true;
+            break;
+        default:
+            changed = false;
+            break;
+        }
+
+        if (changed)
+            writeInXmlFile(XML_FILENAME);
+    }
+    return changed;
+}
+
+/* --------------------------- */
+/* --- AUXILIARY FUNCTIONS --- */
+/* --------------------------- */
+
+// Load .xml file's content in memory.
+void WhchTreeModel::loadXmlFile(const QString &fileName)
+{
+    QFile file(QDir::homePath() + "/" + "." + fileName);
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Error. Could not open file: " << fileName
+                << "in" << QDir::current().absolutePath();
+        return;
+    }
+
+    QString setContentError;
+    if (!m_domFile.setContent(&file, &setContentError))
+    {
+        qDebug() << "Error. Could not set content for file: " << fileName
+                << "in" << QDir::current().absolutePath();
+        qDebug() << "Error message: " << setContentError;
+
+        file.close();
+        return;
+    }
+
+    file.close();
+}
+
+// Write memory data in the .xml file.
+void WhchTreeModel::writeInXmlFile (const QString &fileName)
+{
+    QFile file(QDir::homePath() + "/" + "." + fileName);
+
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Error. Could not write in file: " << fileName;
+        return;
+    }
+
+    QTextStream ts(&file);
+    ts << m_domFile.toString();
+
+    file.close();
+ }

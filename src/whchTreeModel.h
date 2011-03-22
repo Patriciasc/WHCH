@@ -4,13 +4,14 @@
 #include "whchTreeNode.h"
 #include <QDomDocument>
 #include <QAbstractItemModel>
+#include <QFile>
 
 class WhchTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    WhchTreeModel(QDomDocument document, QObject *parent = 0);
+    WhchTreeModel(QObject *parent = 0);
     ~WhchTreeModel();
 
     QVariant data(const QModelIndex &index, int role) const;
@@ -22,10 +23,14 @@ public:
     QModelIndex parent(const QModelIndex &child) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
 
 private:
-    QDomDocument m_domDocument;
+    QDomDocument m_domFile;
     WhchTreeNode *m_root;
+
+    void loadXmlFile(const QString &filename);
+    void writeInXmlFile(const QString &filename);
 };
 
 #endif // WHCHTREEMODEL_H
