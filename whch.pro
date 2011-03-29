@@ -30,14 +30,16 @@ SOURCES += src/main.cpp \
            src/qtsingleapplication/qtlocalpeer.cpp \
            src/qtsingleapplication/qtlockedfile.cpp \
            src/qtsingleapplication/qtlockedfile_win.cpp \
-           src/qtsingleapplication/qtlockedfile_unix.cpp
+           src/qtsingleapplication/qtlockedfile_unix.cpp \
+           src/whchDomNode.cpp
 
 HEADERS += src/whch.h \
            src/whchTableModel.h \
            src/whchTask.h \
            src/qtsingleapplication/qtsingleapplication.h \
            src/qtsingleapplication/qtlocalpeer.h \
-           src/qtsingleapplication/qtlockedfile.h
+           src/qtsingleapplication/qtlockedfile.h \
+           src/whchDomNode.h
 
 FORMS   += data/ui/whch.ui \
            data/ui/dialogTasksClients.ui
