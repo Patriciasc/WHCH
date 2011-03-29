@@ -1,4 +1,10 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Apr 05 11:43:20 2011 +0100
+
+    Added tree proxy model for tree view.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Tue Apr 05 11:43:20 2011 +0100
 
     Added tree model's implementation (whchDomModel).

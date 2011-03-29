@@ -32,7 +32,8 @@ SOURCES += src/main.cpp \
            src/qtsingleapplication/qtlockedfile_win.cpp \
            src/qtsingleapplication/qtlockedfile_unix.cpp \
            src/whchDomNode.cpp \
-           src/whchDomModel.cpp
+           src/whchDomModel.cpp \
+           src/whchTreeProxyModel.cpp
 
 HEADERS += src/whch.h \
            src/whchTableModel.h \
@@ -41,7 +42,8 @@ HEADERS += src/whch.h \
            src/qtsingleapplication/qtlocalpeer.h \
            src/qtsingleapplication/qtlockedfile.h \
            src/whchDomNode.h \
-           src/whchDomModel.h
+           src/whchDomModel.h \
+           src/whchTreeProxyModel.h
 
 FORMS   += data/ui/whch.ui \
            data/ui/dialogTasksClients.ui
