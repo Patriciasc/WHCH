@@ -33,6 +33,7 @@
 #include "whchTableModel.h"
 #include "whchDomModel.h"
 #include "whchTreeProxyModel.h"
+#include "whchTableProxyModel.h"
 #include <QMainWindow>
 #include <QCoreApplication>
 #include <QFile>
@@ -96,6 +97,7 @@ private:
     WhchTableModel *m_model;
     WhchDomModel *m_domModel;
     WhchTreeProxyModel *m_treeProxyModel;
+    WhchTableProxyModel *m_tableProxyModel;
     /* New tasks/client added by the user in the current session */
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;

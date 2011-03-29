@@ -63,15 +63,20 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
-    //Test tree proxy model.
+    //Test tree and table proxy model.
     QFile file(QDir::homePath() + "/" + "." + "whch_log.xml");
     if (file.open(QIODevice::ReadOnly)) {
         QDomDocument document;
         if (document.setContent(&file)) {
             m_domModel = new WhchDomModel(document, this);
+
             m_treeProxyModel = new WhchTreeProxyModel(this);
             m_treeProxyModel->setSourceModel(m_domModel);
             m_ui->treeView->setModel(m_treeProxyModel);
+
+            m_tableProxyModel = new WhchTableProxyModel(this);
+            m_tableProxyModel->setSourceModel(m_domModel);
+            m_ui->tableView_2->setModel(m_tableProxyModel);
         }
         file.close();
     }
