@@ -56,7 +56,7 @@ WhchTableModel::WhchTableModel(QObject *parent)
         QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
 
         QDomElement domRoot = m_domFile.createElement("year");
-        domRoot.setAttribute("year", currentDate.section("/", 0, 0));
+        domRoot.setAttribute("date", currentDate.section("/", 0, 0));
         m_domFile.appendChild(domRoot);
 
         // Write result to an .xml file.
@@ -83,12 +83,12 @@ int WhchTableModel::rowCount(const QModelIndex &parent) const
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
     !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        if (domRoot.attribute("year").compare(currentDate.section("/", 0, 0)) == 0)
+        if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
             for (QDomElement weekElement = domRoot.firstChildElement("week");
             !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                if (weekElement.attribute("week").toInt() == QDate::currentDate().weekNumber())
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
                 {
                     for (QDomElement dayElement = weekElement.firstChildElement("day");
                     !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
@@ -411,13 +411,13 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
     for (QDomElement domRoot = m_domFile.firstChildElement("year");
     !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
     {
-        if (domRoot.attribute("year").compare(currentDate.section("/", 0, 0)) == 0)
+        if (domRoot.attribute("date").compare(currentDate.section("/", 0, 0)) == 0)
         {
             // Look if the current week already exists in memory.
             QDomElement weekElement = domRoot.firstChildElement("week");
             for (; !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
             {
-                if (weekElement.attribute("week").toInt() == QDate::currentDate().weekNumber())
+                if (weekElement.attribute("number").toInt() == QDate::currentDate().weekNumber())
                     break;
             }
 
@@ -425,7 +425,7 @@ void WhchTableModel::setNewTask(WhchTask currentTask)
             if (weekElement.isNull())
             {
                 weekElement = m_domFile.createElement("week");
-                weekElement.setAttribute("week", QDate::currentDate().weekNumber());
+                weekElement.setAttribute("number", QDate::currentDate().weekNumber());
                 domRoot.appendChild(weekElement);
             }
 

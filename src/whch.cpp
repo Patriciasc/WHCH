@@ -61,47 +61,22 @@ Whch::Whch(QWidget *parent) :
     m_ui->setupUi(this);
 
     // Set model/view.
-    //m_tableModel = new WhchTableModel();
-    //m_ui->tableView->setModel(m_tableModel);
-
-
-    m_treeModel = new WhchTreeModel();
-    m_treeProxyModel = new WhchTreeProxyModel();
-    m_tableProxyModel = new WhchTableProxyModel ();
-
-    m_treeProxyModel->setSourceModel(m_treeModel);
-    m_tableProxyModel->setSourceModel(m_treeModel);
-
-    m_ui->treeView->setModel(m_treeProxyModel);
-    m_ui->tableView_2->setModel(m_tableProxyModel);
-    m_ui->tableView->setModel(m_tableProxyModel);
-
-    connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
-            m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
-
-    connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
-            m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
-
-    connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
-            this, SLOT(onClickedViewIndex(QModelIndex)));
-
-    //Set m_ui->tableView_2 rootindex as the current day.
+    m_model = new WhchTableModel();
+    m_ui->tableView->setModel(m_model);
 
     // Set system try icon.
     setTryIcon();
 
     // Load session data.
-    //loadSessionData();
+    loadSessionData();
 
     // Set list of available tasks.
-    //setComboboxTasks();
+    setComboboxTasks();
 
     // Resize start/end columns and rows.
     m_ui->tableView->resizeRowsToContents();
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
-    // FIXME: Scroll view. Not working.
-    m_ui->tableView->scrollToBottom();
 
     m_ui->lineEdit->setEnabled(false);
     m_ui->StopButton->setEnabled(false);
@@ -198,8 +173,8 @@ QStringList Whch::clientTotalTasks(const QString &client)
 {
     QStringList clientTasks;
 
-    if (m_tableModel->isClient(client))
-        clientTasks << m_tableModel->ClientTasks(client);
+    if (m_model->isClient(client))
+        clientTasks << m_model->ClientTasks(client);
     if (m_sessionData.contains(client))
     {
         QStringList sessionClientTasks(m_sessionData.value(client));
@@ -216,7 +191,7 @@ QStringList Whch::clientTotalTasks(const QString &client)
 // Return total tasks (session and .xml file ones).
 QStringList Whch::totalTasks()
 {
-    QStringList totalTasks (m_tableModel->AttributesList("name"));
+    QStringList totalTasks (m_model->AttributesList("name"));
     QStringList newTasks (sessionTasks());
 
     for (int i = 0; i < newTasks.count(); ++i)
@@ -323,7 +298,7 @@ void Whch::onDialogComboboxItemActivated(const QString &client)
         m_uiDialog->comboBox->setEditable(false);
 
     // Set current available tasks and new line for new task.
-    QStringList clientTasks(m_tableModel->ClientTasks(client));
+    QStringList clientTasks(m_model->ClientTasks(client));
     if (m_sessionData.contains(client))
     {
         QStringList sessionClientTasks(m_sessionData.value(client));
@@ -354,7 +329,7 @@ void Whch::onDialogComboboxLineEditReturn()
 
     if (newClient.compare("") != 0)
     {
-        QStringList clients(m_tableModel->AttributesList("client"));
+        QStringList clients(m_model->AttributesList("client"));
 
         if (!clients.contains(newClient))
         {
@@ -403,7 +378,7 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
                 for (int i=0; i < totalListTasks.size(); ++i)
                 {
                     QString currentTask (totalListTasks.at(i));
-                    QString taskClient (m_tableModel->clientOfTask(currentTask));
+                    QString taskClient (m_model->clientOfTask(currentTask));
                     if (taskClient.compare("") == 0)
                         taskClient = sessionClientOfTask(currentTask);
 
@@ -456,11 +431,6 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
     }
 }
 
-void Whch::onClickedViewIndex(const QModelIndex &index)
-{
-    m_ui->tableView_2->setRootIndex(index);
-}
-
 /* ------------- */
 /* ACTION SLOTS. */
 /* ------------- */
@@ -480,7 +450,7 @@ void Whch::on_actionTasks_triggered()
     m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
 
     // Load list of clients.
-    QStringList clients(m_tableModel->AttributesList("client"));
+    QStringList clients(m_model->AttributesList("client"));
     if (!m_sessionData.isEmpty())
     {
         QStringList sessionClients (m_sessionData.keys());
@@ -587,14 +557,14 @@ void  Whch::saveSessionData()
 void  Whch::setComboboxTasks()
 {
     QStringList sessionDataValues;
-    QStringList tasks (m_tableModel->AttributesList("name"));
+    QStringList tasks (m_model->AttributesList("name"));
     QStringList tasksClients;
     m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);    
 
     /* Retrieve tasks that already exist in the .xml file. */
     for (int i=0; i<tasks.size(); ++i)
     {
-        tasksClients << tasks.at(i) + " (" + m_tableModel->clientOfTask(tasks.at(i)) + ")";
+        tasksClients << tasks.at(i) + " (" + m_model->clientOfTask(tasks.at(i)) + ")";
     }
 
     /* Retrieve current session tasks. */
@@ -659,8 +629,7 @@ void Whch::on_StopButton_clicked()
 
             setCurrentTask();
 
-            //Scroll window and resize start and end columns.
-            m_ui->tableView->scrollToBottom();
+            //Resize start and end columns
             m_ui->tableView->resizeColumnToContents(0);
             m_ui->tableView->resizeColumnToContents(1);
 
@@ -681,54 +650,15 @@ void Whch::setCurrentTask()
     currentTask.m_name = text;
 
     // Set task's related client.
-    currentTask.m_client = m_tableModel->clientOfTask(text);
+    currentTask.m_client = m_model->clientOfTask(text);
     if (currentTask.m_client.compare("") == 0)
         currentTask.m_client =  sessionClientOfTask(text);
 
     //Display new task.
-    m_tableModel->setNewTask(currentTask);
+    m_model->setNewTask(currentTask);
 }
 
 void Whch::on_lineEdit_returnPressed()
 {
     on_StopButton_clicked();
-}
-
-void Whch::on_actionHistory_View_triggered(bool checked)
-{
-    if(checked)
-    {
-        m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
-        enableWidgets(false);
-    }
-    else
-    {
-        m_ui->stackedWidget->setCurrentWidget(m_ui->page);
-        enableWidgets(true);
-        m_ui->tableView->scrollToBottom();
-    }
-}
-
-void Whch::enableWidgets(bool enabled)
-{
-    if(enabled)
-    {
-        m_ui->comboBox->show();
-        m_ui->StartButton->show();
-        m_ui->StopButton->show();
-        m_ui->lineEdit->show();
-        m_ui->lcdNumber->show();
-        m_ui->label_3->show();
-        m_ui->label_4->show();
-    }
-    else
-    {
-        m_ui->comboBox->hide();
-        m_ui->StartButton->hide();
-        m_ui->StopButton->hide();
-        m_ui->lineEdit->hide();
-        m_ui->lcdNumber->hide();
-        m_ui->label_3->hide();
-        m_ui->label_4->hide();
-    }
 }
