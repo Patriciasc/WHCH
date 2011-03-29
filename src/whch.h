@@ -55,6 +55,7 @@ public:
     ~Whch();
 
 private slots:
+    void on_actionHistory_View_triggered(bool checked);
     void onUiComboboxItemActivated(const QString &task);
     void onDialogComboboxItemActivated(const QString &client);
     void onDialogTableCellChanged(QTableWidgetItem *item);

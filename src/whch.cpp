@@ -76,6 +76,7 @@ Whch::Whch(QWidget *parent) :
     m_ui->tableView->resizeRowsToContents();
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
+    m_ui->tableView->scrollToBottom();
 
     m_ui->lineEdit->setEnabled(false);
     m_ui->StopButton->setEnabled(false);
@@ -666,4 +667,16 @@ void Whch::setCurrentTask()
 void Whch::on_lineEdit_returnPressed()
 {
     on_StopButton_clicked();
+}
+
+void Whch::on_actionHistory_View_triggered(bool checked)
+{
+    if(checked)
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
+
+    else
+    {
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page);
+        m_ui->tableView->scrollToBottom();
+    }
 }
