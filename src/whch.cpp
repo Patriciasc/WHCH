@@ -63,39 +63,29 @@ Whch::Whch(QWidget *parent) :
     m_model = new WhchTableModel();
     m_ui->tableView->setModel(m_model);
 
-    //Test tree and table proxy model.
-    QFile file(QDir::homePath() + "/" + "." + "whch_log.xml");
-    if (file.open(QIODevice::ReadOnly)) {
-        QDomDocument document;
-        if (document.setContent(&file)) {
-            m_domModel = new WhchDomModel(document, this);
+    // Populate models and display views.
+    m_domModel = new WhchDomModel(this);
 
-            m_treeProxyModel = new WhchTreeProxyModel(this);
-            m_treeProxyModel->setSourceModel(m_domModel);
-            m_ui->treeView->setModel(m_treeProxyModel);
+    m_treeProxyModel = new WhchTreeProxyModel(this);
+    m_treeProxyModel->setSourceModel(m_domModel);
+    m_ui->treeView->setModel(m_treeProxyModel);
 
-            m_tableProxyModel = new WhchTableProxyModel(this);
-            m_tableProxyModel->setSourceModel(m_domModel);
-            m_ui->tableView_2->setModel(m_tableProxyModel);
+    m_tableProxyModel = new WhchTableProxyModel(this);
+    m_tableProxyModel->setSourceModel(m_domModel);
+    m_ui->tableView_2->setModel(m_tableProxyModel);
 
-            //Hide "history" column.
-            m_ui->tableView_2->setColumnHidden(0,true);
+    //Connect tree view with table view.
+    connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
+            m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
 
-            //Test: connect treeView items with TableView ones.
-            connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
-                    m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
+    connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
+            m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
 
-            connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
-                    m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
+    connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
+            this, SLOT(onClickedViewIndex(QModelIndex)));
 
-            connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
-                    this, SLOT(onClickedViewIndex(QModelIndex)));
-
-            //Print tree.
-            m_domModel->printModelIndexTree();
-        }
-        file.close();
-    }
+    //Print tree.
+    m_domModel->printModelIndexTree();
 
     // Set system try icon.
     setTryIcon();
@@ -106,11 +96,12 @@ Whch::Whch(QWidget *parent) :
     // Set list of available tasks.
     setComboboxTasks();
 
-    // Resize start/end columns and rows.
+    // Rearrange table view.
     m_ui->tableView->resizeRowsToContents();
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
     m_ui->tableView->scrollToBottom();
+    m_ui->tableView_2->setColumnHidden(0,true);
 
     m_ui->lineEdit->setEnabled(false);
     m_ui->StopButton->setEnabled(false);
@@ -682,6 +673,7 @@ void Whch::on_StopButton_clicked()
             setCurrentTask();
             //TODO: reload data in model to update
             //the tree and table view.
+            //m_domModel->loadXmlFile("whch_log.xml");
 
             //Resize start and end columns
             m_ui->tableView->resizeColumnToContents(0);
@@ -721,8 +713,10 @@ void Whch::on_lineEdit_returnPressed()
 
 void Whch::on_actionHistory_View_triggered(bool checked)
 {
+
     if(checked)
     {
+        m_ui->tableView_2->reset();
         m_ui->tableView_2->hideRow(0);
         m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
     }

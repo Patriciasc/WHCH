@@ -12,7 +12,7 @@ class WhchDomModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    WhchDomModel(QDomDocument document, QObject *parent = 0);
+    WhchDomModel(QObject *parent = 0);
     ~WhchDomModel();
 
     QVariant data(const QModelIndex &index, int role) const;
@@ -27,10 +27,13 @@ public:
 
     //Debugging functions.
      void printModelIndexTree();
+     void loadXmlFile(const QString &fileName);
 
 private:
     QDomDocument m_domDocument;
     WhchDomNode *m_rootNode;
+
+    void writeInXmlFile(const QString &fileName);
 };
 
 #endif // WHCHDOMMODEL_H
