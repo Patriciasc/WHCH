@@ -1,14 +1,15 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
-<<<<<<< HEAD
 Date:   Tue Apr 05 11:43:20 2011 +0100
-=======
-Date:   wed Mar 30 12:39:20 2011 +0100
+
+    Implemented function for printing the current tree.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Apr 05 11:43:20 2011 +0100
 
     Removed filterAcceptsColumn() from table proxy model.
 
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
-Date:   wed Mar 30 11:00:20 2011 +0100
->>>>>>> Removed filterAcceptsColumn() from tableProxyModel
+Date:   Tue Apr 05 11:43:20 2011 +0100
 
     Test: connected treeView with tableView. Working.
 

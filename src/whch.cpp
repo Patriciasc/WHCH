@@ -91,6 +91,9 @@ Whch::Whch(QWidget *parent) :
             connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
                     this, SLOT(onClickedViewIndex(QModelIndex)));
 
+            //Print tree.
+            m_domModel->printModelIndexTree();
+
         }
         file.close();
     }

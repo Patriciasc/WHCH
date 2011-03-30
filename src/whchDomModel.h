@@ -25,6 +25,9 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+    //Debugging functions.
+     void printModelIndexTree();
+
 private:
     QDomDocument m_domDocument;
     WhchDomNode *m_rootNode;

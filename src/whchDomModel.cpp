@@ -166,3 +166,43 @@
 
      return 7;
  }
+
+ // Debugging functions.
+ void WhchDomModel::printModelIndexTree()
+ {
+     qDebug() << "----------------------------------- Tree Model Index -----------------------------------";
+     qDebug() <<"";
+
+     QModelIndex rootIndex = index(0, 0, QModelIndex());
+     qDebug() << "root" << rootIndex;
+
+     int numDomElements = (m_rootNode->node().childNodes().count()) - 1;
+     for (QDomElement domRoot = m_domDocument.firstChildElement("year");
+          !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+     {
+         QModelIndex domIndex = index(numDomElements--, 0, rootIndex);
+         qDebug() << "|";
+         qDebug() << "|_" << domRoot.nodeName() << domIndex;
+
+         int numWeekElements = domRoot.childNodes().count() - 1;
+         for (QDomElement weekElement = domRoot.firstChildElement("week");
+         !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
+         {
+             QModelIndex weekIndex = index(numWeekElements--, 0, domIndex);
+             qDebug() << "   |";
+             qDebug() << "   |_" << weekElement.nodeName() << weekIndex;
+             qDebug() << "   |  |";
+
+             int numDayElements = weekElement.childNodes().count() - 1;
+             for (QDomElement dayElement = weekElement.firstChildElement("day");
+             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+             {
+                 QModelIndex dayIndex = index(numDayElements--, 0, weekIndex);
+                 qDebug() << "   |  |_" << dayElement.nodeName() << dayIndex;
+             }
+         }
+     }
+
+     qDebug() <<"";
+     qDebug() << "----------------------------------------------------------------------------------------";
+ }
