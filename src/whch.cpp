@@ -78,6 +78,9 @@ Whch::Whch(QWidget *parent) :
             m_tableProxyModel->setSourceModel(m_domModel);
             m_ui->tableView_2->setModel(m_tableProxyModel);
 
+            //Hide "history" column.
+            m_ui->tableView_2->setColumnHidden(0,true);
+
             //Test: connect treeView items with TableView ones.
             connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
                     m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));

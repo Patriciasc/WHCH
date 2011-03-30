@@ -8,14 +8,9 @@ class WhchTableProxyModel :  public QSortFilterProxyModel
     Q_OBJECT
 public:
     WhchTableProxyModel(QObject *parent = 0);
-   //int columnCount(const QModelIndex &parent) const;
 
 public slots:
     void onItemClicked(const QModelIndex &index);
-
-protected:
-    /*bool filterAcceptsColumn (int sourceColumn,
-                              const QModelIndex & sourceParent ) const;*/
 
 signals:
      void retrieve_children(const QModelIndex &index);
