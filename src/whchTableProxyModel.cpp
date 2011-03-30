@@ -18,6 +18,5 @@ bool WhchTableProxyModel::filterAcceptsColumn (int sourceColumn,
 
 void WhchTableProxyModel::onItemClicked(const QModelIndex &index)
 {
-    QModelIndex sourceIndex = mapFromSource(index);
-    emit retrieve_children(sourceIndex);
+    emit retrieve_children(mapFromSource(index));
 }

@@ -1,6 +1,11 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Tue Apr 05 11:43:20 2011 +0100
 
+    Test: connected treeView with tableView. Not working.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Apr 05 11:43:20 2011 +0100
+
     Test: connected table proxy model and view. Worked.
 
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
