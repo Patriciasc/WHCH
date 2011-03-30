@@ -5,7 +5,7 @@ WhchTableProxyModel::WhchTableProxyModel(QObject *parent) :
         QSortFilterProxyModel(parent)
 {
 }
-
+/*
 bool WhchTableProxyModel::filterAcceptsColumn (int sourceColumn,
                           const QModelIndex & sourceParent ) const
 {
@@ -15,7 +15,7 @@ bool WhchTableProxyModel::filterAcceptsColumn (int sourceColumn,
         return false;
     return true;
 }
-
+*/
 void WhchTableProxyModel::onItemClicked(const QModelIndex &index)
 {
     emit retrieve_children(mapFromSource(index));

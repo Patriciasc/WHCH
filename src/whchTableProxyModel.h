@@ -14,8 +14,8 @@ public slots:
     void onItemClicked(const QModelIndex &index);
 
 protected:
-    bool filterAcceptsColumn (int sourceColumn,
-                              const QModelIndex & sourceParent ) const;
+    /*bool filterAcceptsColumn (int sourceColumn,
+                              const QModelIndex & sourceParent ) const;*/
 
 signals:
      void retrieve_children(const QModelIndex &index);
