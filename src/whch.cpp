@@ -93,7 +93,6 @@ Whch::Whch(QWidget *parent) :
 
             //Print tree.
             m_domModel->printModelIndexTree();
-
         }
         file.close();
     }
@@ -472,7 +471,16 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
 
 void Whch::onClickedViewIndex(const QModelIndex &index)
 {
-    m_ui->tableView_2->setRootIndex(index);
+    if (index.isValid())
+    {
+        m_ui->tableView_2->showRow(0);
+        m_ui->tableView_2->setRootIndex(index);
+    }
+    else
+    {
+        m_ui->tableView_2->reset();
+        m_ui->tableView_2->hideRow(0);
+    }
 }
 
 /* ------------- */
@@ -672,6 +680,8 @@ void Whch::on_StopButton_clicked()
             m_ui->StopButton->setEnabled(false);
 
             setCurrentTask();
+            //TODO: reload data in model to update
+            //the tree and table view.
 
             //Resize start and end columns
             m_ui->tableView->resizeColumnToContents(0);
@@ -712,8 +722,10 @@ void Whch::on_lineEdit_returnPressed()
 void Whch::on_actionHistory_View_triggered(bool checked)
 {
     if(checked)
+    {
+        m_ui->tableView_2->hideRow(0);
         m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
-
+    }
     else
     {
         m_ui->stackedWidget->setCurrentWidget(m_ui->page);

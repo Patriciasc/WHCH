@@ -31,5 +31,10 @@ bool WhchTreeProxyModel::filterAcceptsColumn (int sourceColumn,
 
 void WhchTreeProxyModel::onItemClicked(const QModelIndex &index)
 {
-    emit clicked(mapToSource(index));
+    QString currentNodeName = index.data().toString().section(" ", 0, 0);
+
+    if (currentNodeName.compare("date") == 0)
+        emit clicked(mapToSource(index));
+    else
+        emit clicked(QModelIndex());
 }
