@@ -79,6 +79,48 @@ QVariant WhchDomModel::data(const QModelIndex &index,
     return QVariant();
 }
 
+bool WhchDomModel::setData(const QModelIndex &index,
+                            const QVariant &value,
+                            int role)
+{
+    bool changed = false;
+
+    if (index.isValid() && role == Qt::EditRole)
+    {
+
+        WhchDomNode *indexNode = static_cast<WhchDomNode*>(index.internalPointer());
+        QDomNode node = indexNode->node();
+        QDomNamedNodeMap attributeMap = node.attributes();
+
+        switch (index.column())
+        {
+        case 1:
+            attributeMap.namedItem("start").setNodeValue(value.toDateTime().toString(Qt::ISODate));
+            emit dataChanged(index, index);
+            changed = true;
+            break;
+        case 2:
+            attributeMap.namedItem("end").setNodeValue(value.toDateTime().toString(Qt::ISODate));
+            emit dataChanged(index, index);
+            changed = true;
+            break;
+        case 6:
+            node.firstChildElement("details").firstChild().toText().setNodeValue(value.toString());
+            emit dataChanged(index, index);
+            changed = true;
+            break;
+        default:
+            changed = false;
+            break;
+        }
+
+        if (changed)
+            writeInXmlFile(XML_FILENAME);
+    }
+    return changed;
+}
+
+
 Qt::ItemFlags WhchDomModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -86,7 +128,7 @@ Qt::ItemFlags WhchDomModel::flags(const QModelIndex &index) const
 
     int columnNumber = index.column();
     if ((columnNumber == 1) || (columnNumber == 2) || (columnNumber == 6))
-        return Qt::ItemIsEnabled | Qt::ItemIsEditable;
+        return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
     else
         return Qt::ItemIsEnabled;
 }

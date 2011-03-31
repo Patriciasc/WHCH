@@ -1,6 +1,11 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Tue Apr 05 11:43:20 2011 +0100
 
+    Table view for tableProxyModel is editable now.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Tue Apr 05 11:43:20 2011 +0100
+
     .xml file no more a parameter of dom model constructor.
 
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
