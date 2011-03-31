@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Mar 31 12:17:20 2011 +0100
+
+    Replaced "restore" with "show" in tooltip menu.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Tue Mar 29 12:08:20 2011 +0100
 
     Reverted Tree Model changes and created TreeModel branch.

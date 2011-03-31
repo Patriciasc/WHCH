@@ -206,7 +206,7 @@ QStringList Whch::totalTasks()
 // Creates menu actions for the system tray icon.
 void Whch::createTrayIconMenuActions()
 {
-    restoreAction = new QAction(tr("&Restore"), this);
+    restoreAction = new QAction(tr("&Show"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
     quitAction = new QAction(tr("&Quit"), this);
