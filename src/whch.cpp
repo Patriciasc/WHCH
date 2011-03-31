@@ -110,7 +110,11 @@ void Whch::onTimerTimeOut()
     m_ui->lcdNumber->display(text);
 
     // Update tooltip status.
-    m_trayIcon->setToolTip("Spent time on task:\n"+ text);
+    QString hoursText;
+    QString minutesText;
+    ((hours > 1) || (hours == 0)) ? hoursText = " hours," : hoursText=" hour,";
+    ((minutes > 1) || (minutes == 0)) ? minutesText = " minutes" : minutesText=" minute";
+    m_trayIcon->setToolTip("Spent time on task:\n"+ QString("%1").arg(hours) + hoursText + " " + QString("%1").arg(minutes) + minutesText);
 }
 
 /* List of new added tasks. */
@@ -227,7 +231,7 @@ void Whch::createTrayIcon()
     m_trayIcon->setIcon(icon);
     m_trayIcon->setVisible(true);
     setWindowIcon(icon);
-    m_trayIcon->setToolTip("Spent time on task:\n 00:00:00");
+    m_trayIcon->setToolTip("Spent time on task:\n 00 hours, 00 minutes");
 }
 
 // Handler for tray icon's activation.
