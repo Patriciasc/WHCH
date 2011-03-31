@@ -7,7 +7,7 @@
 <xsl:template match="/">
 <xsl:text>{| border="1" cellpadding="4" class="wikitable"
 </xsl:text>
-<xsl:text>! Date!! Client!! Duration!! Task!! Details</xsl:text>
+<xsl:text>! Start!! End!! Client!! Duration!! Task!! Details</xsl:text>
 <xsl:apply-templates select="year/week"/>
 <xsl:text>
 |}</xsl:text>
