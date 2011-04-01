@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     if (app.isRunning())
     {
         QMessageBox msgBox;
-        msgBox.setText(QObject::tr("Sorry, an other instance of WHCH is running already."));
+        msgBox.setText(QObject::tr("Sorry, another instance of WHCH is running already."));
         msgBox.setIcon(QMessageBox::Critical);
         msgBox.exec();
         return 1;
