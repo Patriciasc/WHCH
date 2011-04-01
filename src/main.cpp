@@ -39,14 +39,12 @@ int main(int argc, char *argv[])
 
     if (app.isRunning())
     {
-        QMessageBox msgBox;
-        msgBox.setText(QObject::tr("Sorry, another instance of WHCH is running already."));
-        msgBox.setIcon(QMessageBox::Critical);
-        msgBox.exec();
-        return 1;
+        app.sendMessage(QString());
+        return 0;
     }
 
     Whch w;
+    QObject::connect(&app, SIGNAL(messageReceived(QString)), &w, SLOT(show()));
     app.setActiveWindow(&w);
     w.show();
 
