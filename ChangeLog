@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Apr 04 12:25:20 2011 +0100
+
+    Not showing seconds in times where not necessary.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Fri Mar 01 17:30:20 2011 +0100
 
     Show main instance window when rerunning app.

@@ -46,14 +46,12 @@
   <xsl:variable name="duration" select="xs:dateTime(@end) - xs:dateTime(@start)"/>
   <xsl:value-of select="hours-from-duration($duration)"/><xsl:text>h</xsl:text>
   <xsl:value-of select="minutes-from-duration($duration)"/><xsl:text>m</xsl:text>
-  <xsl:value-of select="seconds-from-duration($duration)"/><xsl:text>s</xsl:text>
 </xsl:template>
 
 <xsl:template name="total_duration">
   <xsl:variable name="duration" select="sum(for $x in //task return $x/xs:dateTime(@end) - $x/xs:dateTime(@start))"/>
   <xsl:value-of select="hours-from-duration($duration)"/><xsl:text>h</xsl:text>
   <xsl:value-of select="minutes-from-duration($duration)"/><xsl:text>m</xsl:text>
-  <xsl:value-of select="seconds-from-duration($duration)"/><xsl:text>s</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

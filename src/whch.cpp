@@ -99,6 +99,7 @@ Whch::~Whch()
 void Whch::onTimerTimeOut()
 {
     int seconds = ++m_seconds;
+    qDebug() << m_seconds;
     int minutes = seconds / 60;
     seconds %= 60;
     int hours = minutes / 60;
@@ -231,7 +232,7 @@ void Whch::createTrayIcon()
     m_trayIcon->setIcon(icon);
     m_trayIcon->setVisible(true);
     setWindowIcon(icon);
-    m_trayIcon->setToolTip("Spent time on task:\n 00 hours, 00 minutes");
+    m_trayIcon->setToolTip("Spent time on task:\n 0 hours, 0 minutes");
 }
 
 // Handler for tray icon's activation.
@@ -628,6 +629,7 @@ void Whch::on_StopButton_clicked()
         {
             m_timer->stop();
             m_seconds = 0;
+            qDebug() << m_seconds;
             m_ui->lcdNumber->display("00:00:00");
             m_ui->StopButton->setEnabled(false);
 
@@ -641,6 +643,8 @@ void Whch::on_StopButton_clicked()
             m_ui->lineEdit->clear();
             m_ui->lineEdit->setEnabled(false);
             m_ui->StartButton->setEnabled(true);
+
+            m_trayIcon->setToolTip("Spent time on task:\n 0 hours, 0 minutes");
         }
     }
 }

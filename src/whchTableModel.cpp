@@ -162,8 +162,8 @@ QVariant WhchTableModel::data(const QModelIndex &index,
                 seconds %= 60;
                 int hours = minutes / 60;
                 minutes %= 60;
-                return element.attribute("duration", QString("%1h%2m%3s").
-                                         arg(hours).arg(minutes).arg(seconds));
+                return element.attribute("duration", QString("%1h%2m").
+                                         arg(hours).arg(minutes));
             }
             case 3:
                 return element.attribute("client");
