@@ -54,8 +54,7 @@ Whch::Whch(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::whch),
     m_uiDialog(new Ui::Dialog),
-    m_seconds(0),
-    m_timer(new QTimer)
+    m_seconds(0)
 {
     // Set GUI.
     m_ui->setupUi(this);
@@ -99,7 +98,6 @@ Whch::~Whch()
 void Whch::onTimerTimeOut()
 {
     int seconds = ++m_seconds;
-    qDebug() << m_seconds;
     int minutes = seconds / 60;
     seconds %= 60;
     int hours = minutes / 60;
@@ -608,9 +606,9 @@ void Whch::on_StartButton_clicked()
     m_ui->StopButton->setEnabled(true);
     m_ui->lineEdit->setEnabled(true);
 
+    m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
     m_timer->start(1000);
-    onTimerTimeOut();
 }
 
 /* Stops timer and saves new introduced task. */
@@ -629,7 +627,6 @@ void Whch::on_StopButton_clicked()
         {
             m_timer->stop();
             m_seconds = 0;
-            qDebug() << m_seconds;
             m_ui->lcdNumber->display("00:00:00");
             m_ui->StopButton->setEnabled(false);
 

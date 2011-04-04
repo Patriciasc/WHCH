@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Apr 04 16:46:20 2011 +0100
+
+    Changed LCD timer logic and solved time counting bug.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Mon Apr 04 12:25:20 2011 +0100
 
     Not showing seconds in times where not necessary.
