@@ -263,6 +263,44 @@ void WhchDomModel::writeInXmlFile (const QString &fileName)
     file.close();
 }
 
+QModelIndex WhchDomModel::currentDayIndex()
+{
+    // Get root index.
+    QModelIndex rootIndex = index(0, 0, QModelIndex());
+
+    // Get current year index.
+    QDomElement currentYearElement = m_rootNode->node().lastChildElement();
+    int numYearElements = m_rootNode->node().childNodes().count();
+    QModelIndex yearIndex = index(numYearElements-1, 0, rootIndex);
+
+    if (!yearIndex.isValid())
+        return QModelIndex();
+
+    // Get current week index.
+    QDomElement currentWeekElement = currentYearElement.lastChildElement();
+    int numWeekElements = currentYearElement.childNodes().count();
+    QModelIndex weekIndex = index(numWeekElements-1, 0, yearIndex);
+
+    if (!weekIndex.isValid())
+        return QModelIndex();
+
+    // Get current day index.
+    QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
+    QDomElement currentDayElement = currentWeekElement.lastChildElement();
+
+    if (currentDayElement.attribute("date").compare(currentDate) == 0)
+    {
+        int numDayElements = currentWeekElement.childNodes().count();
+        QModelIndex dayIndex = index(numDayElements-1, 0, weekIndex);
+
+        if (!dayIndex.isValid())
+            return QModelIndex();
+
+        return dayIndex.parent();
+    }
+    else
+        return QModelIndex();
+}
 
 // Debugging functions.
 void WhchDomModel::printModelIndexTree()

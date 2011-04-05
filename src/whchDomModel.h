@@ -27,14 +27,18 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+    //Auxiliary functions.
+    void loadXmlFile(const QString &fileName);
+    QModelIndex currentDayIndex();
+
     //Debugging functions.
      void printModelIndexTree();
-     void loadXmlFile(const QString &fileName);
 
 private:
     QDomDocument m_domDocument;
     WhchDomNode *m_rootNode;
 
+    //Auxiliary functions.
     void writeInXmlFile(const QString &fileName);
 };
 

@@ -61,7 +61,6 @@ Whch::Whch(QWidget *parent) :
 
     // Set model/view.
     m_model = new WhchTableModel();
-    m_ui->tableView->setModel(m_model);
 
     // Populate models and display views.
     m_domModel = new WhchDomModel(this);
@@ -73,6 +72,14 @@ Whch::Whch(QWidget *parent) :
     m_tableProxyModel = new WhchTableProxyModel(this);
     m_tableProxyModel->setSourceModel(m_domModel);
     m_ui->tableView_2->setModel(m_tableProxyModel);
+    m_ui->tableView->setModel(m_tableProxyModel);
+
+    // Set current day view.
+    QModelIndex currentDay= m_tableProxyModel->mapFromSource(m_domModel->currentDayIndex());
+    if (currentDay.isValid())
+        m_ui->tableView->setRootIndex(currentDay);
+    else
+        m_ui->tableView->hideRow(0);
 
     //Connect tree view with table view.
     connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
@@ -101,6 +108,7 @@ Whch::Whch(QWidget *parent) :
     m_ui->tableView->resizeColumnToContents(0);
     m_ui->tableView->resizeColumnToContents(1);
     m_ui->tableView->scrollToBottom();
+    m_ui->tableView->setColumnHidden(0,true);
     m_ui->tableView_2->setColumnHidden(0,true);
 
     m_ui->lineEdit->setEnabled(false);
