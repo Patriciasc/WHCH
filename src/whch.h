@@ -29,8 +29,6 @@
 #ifndef WHCH_H
 #define WHCH_H
 
-
-#include "whchTableModel.h"
 #include "whchDomModel.h"
 #include "whchTreeProxyModel.h"
 #include "whchTableProxyModel.h"
@@ -60,17 +58,13 @@ public:
 private slots:
     void on_actionHistory_View_triggered(bool checked);
     void onUiComboboxItemActivated(const QString &task);
-    void onDialogComboboxItemActivated(const QString &client);
     void onDialogTableCellChanged(QTableWidgetItem *item);
-    void onDialogTableItemChanged(QTableWidgetItem *item);
     void on_lineEdit_returnPressed();
     void on_StartButton_clicked();
     void on_StopButton_clicked();
-    void onDialogComboboxLineEditReturn();
     void onClickedViewIndex(const QModelIndex &index);
 
     void on_actionAbout_whch_triggered();
-    void on_actionTasks_triggered();
     void on_actionQuit_triggered();
     void on_actionExport_to_wiki_format_triggered();
 
@@ -78,12 +72,8 @@ private slots:
     QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
     QStringList sessionClientTasks(const QString &client);
-    bool isSessionClient(const QString &client);
-    QStringList clientTotalTasks(const QString &client);
-    QStringList totalTasks();
     void loadSessionData();
     void saveSessionData();
-    void setComboboxTasks();
     void setCurrentTask();
     void createTrayIconMenuActions();
     void createTrayIcon();
@@ -95,7 +85,6 @@ private slots:
 private:
     Ui::whch *m_ui;
     Ui::Dialog *m_uiDialog;
-    WhchTableModel *m_model;
     WhchDomModel *m_domModel;
     WhchTreeProxyModel *m_treeProxyModel;
     WhchTableProxyModel *m_tableProxyModel;

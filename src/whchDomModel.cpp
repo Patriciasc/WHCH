@@ -9,14 +9,31 @@ static const QString XML_FILENAME = "whch_log.xml";
 WhchDomModel::WhchDomModel(QObject *parent) :
               QAbstractItemModel(parent)
 {
+    // Set start time and timer for first task.
+    m_taskNode = m_domDocument.createElement("task");
+    m_taskNode.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
+
     m_domDocument = QDomDocument("WHCH");
     QString fileName(QDir::homePath() + "/" + "." + XML_FILENAME);
     QFile file(fileName);
 
-    m_rootNode = new WhchDomNode(m_domDocument, 0);
+    // Create a new .xml file.
+    if (!file.exists())
+    {
+        // Initialize root element in memory.
+        QDomElement root = m_domDocument.createElement("History");
+        m_domDocument.appendChild(root);
+        m_rootNode = new WhchDomNode(m_domDocument, 0);
+
+        // Write memory data in the .xml file.
+        writeInXmlFile(XML_FILENAME);
+    }
+    else
+        m_rootNode = new WhchDomNode(m_domDocument, 0);
 
     // Load .xml file's content in memory.
     loadXmlFile(XML_FILENAME);
+
 }
 
 
@@ -64,7 +81,7 @@ QVariant WhchDomModel::data(const QModelIndex &index,
                 seconds %= 60;
                 int hours = minutes / 60;
                 minutes %= 60;
-                return QString("%1h%2m%3s").arg(hours).arg(minutes).arg(seconds);
+                return QString("%1h%2m").arg(hours).arg(minutes);
             }
              case 4:
             return attributeMap.namedItem("client").nodeValue();
@@ -219,10 +236,67 @@ int WhchDomModel::columnCount(const QModelIndex &parent) const
     return 7;
 }
 
+void WhchDomModel::addNewTaskElement(WhchTask currentTask)
+{
+    QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
+    QDomElement rootElement =  m_domDocument.firstChildElement();
+
+    QDomElement yearNode = rootElement.lastChildElement();
+    QString yearDate(currentDate.section("/", 0, 0));
+    if (yearNode.attribute("year").compare(yearDate) != 0)
+    {
+        yearNode = m_domDocument.createElement("year");
+        yearNode.setAttribute("year", yearDate);
+        rootElement.appendChild(yearNode);
+    }
+
+    QDomElement weekNode = yearNode.lastChildElement();
+    int weekNumber = QDate::currentDate().weekNumber();
+    if(weekNode.attribute("week").toInt() != weekNumber)
+    {
+        //Create week node and assign it as week node.
+        weekNode = m_domDocument.createElement("week");
+        weekNode.setAttribute("week",  weekNumber);
+        yearNode.appendChild(weekNode);
+    }
+
+    QDomElement dayNode = weekNode.lastChildElement();
+    if(dayNode.attribute("date").compare(currentDate) != 0)
+    {
+        //Create day node and assign it as day node.
+        dayNode = m_domDocument.createElement("day");
+        dayNode.setAttribute("date", currentDate);
+        weekNode.appendChild(dayNode);
+    }
+
+    //Create a new task node.
+    m_taskNode.setAttribute("end", QDateTime::currentDateTime().toString(Qt::ISODate));
+    m_taskNode.setAttribute("name", currentTask.m_name.section(" (", 0,0));
+    m_taskNode.setAttribute("client", currentTask.m_client);
+
+    QDomElement detailsNode= m_domDocument.createElement("details");
+    QDomText detailsText = m_domDocument.createTextNode(currentTask.m_details);
+    detailsNode.appendChild(detailsText);
+    m_taskNode.appendChild(detailsNode);
+
+    dayNode.appendChild(m_taskNode);
+
+    //Write data in .xml file.
+    writeInXmlFile (XML_FILENAME);
+
+    //Reset view.
+    reset();
+
+    // Set start time and timer for first task.
+    m_taskNode = m_domDocument.createElement("task");
+    m_taskNode.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
+}
+
 // Auxiliary functions.
 // Load .xml file's content in memory.
 void WhchDomModel::loadXmlFile(const QString &fileName)
 {
+    qDebug() << "loadfile";
     QFile file(QDir::homePath() + "/" + "." + fileName);
 
     if (!file.open(QIODevice::ReadOnly))
@@ -266,11 +340,12 @@ void WhchDomModel::writeInXmlFile (const QString &fileName)
 QModelIndex WhchDomModel::currentDayIndex()
 {
     // Get root index.
+    QDomElement rootElement =  m_domDocument.firstChildElement();
     QModelIndex rootIndex = index(0, 0, QModelIndex());
 
     // Get current year index.
-    QDomElement currentYearElement = m_rootNode->node().lastChildElement();
-    int numYearElements = m_rootNode->node().childNodes().count();
+    QDomElement currentYearElement = rootElement.lastChildElement();
+    int numYearElements = rootElement.childNodes().count();
     QModelIndex yearIndex = index(numYearElements-1, 0, rootIndex);
 
     if (!yearIndex.isValid())
@@ -296,10 +371,13 @@ QModelIndex WhchDomModel::currentDayIndex()
         if (!dayIndex.isValid())
             return QModelIndex();
 
-        return dayIndex.parent();
+        return dayIndex;
     }
     else
+    {
+        qDebug() << "date no existe";
         return QModelIndex();
+    }
 }
 
 // Debugging functions.
@@ -308,24 +386,25 @@ void WhchDomModel::printModelIndexTree()
     qDebug() << "----------------------------------- Tree Model Index -----------------------------------";
     qDebug() <<"";
 
+    QDomElement rootElement =  m_domDocument.firstChildElement();
     QModelIndex rootIndex = index(0, 0, QModelIndex());
-    qDebug() << "root" << rootIndex;
+    qDebug() << "History" << rootIndex.data() << rootIndex;
 
-    int numDomElements = (m_rootNode->node().childNodes().count()) - 1;
-    for (QDomElement domRoot = m_domDocument.firstChildElement("year");
-    !domRoot.isNull(); domRoot = domRoot.nextSiblingElement("year"))
+    int numYearElements = (m_rootNode->node().childNodes().count()) - 1;
+    for (QDomElement YearElement = rootElement.firstChildElement();
+    !YearElement.isNull(); YearElement = YearElement.nextSiblingElement())
     {
-        QModelIndex domIndex = index(numDomElements--, 0, rootIndex);
+        QModelIndex yearIndex= index(numYearElements--, 0, rootIndex);
         qDebug() << "|";
-        qDebug() << "|_" << domRoot.nodeName() << domIndex;
+        qDebug() << "|_" << YearElement.nodeName() << yearIndex.data() << yearIndex;
 
-        int numWeekElements = domRoot.childNodes().count() - 1;
-        for (QDomElement weekElement = domRoot.firstChildElement("week");
+        int numWeekElements = YearElement.childNodes().count() - 1;
+        for (QDomElement weekElement = YearElement.firstChildElement("week");
         !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
         {
-            QModelIndex weekIndex = index(numWeekElements--, 0, domIndex);
+            QModelIndex weekIndex = index(numWeekElements--, 0, yearIndex);
             qDebug() << "   |";
-            qDebug() << "   |_" << weekElement.nodeName() << weekIndex;
+            qDebug() << "   |_" << weekElement.nodeName() << weekIndex.data() << weekIndex;
             qDebug() << "   |  |";
 
             int numDayElements = weekElement.childNodes().count() - 1;
@@ -333,7 +412,7 @@ void WhchDomModel::printModelIndexTree()
             !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
             {
                 QModelIndex dayIndex = index(numDayElements--, 0, weekIndex);
-                qDebug() << "   |  |_" << dayElement.nodeName() << dayIndex;
+                qDebug() << "   |  |_" << dayElement.nodeName() << dayIndex.data() << dayIndex;
             }
         }
     }

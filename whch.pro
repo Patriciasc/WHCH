@@ -24,7 +24,6 @@ INSTALLS += target icon desktop
 INCLUDEPATH += src/qtsingleapplication
 SOURCES += src/main.cpp \
            src/whch.cpp \
-           src/whchTableModel.cpp \
            src/whchTask.cpp \
            src/qtsingleapplication/qtsingleapplication.cpp \
            src/qtsingleapplication/qtlocalpeer.cpp \
@@ -37,7 +36,6 @@ SOURCES += src/main.cpp \
            src/whchTableProxyModel.cpp
 
 HEADERS += src/whch.h \
-           src/whchTableModel.h \
            src/whchTask.h \
            src/qtsingleapplication/qtsingleapplication.h \
            src/qtsingleapplication/qtlocalpeer.h \

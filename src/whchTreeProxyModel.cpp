@@ -11,7 +11,7 @@ WhchTreeProxyModel::WhchTreeProxyModel(QObject *parent) :
 bool WhchTreeProxyModel::filterAcceptsRow(int sourceRow,
                                           const QModelIndex &sourceParent) const
 {
-    QModelIndex index = sourceModel()->index(sourceRow, 4, sourceParent);
+    QModelIndex index = sourceModel()->index(sourceRow, 6, sourceParent);
     // Check if it is a task row.
     if (sourceModel()->data(index).toString().compare("") != 0)
         return false;

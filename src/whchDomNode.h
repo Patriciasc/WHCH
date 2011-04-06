@@ -9,6 +9,7 @@ class WhchDomNode
 public:
     WhchDomNode(QDomNode &node, int row, WhchDomNode *parent = 0);
     ~WhchDomNode();
+
     QDomNode node() const;
     WhchDomNode *parent();
     WhchDomNode *child(int rowNumber);

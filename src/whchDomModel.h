@@ -2,6 +2,7 @@
 #define WHCHDOMMODEL_H
 
 #include "whchDomNode.h"
+#include "whchTask.h"
 #include <QAbstractItemModel>
 #include <QDomDocument>
 #include <QModelIndex>
@@ -27,6 +28,8 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+    void addNewTaskElement(WhchTask currentTask);
+
     //Auxiliary functions.
     void loadXmlFile(const QString &fileName);
     QModelIndex currentDayIndex();
@@ -37,6 +40,7 @@ public:
 private:
     QDomDocument m_domDocument;
     WhchDomNode *m_rootNode;
+    QDomElement m_taskNode;
 
     //Auxiliary functions.
     void writeInXmlFile(const QString &fileName);

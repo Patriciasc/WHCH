@@ -1,7 +1,8 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
-Date:   Tue Apr 05 15:15:20 2011 +0100
+Date:   Tue Apr 06 16:51:20 2011 +0100
 
-    Connected main table view with table proxy model.
+    Removed the old table model and and related functions.
+    Enabled the dom model to add new task nodes.
 
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Tue Apr 05 11:43:20 2011 +0100
