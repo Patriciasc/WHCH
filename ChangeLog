@@ -1,5 +1,11 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
-Date:   Tue Apr 06 16:51:20 2011 +0100
+Date:   Thu Apr 07 11:34:20 2011 +0100
+
+    Changed .xslt template to make it fit with new
+    tree structure.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Wed Apr 06 16:51:20 2011 +0100
 
     Removed the old table model and and related functions.
     Enabled the dom model to add new task nodes.

@@ -8,12 +8,12 @@
 <xsl:text>{| border="1" cellpadding="4" class="wikitable"
 </xsl:text>
 <xsl:text>! Start!! End!! Client!! Duration!! Task!! Details</xsl:text>
-<xsl:apply-templates select="year/week"/>
+<xsl:apply-templates select="History/year/week"/>
 <xsl:text>
 |}</xsl:text>
 </xsl:template>
 
-<xsl:template match="year/week">
+<xsl:template match="History/year/week">
 <xsl:for-each select="day/task">
 <xsl:sort select="@client"/>
 <xsl:text>
