@@ -275,7 +275,7 @@
     <property name="title">
      <string>Settings</string>
     </property>
-    <addaction name="actionTasks"/>
+    <addaction name="actionTasksClients"/>
     <addaction name="actionHistory_View"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -301,7 +301,7 @@
     <string>Quit</string>
    </property>
   </action>
-  <action name="actionTasks">
+  <action name="actionTasksClients">
    <property name="text">
     <string>Clients and Tasks</string>
    </property>

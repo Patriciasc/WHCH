@@ -380,6 +380,121 @@ QModelIndex WhchDomModel::currentDayIndex()
     }
 }
 
+/* List of attributes "attribute". */
+QStringList WhchDomModel::AttributesList(const QString &attribute)
+{
+    QStringList attributes;
+    QDomElement rootElement =  m_domDocument.firstChildElement();
+
+    for (QDomElement yearElement = rootElement.firstChildElement();
+    !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
+    {
+        for (QDomElement weekElement = yearElement.firstChildElement();
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        {
+            for (QDomElement dayElement = weekElement.firstChildElement();
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            {
+                for (QDomElement element = dayElement.firstChildElement();
+                !element.isNull(); element = element.nextSiblingElement())
+                {
+                    const QString attributeName = element.attribute(attribute);
+                    // Do not repeat attributes in the list.
+                    if (attributes.filter(attributeName).empty())
+                        attributes << attributeName;
+                }
+            }
+        }
+    }
+    return attributes;
+}
+
+/* List of tasks related with the given client. */
+QStringList WhchDomModel::xmlClientTasks(const QString &client)
+{
+    QStringList clientTasks;
+    QDomElement rootElement =  m_domDocument.firstChildElement();
+
+    for (QDomElement yearElement = rootElement.firstChildElement();
+    !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
+    {
+        for (QDomElement weekElement = yearElement.firstChildElement();
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        {
+            for (QDomElement dayElement = weekElement.firstChildElement();
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            {
+                for (QDomElement element = dayElement.firstChildElement();
+                !element.isNull(); element = element.nextSiblingElement())
+                {
+                    if (element.attribute("client").compare(client) == 0)
+                    {
+                        const QString taskName = element.attribute("name");
+                        /* Not repeat tasks in the list. */
+                        if (clientTasks.filter(taskName).empty())
+                            clientTasks << taskName;
+                    }
+                }
+            }
+        }
+    }
+    return clientTasks;
+}
+
+bool WhchDomModel::isXmlClient(const QString &client)
+{
+    QDomElement rootElement =  m_domDocument.firstChildElement();
+
+    for (QDomElement yearElement = rootElement.firstChildElement();
+    !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
+    {
+        for (QDomElement weekElement = yearElement.firstChildElement();
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        {
+            for (QDomElement dayElement = weekElement.firstChildElement();
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            {
+                for (QDomElement element = dayElement.firstChildElement();
+                !element.isNull(); element = element.nextSiblingElement())
+                {
+                    if (element.attribute("client").compare(client) == 0)
+                        return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// Retrieves given task's client.
+QString WhchDomModel::xmlClientOfTask(const QString &task)
+{
+    QString client;
+    QDomElement rootElement =  m_domDocument.firstChildElement();
+
+
+    for (QDomElement yearElement = rootElement.firstChildElement();
+    !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
+    {
+        for (QDomElement weekElement = yearElement.firstChildElement();
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        {
+            for (QDomElement dayElement = weekElement.firstChildElement();
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            {
+                for (QDomElement element = dayElement.firstChildElement();
+                !element.isNull(); element = element.nextSiblingElement())
+                {
+                    if (element.attribute("name").compare(task) == 0)
+                        return client = element.attribute("client");
+                }
+            }
+        }
+
+    }
+    return client;
+}
+
 // Debugging functions.
 void WhchDomModel::printModelIndexTree()
 {

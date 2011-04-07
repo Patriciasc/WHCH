@@ -33,6 +33,10 @@ public:
     //Auxiliary functions.
     void loadXmlFile(const QString &fileName);
     QModelIndex currentDayIndex();
+    QStringList AttributesList(const QString &attribute);
+    QStringList xmlClientTasks(const QString &client);
+    bool isXmlClient(const QString &client);
+    QString xmlClientOfTask(const QString &task);
 
     //Debugging functions.
      void printModelIndexTree();

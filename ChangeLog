@@ -1,4 +1,10 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Thu Apr 07 15:43:20 2011 +0100
+
+    Task/client dialog working within the new model.
+    No using session data yet.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Thu Apr 07 11:34:20 2011 +0100
 
     Changed .xslt template to make it fit with new

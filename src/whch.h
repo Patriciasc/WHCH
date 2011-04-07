@@ -58,11 +58,15 @@ public:
 private slots:
     void on_actionHistory_View_triggered(bool checked);
     void onUiComboboxItemActivated(const QString &task);
+    void onDialogComboboxItemActivated(const QString &client);
     void onDialogTableCellChanged(QTableWidgetItem *item);
+    void onDialogTableItemChanged(QTableWidgetItem *item);
+    void onDialogComboboxLineEditReturn();
     void on_lineEdit_returnPressed();
     void on_StartButton_clicked();
     void on_StopButton_clicked();
     void onClickedViewIndex(const QModelIndex &index);
+    void on_actionTasksClients_triggered();
 
     void on_actionAbout_whch_triggered();
     void on_actionQuit_triggered();
@@ -72,6 +76,8 @@ private slots:
     QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
     QStringList sessionClientTasks(const QString &client);
+    QStringList clientTasks(const QString &client);
+    QStringList totalTasks();
     void loadSessionData();
     void saveSessionData();
     void setCurrentTask();
@@ -88,7 +94,8 @@ private:
     WhchDomModel *m_domModel;
     WhchTreeProxyModel *m_treeProxyModel;
     WhchTableProxyModel *m_tableProxyModel;
-    /* New tasks/client added by the user in the current session */
+
+    /* Session data. */
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;
 
