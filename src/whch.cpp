@@ -6,7 +6,7 @@
  * #                                                                      #
  * # Copyright (C) 2010 Openismus GmbH                                    #
  * #                                                                      #
- * # Version: 0.1                                                         #
+ * # Version: 0.3                                                         #
  * #                                                                      #
  * # Description: Application for tracking the time spent on individual   #
  * # projects.                                                            #
