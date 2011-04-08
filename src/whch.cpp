@@ -442,6 +442,7 @@ void Whch::customizeUi()
     m_ui->tableView->scrollToBottom();
     m_ui->tableView->setColumnHidden(0,true);
     m_ui->tableView_2->setColumnHidden(0,true);
+    m_ui->treeView->setHeaderHidden(true);
 
     m_ui->lineEdit->setEnabled(false);
     m_ui->StopButton->setEnabled(false);

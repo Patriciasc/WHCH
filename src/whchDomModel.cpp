@@ -94,6 +94,7 @@ WhchDomModel::WhchDomModel(QObject *parent) :
     {
         // Initialize root element in memory.
         QDomElement root = m_domDocument.createElement("History");
+        root.setAttribute("History", "view");
         m_domDocument.appendChild(root);
         m_rootNode = new WhchDomNode(m_domDocument, 0);
 
@@ -107,7 +108,6 @@ WhchDomModel::WhchDomModel(QObject *parent) :
     loadXmlFile(XML_FILENAME);
 
 }
-
 
 WhchDomModel::~WhchDomModel()
 {
@@ -231,7 +231,7 @@ QVariant WhchDomModel::headerData(int section,
         switch (section)
         {
         case 0:
-            return tr("History");
+            return tr("");
         case 1:
             return tr("Start");
         case 2:
