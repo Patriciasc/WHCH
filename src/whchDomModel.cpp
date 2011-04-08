@@ -295,49 +295,6 @@ void WhchDomModel::addNewTaskElement(WhchTask currentTask)
     m_taskNode.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
-// Load .xml file's content in memory.
-void WhchDomModel::loadXmlFile(const QString &fileName)
-{
-    QFile file(QDir::homePath() + "/" + "." + fileName);
-
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << "Error. Could not open file: " << fileName
-                << "in" << QDir::current().absolutePath();
-        return;
-    }
-
-    QString setContentError;
-    if (!m_domDocument.setContent(&file, &setContentError))
-    {
-        qDebug() << "Error. Could not set content for file: " << fileName
-                << "in" << QDir::current().absolutePath();
-        qDebug() << "Error message: " << setContentError;
-
-        file.close();
-        return;
-    }
-
-    file.close();
-}
-
-// Write memory data in the .xml file.
-void WhchDomModel::writeInXmlFile (const QString &fileName)
-{
-    QFile file(QDir::homePath() + "/" + "." + fileName);
-
-    if (!file.open(QIODevice::WriteOnly))
-    {
-        qDebug() << "Error. Could not write in file: " << fileName;
-        return;
-    }
-
-    QTextStream ts(&file);
-    ts << m_domDocument.toString();
-
-    file.close();
-}
-
 // Returns the index of the item representing the current day
 // or an invalid index if the item does not exist.
 QModelIndex WhchDomModel::currentDayIndex()
@@ -537,4 +494,48 @@ void WhchDomModel::printModelIndexTree()
 
     qDebug() <<"";
     qDebug() << "----------------------------------------------------------------------------------------";
+}
+
+// ## Auxiliary functions ##
+// Load .xml file's content in memory.
+void WhchDomModel::loadXmlFile(const QString &fileName)
+{
+    QFile file(QDir::homePath() + "/" + "." + fileName);
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Error. Could not open file: " << fileName
+                << "in" << QDir::current().absolutePath();
+        return;
+    }
+
+    QString setContentError;
+    if (!m_domDocument.setContent(&file, &setContentError))
+    {
+        qDebug() << "Error. Could not set content for file: " << fileName
+                << "in" << QDir::current().absolutePath();
+        qDebug() << "Error message: " << setContentError;
+
+        file.close();
+        return;
+    }
+
+    file.close();
+}
+
+// Write memory data in the .xml file.
+void WhchDomModel::writeInXmlFile (const QString &fileName)
+{
+    QFile file(QDir::homePath() + "/" + "." + fileName);
+
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Error. Could not write in file: " << fileName;
+        return;
+    }
+
+    QTextStream ts(&file);
+    ts << m_domDocument.toString();
+
+    file.close();
 }

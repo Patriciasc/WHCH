@@ -28,7 +28,6 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    //Auxiliary functions.
     void addNewTaskElement(WhchTask currentTask);
     QModelIndex currentDayIndex();
     QStringList AttributesList(const QString &attribute);
@@ -36,7 +35,7 @@ public:
     bool isXmlClient(const QString &client);
     QString xmlClientOfTask(const QString &task);
 
-    //Debugging functions.
+    // Debugging functions.
      void printModelIndexTree();
 
 private:
@@ -44,7 +43,7 @@ private:
     WhchDomNode *m_rootNode;
     QDomElement m_taskNode;
 
-    //Auxiliary functions.
+    // Auxiliary functions.
     void writeInXmlFile(const QString &fileName);
     void loadXmlFile(const QString &fileName);
 };
