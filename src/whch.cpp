@@ -308,6 +308,27 @@ void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+void Whch::onTimerTimeOut()
+{
+    int seconds = ++m_seconds;
+    int minutes = seconds / 60;
+    seconds %= 60;
+    int hours = minutes / 60;
+    minutes %= 60;
+
+    QTime *time = new QTime(hours,minutes,seconds);
+    QString text = time->toString("HH:mm:ss");
+
+    m_ui->lcdNumber->display(text);
+
+    // Update tooltip status.
+    QString hoursText;
+    QString minutesText;
+    ((hours > 1) || (hours == 0)) ? hoursText = " hours," : hoursText=" hour,";
+    ((minutes > 1) || (minutes == 0)) ? minutesText = " minutes" : minutesText=" minute";
+    m_trayIcon->setToolTip("Spent time on task:\n"+ QString("%1").arg(hours) + hoursText + " " + QString("%1").arg(minutes) + minutesText);
+}
+
 // Sets up dialog for adding tasks and clients.
 void Whch::on_actionTasksClients_triggered()
 {
@@ -471,27 +492,6 @@ void Whch::setCurrentDayIndex()
     }
     else
         m_ui->tableView->hideRow(0);
-}
-
-void Whch::onTimerTimeOut()
-{
-    int seconds = ++m_seconds;
-    int minutes = seconds / 60;
-    seconds %= 60;
-    int hours = minutes / 60;
-    minutes %= 60;
-
-    QTime *time = new QTime(hours,minutes,seconds);
-    QString text = time->toString("HH:mm:ss");
-
-    m_ui->lcdNumber->display(text);
-
-    // Update tooltip status.
-    QString hoursText;
-    QString minutesText;
-    ((hours > 1) || (hours == 0)) ? hoursText = " hours," : hoursText=" hour,";
-    ((minutes > 1) || (minutes == 0)) ? minutesText = " minutes" : minutesText=" minute";
-    m_trayIcon->setToolTip("Spent time on task:\n"+ QString("%1").arg(hours) + hoursText + " " + QString("%1").arg(minutes) + minutesText);
 }
 
 // List of new added tasks.

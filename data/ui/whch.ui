@@ -254,7 +254,7 @@
              <widget class="QTreeView" name="treeView">
               <property name="maximumSize">
                <size>
-                <width>210</width>
+                <width>220</width>
                 <height>16777215</height>
                </size>
               </property>

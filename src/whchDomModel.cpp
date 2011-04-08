@@ -323,14 +323,25 @@ void WhchDomModel::addNewTaskElement(WhchTask currentTask)
         rootElement.appendChild(yearNode);
     }
 
-    QDomElement weekNode = yearNode.lastChildElement();
+    QDomElement monthNode = yearNode.lastChildElement();
+    int monthNumber = QDate::currentDate().month();
+    QString month = QDate::longMonthName(monthNumber);
+    if(monthNode.attribute("month").compare(month) != 0)
+    {
+        // Create month node and assign it as month node.
+        monthNode = m_domDocument.createElement("month");
+        monthNode.setAttribute("month",  month);
+        yearNode.appendChild(monthNode);
+    }
+
+    QDomElement weekNode = monthNode.lastChildElement();
     int weekNumber = QDate::currentDate().weekNumber();
     if(weekNode.attribute("week").toInt() != weekNumber)
     {
         // Create week node and assign it as week node.
         weekNode = m_domDocument.createElement("week");
         weekNode.setAttribute("week",  weekNumber);
-        yearNode.appendChild(weekNode);
+        monthNode.appendChild(weekNode);
     }
 
     QDomElement dayNode = weekNode.lastChildElement();
@@ -381,10 +392,18 @@ QModelIndex WhchDomModel::currentDayIndex()
     if (!yearIndex.isValid())
         return QModelIndex();
 
+    // Get current month index.
+    QDomElement currentMonthElement = currentYearElement.lastChildElement();
+    int numMonthElements = currentYearElement.childNodes().count();
+    QModelIndex monthIndex = index(numMonthElements-1, 0, yearIndex);
+
+    if (!monthIndex.isValid())
+        return QModelIndex();
+
     // Get current week index.
-    QDomElement currentWeekElement = currentYearElement.lastChildElement();
-    int numWeekElements = currentYearElement.childNodes().count();
-    QModelIndex weekIndex = index(numWeekElements-1, 0, yearIndex);
+    QDomElement currentWeekElement = currentMonthElement.lastChildElement();
+    int numWeekElements = currentMonthElement.childNodes().count();
+    QModelIndex weekIndex = index(numWeekElements-1, 0, monthIndex);
 
     if (!weekIndex.isValid())
         return QModelIndex();
@@ -416,19 +435,23 @@ QStringList WhchDomModel::AttributesList(const QString &attribute)
     for (QDomElement yearElement = rootElement.firstChildElement();
     !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
     {
-        for (QDomElement weekElement = yearElement.firstChildElement();
-        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        for (QDomElement monthElement = yearElement.firstChildElement();
+        !monthElement.isNull(); monthElement = monthElement.nextSiblingElement())
         {
-            for (QDomElement dayElement = weekElement.firstChildElement();
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            for (QDomElement weekElement = monthElement.firstChildElement();
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
             {
-                for (QDomElement element = dayElement.firstChildElement();
-                !element.isNull(); element = element.nextSiblingElement())
+                for (QDomElement dayElement = weekElement.firstChildElement();
+                !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
                 {
-                    const QString attributeName = element.attribute(attribute);
-                    // Do not repeat attributes in the list.
-                    if (attributes.filter(attributeName).empty())
-                        attributes << attributeName;
+                    for (QDomElement element = dayElement.firstChildElement();
+                    !element.isNull(); element = element.nextSiblingElement())
+                    {
+                        const QString attributeName = element.attribute(attribute);
+                        // Do not repeat attributes in the list.
+                        if (attributes.filter(attributeName).empty())
+                            attributes << attributeName;
+                    }
                 }
             }
         }
@@ -445,21 +468,25 @@ QStringList WhchDomModel::xmlClientTasks(const QString &client)
     for (QDomElement yearElement = rootElement.firstChildElement();
     !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
     {
-        for (QDomElement weekElement = yearElement.firstChildElement();
-        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        for (QDomElement monthElement = yearElement.firstChildElement();
+        !monthElement.isNull(); monthElement = monthElement.nextSiblingElement())
         {
-            for (QDomElement dayElement = weekElement.firstChildElement();
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            for (QDomElement weekElement = monthElement.firstChildElement();
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
             {
-                for (QDomElement element = dayElement.firstChildElement();
-                !element.isNull(); element = element.nextSiblingElement())
+                for (QDomElement dayElement = weekElement.firstChildElement();
+                !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
                 {
-                    if (element.attribute("client").compare(client) == 0)
+                    for (QDomElement element = dayElement.firstChildElement();
+                    !element.isNull(); element = element.nextSiblingElement())
                     {
-                        const QString taskName = element.attribute("name");
-                        /* Not repeat tasks in the list. */
-                        if (clientTasks.filter(taskName).empty())
-                            clientTasks << taskName;
+                        if (element.attribute("client").compare(client) == 0)
+                        {
+                            const QString taskName = element.attribute("name");
+                            /* Not repeat tasks in the list. */
+                            if (clientTasks.filter(taskName).empty())
+                                clientTasks << taskName;
+                        }
                     }
                 }
             }
@@ -476,17 +503,21 @@ bool WhchDomModel::isXmlClient(const QString &client)
     for (QDomElement yearElement = rootElement.firstChildElement();
     !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
     {
-        for (QDomElement weekElement = yearElement.firstChildElement();
-        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        for (QDomElement monthElement = yearElement.firstChildElement();
+        !monthElement.isNull(); monthElement = monthElement.nextSiblingElement())
         {
-            for (QDomElement dayElement = weekElement.firstChildElement();
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            for (QDomElement weekElement = monthElement.firstChildElement();
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
             {
-                for (QDomElement element = dayElement.firstChildElement();
-                !element.isNull(); element = element.nextSiblingElement())
+                for (QDomElement dayElement = weekElement.firstChildElement();
+                !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
                 {
-                    if (element.attribute("client").compare(client) == 0)
-                        return true;
+                    for (QDomElement element = dayElement.firstChildElement();
+                    !element.isNull(); element = element.nextSiblingElement())
+                    {
+                        if (element.attribute("client").compare(client) == 0)
+                            return true;
+                    }
                 }
             }
         }
@@ -504,17 +535,21 @@ QString WhchDomModel::xmlClientOfTask(const QString &task)
     for (QDomElement yearElement = rootElement.firstChildElement();
     !yearElement.isNull(); yearElement = yearElement.nextSiblingElement())
     {
-        for (QDomElement weekElement = yearElement.firstChildElement();
-        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        for (QDomElement monthElement = yearElement.firstChildElement();
+        !monthElement.isNull(); monthElement = monthElement.nextSiblingElement())
         {
-            for (QDomElement dayElement = weekElement.firstChildElement();
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            for (QDomElement weekElement = monthElement.firstChildElement();
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
             {
-                for (QDomElement element = dayElement.firstChildElement();
-                !element.isNull(); element = element.nextSiblingElement())
+                for (QDomElement dayElement = weekElement.firstChildElement();
+                !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
                 {
-                    if (element.attribute("name").compare(task) == 0)
-                        return client = element.attribute("client");
+                    for (QDomElement element = dayElement.firstChildElement();
+                    !element.isNull(); element = element.nextSiblingElement())
+                    {
+                        if (element.attribute("name").compare(task) == 0)
+                            return client = element.attribute("client");
+                    }
                 }
             }
         }
@@ -543,21 +578,31 @@ void WhchDomModel::printModelIndexTree()
         qDebug() << "|";
         qDebug() << "|_" << YearElement.nodeName() << yearIndex.data() << yearIndex;
 
-        int numWeekElements = YearElement.childNodes().count() - 1;
-        for (QDomElement weekElement = YearElement.firstChildElement("week");
-        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
+        int numMonthElements = YearElement.childNodes().count() - 1;
+        for (QDomElement monthElement = YearElement.firstChildElement("week");
+        !monthElement.isNull(); monthElement = monthElement.nextSiblingElement("week"))
         {
-            QModelIndex weekIndex = index(numWeekElements--, 0, yearIndex);
-            qDebug() << "   |";
-            qDebug() << "   |_" << weekElement.nodeName() << weekIndex.data() << weekIndex;
-            qDebug() << "   |  |";
+            QModelIndex monthIndex= index(numMonthElements--, 0, yearIndex);
+            qDebug() << "|";
+            qDebug() << "|_" << monthElement.nodeName() << monthIndex.data() << monthIndex;
 
-            int numDayElements = weekElement.childNodes().count() - 1;
-            for (QDomElement dayElement = weekElement.firstChildElement("day");
-            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+
+            int numWeekElements = monthElement.childNodes().count() - 1;
+            for (QDomElement weekElement = monthElement.firstChildElement("week");
+            !weekElement.isNull(); weekElement = weekElement.nextSiblingElement("week"))
             {
-                QModelIndex dayIndex = index(numDayElements--, 0, weekIndex);
-                qDebug() << "   |  |_" << dayElement.nodeName() << dayIndex.data() << dayIndex;
+                QModelIndex weekIndex = index(numWeekElements--, 0, yearIndex);
+                qDebug() << "   |";
+                qDebug() << "   |_" << weekElement.nodeName() << weekIndex.data() << weekIndex;
+                qDebug() << "   |  |";
+
+                int numDayElements = weekElement.childNodes().count() - 1;
+                for (QDomElement dayElement = weekElement.firstChildElement("day");
+                !dayElement.isNull(); dayElement = dayElement.nextSiblingElement("day"))
+                {
+                    QModelIndex dayIndex = index(numDayElements--, 0, weekIndex);
+                    qDebug() << "   |  |_" << dayElement.nodeName() << dayIndex.data() << dayIndex;
+                }
             }
         }
     }

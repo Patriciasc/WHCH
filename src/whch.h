@@ -68,6 +68,7 @@ private slots:
     void on_lineEdit_returnPressed();
     void onClickedViewIndex(const QModelIndex &index);
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void onTimerTimeOut();
 
     void on_actionTasksClients_triggered();
     void on_actionHistory_View_triggered(bool checked);
@@ -100,7 +101,6 @@ private:
     void setupData();
     void setupModelView();
     void setCurrentDayIndex();
-    void onTimerTimeOut();
     QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
     QStringList sessionClientTasks(const QString &client);
