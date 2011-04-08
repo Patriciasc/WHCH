@@ -28,10 +28,8 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    void addNewTaskElement(WhchTask currentTask);
-
     //Auxiliary functions.
-    void loadXmlFile(const QString &fileName);
+    void addNewTaskElement(WhchTask currentTask);
     QModelIndex currentDayIndex();
     QStringList AttributesList(const QString &attribute);
     QStringList xmlClientTasks(const QString &client);
@@ -48,6 +46,7 @@ private:
 
     //Auxiliary functions.
     void writeInXmlFile(const QString &fileName);
+    void loadXmlFile(const QString &fileName);
 };
 
 #endif // WHCHDOMMODEL_H

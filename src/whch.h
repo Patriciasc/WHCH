@@ -56,37 +56,24 @@ public:
     ~Whch();
 
 private slots:
-    void on_actionHistory_View_triggered(bool checked);
     void onUiComboboxItemActivated(const QString &task);
     void onDialogComboboxItemActivated(const QString &client);
+    void onDialogComboboxLineEditReturn();
+
     void onDialogTableCellChanged(QTableWidgetItem *item);
     void onDialogTableItemChanged(QTableWidgetItem *item);
-    void onDialogComboboxLineEditReturn();
-    void on_lineEdit_returnPressed();
+
     void on_StartButton_clicked();
     void on_StopButton_clicked();
+    void on_lineEdit_returnPressed();
     void onClickedViewIndex(const QModelIndex &index);
-    void on_actionTasksClients_triggered();
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
+    void on_actionTasksClients_triggered();
+    void on_actionHistory_View_triggered(bool checked);
     void on_actionAbout_whch_triggered();
     void on_actionQuit_triggered();
     void on_actionExport_to_wiki_format_triggered();
-
-    void onTimerTimeOut();
-    QStringList sessionTasks();
-    QString sessionClientOfTask(const QString &task);
-    QStringList sessionClientTasks(const QString &client);
-    QStringList clientTasks(const QString &client);
-    QStringList totalTasks();
-    void loadSessionData();
-    void saveSessionData();
-    void setCurrentTask();
-    void createTrayIconMenuActions();
-    void createTrayIcon();
-    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
-    void setTryIcon();
-    void showMessage();
-    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::whch *m_ui;
@@ -95,19 +82,39 @@ private:
     WhchTreeProxyModel *m_treeProxyModel;
     WhchTableProxyModel *m_tableProxyModel;
 
-    /* Session data. */
+    // Session data.
     typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;
 
-    /* Tray icon. */
+    // Tray icon.
     QSystemTrayIcon *m_trayIcon;
     QMenu *m_trayIconMenu;
     QAction *restoreAction;
     QAction *quitAction;
 
-    /* Track spent time on current task */
+    // Track spent time on current task
     int m_seconds;
     QTimer *m_timer;
+
+    void customizeUi();
+    void setupData();
+    void setupModelView();
+    void setCurrentDayIndex();
+    void onTimerTimeOut();
+    QStringList sessionTasks();
+    QString sessionClientOfTask(const QString &task);
+    QStringList sessionClientTasks(const QString &client);
+    QStringList clientTasks(const QString &client);
+    QStringList totalTasks();
+    void loadSessionData();
+    void saveSessionData();
+    void setComboboxTasks();
+    void setCurrentTask();
+    void createTrayIconMenuActions();
+    void createTrayIcon();
+    void setTryIcon();
+    void showMessage();
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // WHCH_H

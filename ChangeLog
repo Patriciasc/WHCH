@@ -1,4 +1,10 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Fri Apr 08 12:08:20 2011 +0100
+
+    All functionalities working with new Dom Model.
+    Refactorized some functions.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Thu Apr 07 15:43:20 2011 +0100
 
     Task/client dialog working within the new model.

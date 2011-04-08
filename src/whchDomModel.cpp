@@ -236,6 +236,9 @@ int WhchDomModel::columnCount(const QModelIndex &parent) const
     return 7;
 }
 
+// ## Auxiliary functions ##
+
+// Adds a new task node element.
 void WhchDomModel::addNewTaskElement(WhchTask currentTask)
 {
     QString currentDate(QDate::currentDate().toString("yyyy/MM/dd"));
@@ -254,7 +257,7 @@ void WhchDomModel::addNewTaskElement(WhchTask currentTask)
     int weekNumber = QDate::currentDate().weekNumber();
     if(weekNode.attribute("week").toInt() != weekNumber)
     {
-        //Create week node and assign it as week node.
+        // Create week node and assign it as week node.
         weekNode = m_domDocument.createElement("week");
         weekNode.setAttribute("week",  weekNumber);
         yearNode.appendChild(weekNode);
@@ -263,13 +266,13 @@ void WhchDomModel::addNewTaskElement(WhchTask currentTask)
     QDomElement dayNode = weekNode.lastChildElement();
     if(dayNode.attribute("date").compare(currentDate) != 0)
     {
-        //Create day node and assign it as day node.
+        // Create day node and assign it as day node.
         dayNode = m_domDocument.createElement("day");
         dayNode.setAttribute("date", currentDate);
         weekNode.appendChild(dayNode);
     }
 
-    //Create a new task node.
+    // Create a new task node.
     m_taskNode.setAttribute("end", QDateTime::currentDateTime().toString(Qt::ISODate));
     m_taskNode.setAttribute("name", currentTask.m_name.section(" (", 0,0));
     m_taskNode.setAttribute("client", currentTask.m_client);
@@ -281,10 +284,10 @@ void WhchDomModel::addNewTaskElement(WhchTask currentTask)
 
     dayNode.appendChild(m_taskNode);
 
-    //Write data in .xml file.
+    // Write data in .xml file.
     writeInXmlFile (XML_FILENAME);
 
-    //Reset view.
+    // Reset view.
     reset();
 
     // Set start time and timer for first task.
@@ -292,11 +295,9 @@ void WhchDomModel::addNewTaskElement(WhchTask currentTask)
     m_taskNode.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
-// Auxiliary functions.
 // Load .xml file's content in memory.
 void WhchDomModel::loadXmlFile(const QString &fileName)
 {
-    qDebug() << "loadfile";
     QFile file(QDir::homePath() + "/" + "." + fileName);
 
     if (!file.open(QIODevice::ReadOnly))
@@ -337,6 +338,8 @@ void WhchDomModel::writeInXmlFile (const QString &fileName)
     file.close();
 }
 
+// Returns the index of the item representing the current day
+// or an invalid index if the item does not exist.
 QModelIndex WhchDomModel::currentDayIndex()
 {
     // Get root index.
@@ -374,13 +377,10 @@ QModelIndex WhchDomModel::currentDayIndex()
         return dayIndex;
     }
     else
-    {
-        qDebug() << "date no existe";
         return QModelIndex();
-    }
 }
 
-/* List of attributes "attribute". */
+// Returns a list of "attribute" attributes.
 QStringList WhchDomModel::AttributesList(const QString &attribute)
 {
     QStringList attributes;
@@ -409,7 +409,7 @@ QStringList WhchDomModel::AttributesList(const QString &attribute)
     return attributes;
 }
 
-/* List of tasks related with the given client. */
+// Return a list of tasks related to the given client.
 QStringList WhchDomModel::xmlClientTasks(const QString &client)
 {
     QStringList clientTasks;
@@ -441,6 +441,7 @@ QStringList WhchDomModel::xmlClientTasks(const QString &client)
     return clientTasks;
 }
 
+// Checks if the given client is in the .xml file.
 bool WhchDomModel::isXmlClient(const QString &client)
 {
     QDomElement rootElement =  m_domDocument.firstChildElement();
@@ -466,7 +467,7 @@ bool WhchDomModel::isXmlClient(const QString &client)
     return false;
 }
 
-// Retrieves given task's client.
+// Retrieves the client of a given task.
 QString WhchDomModel::xmlClientOfTask(const QString &task)
 {
     QString client;
@@ -495,7 +496,9 @@ QString WhchDomModel::xmlClientOfTask(const QString &task)
     return client;
 }
 
-// Debugging functions.
+// ## Debugging functions ##
+
+// Prints the DomModel.
 void WhchDomModel::printModelIndexTree()
 {
     qDebug() << "----------------------------------- Tree Model Index -----------------------------------";

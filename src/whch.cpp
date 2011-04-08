@@ -55,230 +55,24 @@ Whch::Whch(QWidget *parent) :
         m_uiDialog(new Ui::Dialog),
         m_seconds(0)
 {
-    // Set GUI.
     m_ui->setupUi(this);
 
-    // Set model/view.
+    setupModelView();
 
-    // Populate models and display views.
-    m_domModel = new WhchDomModel(this);
+    setupData();
 
-    m_treeProxyModel = new WhchTreeProxyModel(this);
-    m_treeProxyModel->setSourceModel(m_domModel);
-    m_ui->treeView->setModel(m_treeProxyModel);
-
-    m_tableProxyModel = new WhchTableProxyModel(this);
-    m_tableProxyModel->setSourceModel(m_domModel);
-    m_ui->tableView_2->setModel(m_tableProxyModel);
-    m_ui->tableView->setModel(m_tableProxyModel);
-
-    // Set current day view.
-    QModelIndex currentDay= m_tableProxyModel->mapFromSource(m_domModel->currentDayIndex());
-    if (currentDay.isValid())
-        m_ui->tableView->setRootIndex(currentDay);
-    else
-        m_ui->tableView->hideRow(0);
-
-    //Connect tree view with table view.
-    connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
-            m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
-
-    connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
-            m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
-
-    connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
-            this, SLOT(onClickedViewIndex(QModelIndex)));
-
-    //Print tree.
-    m_domModel->printModelIndexTree();
-
-    // Set system try icon.
-    setTryIcon();
-
-    // Load .xml data.
-    QStringList xmlTasks = m_domModel->AttributesList("name") << NEW_TASK;
-    m_ui->comboBox->addItems(xmlTasks);
-
-    // Load session data.
-
-    // Set list of available tasks.
-
-    //Set combobox.
-    QObject::connect(m_ui->comboBox, SIGNAL(activated(QString)),
-                     this, SLOT(onUiComboboxItemActivated(QString)));
-
-    // Rearrange table view.
-    m_ui->tableView->resizeRowsToContents();
-    m_ui->tableView->resizeColumnToContents(0);
-    m_ui->tableView->resizeColumnToContents(1);
-    m_ui->tableView->scrollToBottom();
-    m_ui->tableView->setColumnHidden(0,true);
-    m_ui->tableView_2->setColumnHidden(0,true);
-
-    m_ui->lineEdit->setEnabled(false);
-    m_ui->StopButton->setEnabled(false);
-    m_ui->lcdNumber->display("00:00:00");
+    customizeUi();
 }
 
 Whch::~Whch()
 {
-    /* Save session data. */
     saveSessionData();
 
     delete m_ui;
     delete m_uiDialog;
 }
 
-/* ------------------- */
-/* AUXILIARY FUNCTIONS */
-/* ------------------- */
-
-void Whch::onTimerTimeOut()
-{
-    int seconds = ++m_seconds;
-    int minutes = seconds / 60;
-    seconds %= 60;
-    int hours = minutes / 60;
-    minutes %= 60;
-
-    QTime *time = new QTime(hours,minutes,seconds);
-    QString text = time->toString("HH:mm:ss");
-
-    m_ui->lcdNumber->display(text);
-
-    // Update tooltip status.
-    QString hoursText;
-    QString minutesText;
-    ((hours > 1) || (hours == 0)) ? hoursText = " hours," : hoursText=" hour,";
-    ((minutes > 1) || (minutes == 0)) ? minutesText = " minutes" : minutesText=" minute";
-    m_trayIcon->setToolTip("Spent time on task:\n"+ QString("%1").arg(hours) + hoursText + " " + QString("%1").arg(minutes) + minutesText);
-}
-
-/* List of new added tasks. */
-QStringList Whch::sessionTasks()
-{
-    QStringList sessionTasks;
-    MapQStringToList::const_iterator i = m_sessionData.constBegin();
-
-    while (i != m_sessionData.constEnd())
-    {
-        QStringList itemTasks = i.value();
-        for (int j = 0; j < itemTasks.size(); ++j)
-        {
-            // Do not repeat elements.
-            const QString item(itemTasks.at(j));
-            if (!sessionTasks.contains(item))
-                sessionTasks << item;
-        }
-        ++i;
-    }
-    return sessionTasks;
-}
-
-/* Get related client of a task. */
-QString Whch::sessionClientOfTask(const QString &task)
-{
-    MapQStringToList::const_iterator i = m_sessionData.constBegin();
-    QString sessionClient;
-
-    while (i != m_sessionData.constEnd())
-    {
-        QStringList itemTasks = i.value();
-        for (int j = 0; j < itemTasks.size(); ++j)
-        {
-            if(task.contains(itemTasks.at(j)))
-                return sessionClient = i.key();
-        }
-        ++i;
-    }
-    return sessionClient;
-}
-
-// Return the tasks of a session client.
-QStringList Whch::sessionClientTasks(const QString &client)
-{
-    return m_sessionData[client];
-}
-
-// Creates menu actions for the system tray icon.
-void Whch::createTrayIconMenuActions()
-{
-    restoreAction = new QAction(tr("&Show"), this);
-    connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
-
-    quitAction = new QAction(tr("&Quit"), this);
-    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-}
-
-// Creates system tray icon.
-void Whch::createTrayIcon()
-{
-    m_trayIconMenu = new QMenu(this);
-    m_trayIconMenu->addAction(restoreAction);
-    m_trayIconMenu->addSeparator();
-    m_trayIconMenu->addAction(quitAction);
-
-    m_trayIcon = new QSystemTrayIcon(this);
-    m_trayIcon->setContextMenu(m_trayIconMenu);
-    QIcon icon = QIcon(":/data/icons/16x16/whch.png");
-    m_trayIcon->setIcon(icon);
-    m_trayIcon->setVisible(true);
-    setWindowIcon(icon);
-    m_trayIcon->setToolTip("Spent time on task:\n 0 hours, 0 minutes");
-}
-
-// Handler for tray icon's activation.
-void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
-{
-    switch (reason)
-    {
-    case QSystemTrayIcon::DoubleClick:
-        showNormal();
-        break;
-    case QSystemTrayIcon::MiddleClick:
-    case QSystemTrayIcon::Trigger:
-        showMessage();
-        break;
-    default:
-        ;
-    }
-}
-
-// Sets up the tray icon.
-void Whch::setTryIcon()
-{
-    createTrayIconMenuActions();
-    createTrayIcon();
-    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(onTrayIconActivated(QSystemTrayIcon::ActivationReason)));
-}
-
-// Shows tray icon message.
-void Whch::showMessage()
-{
-    QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information;
-    m_trayIcon->showMessage("WHCH", "Tracks the time spent on your projects.", icon, 7000);
-}
-
-// Overriden function. Leaves the app accesible from the tray icon.
-void Whch::closeEvent(QCloseEvent *event)
-{
-
-    if (m_trayIcon->isVisible())
-    {
-        QMessageBox::information(this, tr("Systray"),
-                                 tr("The program will keep running in the "
-                                    "system tray. To terminate the program, "
-                                    "choose <b>Quit</b> in the context menu "
-                                    "of the system tray entry."));
-        hide();
-        event->ignore();
-    }
-}
-
-/* ----- */
-/* SLOTS */
-/* ----- */
+// ## Slots ##
 
 // Shows all available tasks (from session and .xml file) and enables the
 // user to add new ones.
@@ -291,229 +85,68 @@ void Whch::onUiComboboxItemActivated(const QString &task)
     }
 }
 
+// Shows the related tasks of the selected client.
+void Whch::onDialogComboboxItemActivated(const QString &client)
+{
+    // Make it editable for adding a new client.
+    if (client.compare(NEW_CLIENT) == 0)
+    {
+        m_uiDialog->comboBox->setEditable(true);
+        m_uiDialog->comboBox->clearEditText();
+        QObject::connect(m_uiDialog->comboBox->lineEdit(), SIGNAL(returnPressed()),
+                         this, SLOT(onDialogComboboxLineEditReturn()));
+    }
+    else
+        m_uiDialog->comboBox->setEditable(false);
+
+    // Set current available tasks and new line for new task.
+    QStringList clientTasks(m_domModel->xmlClientTasks(client));
+    if (m_sessionData.contains(client))
+    {
+        QStringList sessionClientTasks(m_sessionData.value(client));
+        for (int i = 0; i < sessionClientTasks.size(); ++i)
+        {
+            const QString sessionTaskItem(sessionClientTasks.at(i));
+            if (!clientTasks.contains(sessionTaskItem))
+                clientTasks << sessionTaskItem;
+        }
+    }
+
+    clientTasks << "";
+
+    // Set number of rows.
+    m_uiDialog->tableWidget->setRowCount(clientTasks.size());
+
+    // Show list of tasks.
+    for (int i=0; i< clientTasks.size(); ++i)
+    {
+        QTableWidgetItem *newItem = new QTableWidgetItem(clientTasks.at(i));
+        m_uiDialog->tableWidget->setItem(i, 0, newItem);
+    }
+}
+
+// Update session data.
+void Whch::onDialogComboboxLineEditReturn()
+{
+    QString newClient = m_uiDialog->comboBox->currentText();
+
+    if (newClient.compare("") != 0)
+    {
+        QStringList clients(m_domModel->AttributesList("client"));
+
+        if (!clients.contains(newClient))
+        {
+            QStringList tasks;
+            m_sessionData.insert(newClient, tasks);
+        }
+    }
+}
+
 // Makes last row editable.
 void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
 {
     if ((item->column() == 0) && (item->row() == m_uiDialog->tableWidget->rowCount()-1))
         m_uiDialog->tableWidget->editItem(item);
-}
-
-void Whch::onClickedViewIndex(const QModelIndex &index)
-{
-    if (index.isValid())
-    {
-        m_ui->tableView_2->showRow(0);
-        m_ui->tableView_2->setRootIndex(index);
-    }
-    else
-    {
-        m_ui->tableView_2->reset();
-        m_ui->tableView_2->hideRow(0);
-    }
-}
-
-/* ------------- */
-/* ACTION SLOTS. */
-/* ------------- */
-
-void Whch::on_actionQuit_triggered()
-{
-    this->close();
-}
-
-
-void Whch::on_actionAbout_whch_triggered()
-{
-    QMessageBox::about(this, tr("WHCH (Working Hours Counter for Humans)"),
-                       tr("WHCH stands for '<b>Working Hours Counter for Humans</b>'. "
-                          "This is an application for tracking the time spent on "
-                          "individual projects."));
-}
-
-/* Exports the .xml file to a wikimedia format. */
-void Whch::on_actionExport_to_wiki_format_triggered()
-{
-    QXmlQuery query(QXmlQuery::XSLT20);
-    query.setFocus(QUrl(QDir::homePath() + "/" + "." + "whch_log.xml"));
-    query.setQuery(QUrl("qrc:/whch_log.xslt"));
-
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Export To Mediawiki Format"));
-
-    if (!fileName.isEmpty())
-    {
-        QFile file(fileName);
-        if (file.open(QFile::WriteOnly | QFile::Text))
-        {
-            query.evaluateTo(&file);
-            setWindowFilePath(fileName);
-        }
-        file.close();
-    }
-}
-
-/* Load session data from setting's file. */
-void  Whch::loadSessionData()
-{
-    QCoreApplication::setOrganizationName("Openismus");
-    QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("whch");
-    QSettings settings;
-    QStringList clients = settings.value("clients").toStringList();
-
-    if (!clients.isEmpty())
-    {
-        for (int i = 0; i < clients.size(); ++i)
-        {
-            QStringList tasks = settings.value(clients[i]).toStringList();
-            m_sessionData.insert(clients[i], tasks);
-        }
-    }
-
-}
-
-/* Saves session data into setting's file. */
-void  Whch::saveSessionData()
-{
-    QCoreApplication::setOrganizationName("Openismus");
-    QCoreApplication::setOrganizationDomain("openismus.com");
-    QCoreApplication::setApplicationName("whch");
-    QSettings settings;
-
-    MapQStringToList::const_iterator i = m_sessionData.constBegin();
-    QStringList clientsList;
-    while (i != m_sessionData.constEnd())
-    {
-        clientsList << i.key();
-        settings.setValue(i.key(), i.value());
-        ++i;
-    }
-    settings.setValue("clients", clientsList);
-}
-
-/* Starts timer. */
-void Whch::on_StartButton_clicked()
-{
-    m_ui->StartButton->setEnabled(false);
-    m_ui->StopButton->setEnabled(true);
-    m_ui->lineEdit->setEnabled(true);
-
-    m_timer = new QTimer();
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
-    m_timer->start(1000);
-}
-
-/* Stops timer and saves new introduced task. */
-void Whch::on_StopButton_clicked()
-{
-    const QString lineEditText(m_ui->lineEdit->text());
-
-    // Do not admit empty detail's fields.
-    if (lineEditText.isEmpty() || lineEditText.compare(WARNING) == 0)
-        m_ui->lineEdit->setText(WARNING);
-    else
-    {
-        if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
-            m_ui->lineEdit->setText("Select a task first.");
-        else
-        {
-            m_timer->stop();
-            m_seconds = 0;
-            m_ui->lcdNumber->display("00:00:00");
-            m_ui->StopButton->setEnabled(false);
-
-            setCurrentTask();
-            //Debug.
-            m_domModel->printModelIndexTree();
-
-            //Resize start and end columns
-            m_ui->tableView->resizeColumnToContents(0);
-            m_ui->tableView->resizeColumnToContents(1);
-
-            // Clear input and enable start button.
-            m_ui->lineEdit->clear();
-            m_ui->lineEdit->setEnabled(false);
-            m_ui->StartButton->setEnabled(true);
-
-            m_trayIcon->setToolTip("Spent time on task:\n 0 hours, 0 minutes");
-        }
-    }
-}
-
-void Whch::setCurrentTask()
-{
-    WhchTask currentTask;
-
-    currentTask.m_details = m_ui->lineEdit->text();
-    const QString text(m_ui->comboBox->currentText());
-    currentTask.m_name = text;
-
-    // Set task's related client.
-    currentTask.m_client = m_domModel->xmlClientOfTask(text);
-    /*
-    if (currentTask.m_client.compare("") == 0)
-        currentTask.m_client =  sessionClientOfTask(text);*/
-
-    //Display new task.
-    m_domModel->addNewTaskElement(currentTask);
-    QModelIndex currentDay= m_tableProxyModel->mapFromSource(m_domModel->currentDayIndex());
-    if (currentDay.isValid())
-    {
-        m_ui->tableView->showRow(0);
-        m_ui->tableView->setRootIndex(currentDay);
-    }
-    else
-        m_ui->tableView->hideRow(0);
-
-}
-
-// Sets up dialog for adding tasks and clients.
-void Whch::on_actionTasksClients_triggered()
-{
-    QDialog *taskDialog = new QDialog;
-    m_uiDialog->setupUi(taskDialog);
-
-    // Insert new added clients always at the top.
-    m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
-
-    // Load list of clients.
-    QStringList xmlClients(m_domModel->AttributesList("client"));
-    /*if (!m_sessionData.isEmpty())
-    {
-        QStringList sessionClients (m_sessionData.keys());
-        for (int i=0; i < sessionClients.size(); ++i)
-        {
-            const QString sessionClientItem(sessionClients.at(i));
-            if(!clients.contains(sessionClientItem))
-                clients << sessionClientItem;
-        }
-    }
-    */
-
-    xmlClients << NEW_CLIENT;
-    m_uiDialog->comboBox->addItems(xmlClients);
-
-
-    // Load list of tasks for initial client
-    const QString currentClient (m_uiDialog->comboBox->currentText());
-    if (currentClient.compare(NEW_CLIENT) != 0)
-        onDialogComboboxItemActivated(currentClient);
-
-    // Load list of related tasks to the selected client.
-    QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
-                     this, SLOT(onDialogComboboxItemActivated(QString)));
-
-
-    // Makes last row editable.
-    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem *)),
-                     this, SLOT(onDialogTableCellChanged(QTableWidgetItem *)));
-
-
-    // Manages data if any cell of the last row is edited.
-    /*
-    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem *)),
-                     this, SLOT(onDialogTableItemChanged(QTableWidgetItem *)));*/
-
-    taskDialog->show();
 }
 
 // Save user's new task into the session's structure.
@@ -588,77 +221,334 @@ void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
     }
 }
 
-
-// Shows the related tasks of the selected client.
-void Whch::onDialogComboboxItemActivated(const QString &client)
+// Starts timer.
+void Whch::on_StartButton_clicked()
 {
-    // Make it editable for adding a new client.
-    if (client.compare(NEW_CLIENT) == 0)
-    {
-        m_uiDialog->comboBox->setEditable(true);
-        m_uiDialog->comboBox->clearEditText();
-        QObject::connect(m_uiDialog->comboBox->lineEdit(), SIGNAL(returnPressed()),
-                         this, SLOT(onDialogComboboxLineEditReturn()));
-    }
+    m_ui->StartButton->setEnabled(false);
+    m_ui->StopButton->setEnabled(true);
+    m_ui->lineEdit->setEnabled(true);
+
+    m_timer = new QTimer();
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimerTimeOut()));
+    m_timer->start(1000);
+}
+
+// Stops timer and saves new introduced task
+void Whch::on_StopButton_clicked()
+{
+    const QString lineEditText(m_ui->lineEdit->text());
+
+    // Do not admit empty detail's fields.
+    if (lineEditText.isEmpty() || lineEditText.compare(WARNING) == 0)
+        m_ui->lineEdit->setText(WARNING);
     else
-        m_uiDialog->comboBox->setEditable(false);
-
-    // Set current available tasks and new line for new task.
-    QStringList clientTasks(m_domModel->xmlClientTasks(client));
-    /*
-    if (m_sessionData.contains(client))
     {
-        QStringList sessionClientTasks(m_sessionData.value(client));
-        for (int i = 0; i < sessionClientTasks.size(); ++i)
+        if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
+            m_ui->lineEdit->setText("Select a task first.");
+        else
         {
-            const QString sessionTaskItem(sessionClientTasks.at(i));
-            if (!clientTasks.contains(sessionTaskItem))
-                clientTasks << sessionTaskItem;
+            m_timer->stop();
+            m_seconds = 0;
+            m_ui->lcdNumber->display("00:00:00");
+            m_ui->StopButton->setEnabled(false);
+
+            setCurrentTask();
+
+            // Resize start and end columns.
+            m_ui->tableView->resizeColumnToContents(1);
+            m_ui->tableView->resizeColumnToContents(2);
+
+            // Clear input and enable start button.
+            m_ui->lineEdit->clear();
+            m_ui->lineEdit->setEnabled(false);
+            m_ui->StartButton->setEnabled(true);
+
+            m_trayIcon->setToolTip("Spent time on task:\n 0 hours, 0 minutes");
         }
-    }*/
-
-    clientTasks << "";
-
-    // Set number of rows.
-    m_uiDialog->tableWidget->setRowCount(clientTasks.size());
-
-    // Show list of tasks.
-    for (int i=0; i< clientTasks.size(); ++i)
-    {
-        QTableWidgetItem *newItem = new QTableWidgetItem(clientTasks.at(i));
-        m_uiDialog->tableWidget->setItem(i, 0, newItem);
     }
 }
 
-
-// Update session data.
-void Whch::onDialogComboboxLineEditReturn()
+void Whch::on_lineEdit_returnPressed()
 {
-    QString newClient = m_uiDialog->comboBox->currentText();
+    on_StopButton_clicked();
+}
 
-    if (newClient.compare("") != 0)
+void Whch::onClickedViewIndex(const QModelIndex &index)
+{
+    if (index.isValid())
     {
-        QStringList clients(m_domModel->AttributesList("client"));
+        m_ui->tableView_2->showRow(0);
+        m_ui->tableView_2->setRootIndex(index);
+    }
+    else
+    {
+        m_ui->tableView_2->reset();
+        m_ui->tableView_2->hideRow(0);
+    }
 
-        if (!clients.contains(newClient))
+    m_ui->tableView_2->scrollToBottom();
+    m_ui->tableView_2->resizeColumnToContents(1);
+    m_ui->tableView_2->resizeColumnToContents(2);
+}
+
+// Handler for tray icon's activation.
+void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason)
+    {
+    case QSystemTrayIcon::DoubleClick:
+        showNormal();
+        break;
+    case QSystemTrayIcon::MiddleClick:
+    case QSystemTrayIcon::Trigger:
+        showMessage();
+        break;
+    default:
+        ;
+    }
+}
+
+// Sets up dialog for adding tasks and clients.
+void Whch::on_actionTasksClients_triggered()
+{
+    QDialog *taskDialog = new QDialog;
+    m_uiDialog->setupUi(taskDialog);
+
+    // Insert new added clients always at the top.
+    m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
+
+    // Load list of clients.
+    QStringList clients(m_domModel->AttributesList("client"));
+    if (!m_sessionData.isEmpty())
+    {
+        QStringList sessionClients (m_sessionData.keys());
+        for (int i=0; i < sessionClients.size(); ++i)
         {
-            QStringList tasks;
-            qDebug() << "add in session data";
-            //m_sessionData.insert(newClient, tasks);
+            const QString sessionClientItem(sessionClients.at(i));
+            if(!clients.contains(sessionClientItem))
+                clients << sessionClientItem;
         }
     }
+
+    clients << NEW_CLIENT;
+    m_uiDialog->comboBox->addItems(clients);
+
+    // Load list of tasks for initial client
+    const QString currentClient (m_uiDialog->comboBox->currentText());
+    if (currentClient.compare(NEW_CLIENT) != 0)
+        onDialogComboboxItemActivated(currentClient);
+
+    // Load list of related tasks to the selected client.
+    QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
+                     this, SLOT(onDialogComboboxItemActivated(QString)));
+
+
+    // Makes last row editable.
+    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem *)),
+                     this, SLOT(onDialogTableCellChanged(QTableWidgetItem *)));
+
+
+    // Manages data if any cell of the last row is edited.
+    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem *)),
+                     this, SLOT(onDialogTableItemChanged(QTableWidgetItem *)));
+
+    taskDialog->show();
+}
+
+void Whch::on_actionHistory_View_triggered(bool checked)
+{
+    if(checked)
+    {
+        m_ui->tableView_2->reset();
+        m_ui->tableView_2->hideRow(0);
+
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
+
+        m_ui->tableView_2->resizeColumnToContents(1);
+        m_ui->tableView_2->resizeColumnToContents(2);
+    }
+    else
+    {
+        m_ui->stackedWidget->setCurrentWidget(m_ui->page);
+        m_ui->tableView->scrollToBottom();
+    }
+
+}
+
+void Whch::on_actionAbout_whch_triggered()
+{
+    QMessageBox::about(this, tr("WHCH (Working Hours Counter for Humans)"),
+                       tr("WHCH stands for '<b>Working Hours Counter for Humans</b>'. "
+                          "This is an application for tracking the time spent on "
+                          "individual projects."));
+}
+
+void Whch::on_actionQuit_triggered()
+{
+    this->close();
+}
+
+// Exports the .xml file to a wikimedia format.
+void Whch::on_actionExport_to_wiki_format_triggered()
+{
+    QXmlQuery query(QXmlQuery::XSLT20);
+    query.setFocus(QUrl(QDir::homePath() + "/" + "." + "whch_log.xml"));
+    query.setQuery(QUrl("qrc:/whch_log.xslt"));
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export To Mediawiki Format"));
+
+    if (!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        if (file.open(QFile::WriteOnly | QFile::Text))
+        {
+            query.evaluateTo(&file);
+            setWindowFilePath(fileName);
+        }
+        file.close();
+    }
+}
+
+// ## Auxiliary functions ##
+
+void Whch::customizeUi()
+{
+    setTryIcon();
+
+    m_ui->tableView->resizeRowsToContents();
+    m_ui->tableView->resizeColumnToContents(1);
+    m_ui->tableView->resizeColumnToContents(2);
+    m_ui->tableView->scrollToBottom();
+    m_ui->tableView->setColumnHidden(0,true);
+    m_ui->tableView_2->setColumnHidden(0,true);
+
+    m_ui->lineEdit->setEnabled(false);
+    m_ui->StopButton->setEnabled(false);
+    m_ui->lcdNumber->display("00:00:00");
+}
+
+void Whch::setupData()
+{
+    loadSessionData();
+    setComboboxTasks();
+}
+
+void Whch::setupModelView()
+{
+    m_domModel = new WhchDomModel(this);
+
+    m_treeProxyModel = new WhchTreeProxyModel(this);
+    m_treeProxyModel->setSourceModel(m_domModel);
+    m_ui->treeView->setModel(m_treeProxyModel);
+
+    m_tableProxyModel = new WhchTableProxyModel(this);
+    m_tableProxyModel->setSourceModel(m_domModel);
+    m_ui->tableView_2->setModel(m_tableProxyModel);
+    m_ui->tableView->setModel(m_tableProxyModel);
+
+    // Connect tree view with table view.
+    connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
+            m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
+
+    connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
+            m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
+
+    connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
+            this, SLOT(onClickedViewIndex(QModelIndex)));
+
+    // Show current day tasks.
+    setCurrentDayIndex();
+}
+
+// Show current day tasks.
+void Whch::setCurrentDayIndex()
+{
+    QModelIndex currentDay= m_tableProxyModel->mapFromSource(m_domModel->currentDayIndex());
+    if (currentDay.isValid())
+    {
+        m_ui->tableView->showRow(0);
+        m_ui->tableView->setRootIndex(currentDay);
+    }
+    else
+        m_ui->tableView->hideRow(0);
+}
+
+void Whch::onTimerTimeOut()
+{
+    int seconds = ++m_seconds;
+    int minutes = seconds / 60;
+    seconds %= 60;
+    int hours = minutes / 60;
+    minutes %= 60;
+
+    QTime *time = new QTime(hours,minutes,seconds);
+    QString text = time->toString("HH:mm:ss");
+
+    m_ui->lcdNumber->display(text);
+
+    // Update tooltip status.
+    QString hoursText;
+    QString minutesText;
+    ((hours > 1) || (hours == 0)) ? hoursText = " hours," : hoursText=" hour,";
+    ((minutes > 1) || (minutes == 0)) ? minutesText = " minutes" : minutesText=" minute";
+    m_trayIcon->setToolTip("Spent time on task:\n"+ QString("%1").arg(hours) + hoursText + " " + QString("%1").arg(minutes) + minutesText);
+}
+
+// List of new added tasks.
+QStringList Whch::sessionTasks()
+{
+    QStringList sessionTasks;
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
+
+    while (i != m_sessionData.constEnd())
+    {
+        QStringList itemTasks = i.value();
+        for (int j = 0; j < itemTasks.size(); ++j)
+        {
+            // Do not repeat elements.
+            const QString item(itemTasks.at(j));
+            if (!sessionTasks.contains(item))
+                sessionTasks << item;
+        }
+        ++i;
+    }
+    return sessionTasks;
+}
+
+// Get related client of a task.
+QString Whch::sessionClientOfTask(const QString &task)
+{
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
+    QString sessionClient;
+
+    while (i != m_sessionData.constEnd())
+    {
+        QStringList itemTasks = i.value();
+        for (int j = 0; j < itemTasks.size(); ++j)
+        {
+            if(task.contains(itemTasks.at(j)))
+                return sessionClient = i.key();
+        }
+        ++i;
+    }
+    return sessionClient;
+}
+
+// Return the tasks of a session client.
+QStringList Whch::sessionClientTasks(const QString &client)
+{
+    return m_sessionData[client];
 }
 
 // Return a list of the total tasks of a client. Those saved
 // in the .xml file and those that are session data.
-
 QStringList Whch::clientTasks(const QString &client)
 {
     QStringList clientTasks;
 
     if (m_domModel->isXmlClient(client))
         clientTasks << m_domModel->xmlClientTasks(client);
-    /*
+
     if (m_sessionData.contains(client))
     {
         QStringList sessionClientTasks(m_sessionData.value(client));
@@ -668,7 +558,7 @@ QStringList Whch::clientTasks(const QString &client)
             if (!clientTasks.contains(sessionTaskItem))
                 clientTasks << sessionTaskItem;
         }
-    }*/
+    }
     return clientTasks;
 }
 
@@ -687,23 +577,163 @@ QStringList Whch::totalTasks()
     return xmlTotalTasks;
 }
 
-void Whch::on_lineEdit_returnPressed()
+// Load session data from setting's file.
+void  Whch::loadSessionData()
 {
-    on_StopButton_clicked();
+    QCoreApplication::setOrganizationName("Openismus");
+    QCoreApplication::setOrganizationDomain("openismus.com");
+    QCoreApplication::setApplicationName("whch");
+    QSettings settings;
+    QStringList clients = settings.value("clients").toStringList();
+
+    if (!clients.isEmpty())
+    {
+        for (int i = 0; i < clients.size(); ++i)
+        {
+            QStringList tasks = settings.value(clients[i]).toStringList();
+            m_sessionData.insert(clients[i], tasks);
+        }
+    }
+
 }
 
-void Whch::on_actionHistory_View_triggered(bool checked)
+// Saves session data into setting's file.
+void  Whch::saveSessionData()
 {
+    QCoreApplication::setOrganizationName("Openismus");
+    QCoreApplication::setOrganizationDomain("openismus.com");
+    QCoreApplication::setApplicationName("whch");
+    QSettings settings;
 
-    if(checked)
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
+    QStringList clientsList;
+    while (i != m_sessionData.constEnd())
     {
-        m_ui->tableView_2->reset();
-        m_ui->tableView_2->hideRow(0);
-        m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
+        clientsList << i.key();
+        settings.setValue(i.key(), i.value());
+        ++i;
     }
-    else
+    settings.setValue("clients", clientsList);
+}
+
+// Initialize the list of available tasks.
+void  Whch::setComboboxTasks()
+{
+    QStringList sessionDataValues;
+    QStringList tasks (m_domModel->AttributesList("name"));
+    QStringList tasksClients;
+    m_ui->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
+
+    // Retrieve tasks that already exist in the .xml file.
+    for (int i=0; i<tasks.size(); ++i)
     {
-        m_ui->stackedWidget->setCurrentWidget(m_ui->page);
-        m_ui->tableView->scrollToBottom();
+        tasksClients << tasks.at(i) + " (" + m_domModel->xmlClientOfTask(tasks.at(i)) + ")";
+    }
+
+    // Retrieve current session tasks.
+    MapQStringToList::const_iterator i = m_sessionData.constBegin();
+    while (i != m_sessionData.constEnd())
+    {
+        QStringList currentElementTasks (i.value());
+        for (int j = 0; j < currentElementTasks.size(); ++j)
+            sessionDataValues << currentElementTasks.at(j) +
+                    " (" + i.key() + ")";
+        ++i;
+    }
+
+    // Do not repeat tasks.
+    for (int i=0; i < sessionDataValues.size(); ++i)
+    {
+        if (tasksClients.contains(sessionDataValues.at(i)) == NULL)
+            tasksClients << sessionDataValues.at(i);
+    }
+
+    // Update combobox.
+    tasksClients << NEW_TASK;
+    m_ui->comboBox->addItems(tasksClients);
+
+    if (m_ui->comboBox->currentText().compare(NEW_TASK) == 0)
+        m_ui->lineEdit->setEnabled(false);
+
+    QObject::connect(m_ui->comboBox, SIGNAL(activated(QString)),
+                     this, SLOT(onUiComboboxItemActivated(QString)));
+}
+
+void Whch::setCurrentTask()
+{
+    WhchTask currentTask;
+
+    currentTask.m_details = m_ui->lineEdit->text();
+    const QString text(m_ui->comboBox->currentText());
+    currentTask.m_name = text;
+
+    // Set task's related client.
+    currentTask.m_client = m_domModel->xmlClientOfTask(text);
+    if (currentTask.m_client.compare("") == 0)
+        currentTask.m_client =  sessionClientOfTask(text);
+
+    // Display new task.
+    m_domModel->addNewTaskElement(currentTask);
+
+    setCurrentDayIndex();
+
+    m_ui->tableView->scrollToBottom();
+}
+
+// Creates menu actions for the system tray icon.
+void Whch::createTrayIconMenuActions()
+{
+    restoreAction = new QAction(tr("&Show"), this);
+    connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
+
+    quitAction = new QAction(tr("&Quit"), this);
+    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+}
+
+// Creates system tray icon.
+void Whch::createTrayIcon()
+{
+    m_trayIconMenu = new QMenu(this);
+    m_trayIconMenu->addAction(restoreAction);
+    m_trayIconMenu->addSeparator();
+    m_trayIconMenu->addAction(quitAction);
+
+    m_trayIcon = new QSystemTrayIcon(this);
+    m_trayIcon->setContextMenu(m_trayIconMenu);
+    QIcon icon = QIcon(":/data/icons/16x16/whch.png");
+    m_trayIcon->setIcon(icon);
+    m_trayIcon->setVisible(true);
+    setWindowIcon(icon);
+    m_trayIcon->setToolTip("Spent time on task:\n 0 hours, 0 minutes");
+}
+
+// Sets up the tray icon.
+void Whch::setTryIcon()
+{
+    createTrayIconMenuActions();
+    createTrayIcon();
+    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(onTrayIconActivated(QSystemTrayIcon::ActivationReason)));
+}
+
+// Shows tray icon message.
+void Whch::showMessage()
+{
+    QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information;
+    m_trayIcon->showMessage("WHCH", "Tracks the time spent on your projects.", icon, 7000);
+}
+
+// Overriden function. Leaves the app accesible from the tray icon.
+void Whch::closeEvent(QCloseEvent *event)
+{
+    if (m_trayIcon->isVisible())
+    {
+        QMessageBox::information(this, tr("Systray"),
+                                 tr("The program will keep running in the "
+                                    "system tray. To terminate the program, "
+                                    "choose <b>Quit</b> in the context menu "
+                                    "of the system tray entry."));
+        hide();
+        event->ignore();
     }
 }
