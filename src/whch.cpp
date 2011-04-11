@@ -761,13 +761,21 @@ void Whch::closeEvent(QCloseEvent *event)
 void Whch::initializeHistoryViews()
 {
     QModelIndex currentDayIndex = m_domModel->currentDayIndex();
-    QModelIndex treeModelIndex= m_treeProxyModel->mapFromSource(currentDayIndex);
-    QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(currentDayIndex);
 
-    // TODO: Nicer way of achieving the same effect?
-    m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent().parent(), true);
-    m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent(), true);
-    m_ui->treeView->setExpanded(treeModelIndex.parent().parent(), true);
-    m_ui->treeView->setExpanded(treeModelIndex.parent(), true);
-    m_ui->tableView_2->setRootIndex(tableModelIndex);
+    if (currentDayIndex.isValid())
+    {
+        m_ui->tableView_2->showRow(0);
+
+        QModelIndex treeModelIndex= m_treeProxyModel->mapFromSource(currentDayIndex);
+        QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(currentDayIndex);
+
+        // TODO: Nicer way of achieving the same effect?
+        m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent().parent(), true);
+        m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent(), true);
+        m_ui->treeView->setExpanded(treeModelIndex.parent().parent(), true);
+        m_ui->treeView->setExpanded(treeModelIndex.parent(), true);
+        m_ui->tableView_2->setRootIndex(tableModelIndex);
+    }
+    else
+        m_ui->tableView_2->hideRow(0);
 }
