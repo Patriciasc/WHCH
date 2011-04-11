@@ -116,6 +116,7 @@ private:
     void setTryIcon();
     void showMessage();
     void closeEvent(QCloseEvent *event);
+    void initializeHistoryViews();
 };
 
 #endif // WHCH_H

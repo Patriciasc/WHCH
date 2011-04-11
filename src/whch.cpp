@@ -404,13 +404,14 @@ void Whch::on_actionHistory_View_triggered(bool checked)
 {
     if(checked)
     {
-        m_ui->tableView_2->reset();
-        m_ui->tableView_2->hideRow(0);
-
         m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
+        m_ui->tableView_2->reset();
+
+        initializeHistoryViews();
 
         m_ui->tableView_2->resizeColumnToContents(1);
         m_ui->tableView_2->resizeColumnToContents(2);
+        m_ui->tableView_2->scrollToBottom();
     }
     else
     {
@@ -755,4 +756,18 @@ void Whch::closeEvent(QCloseEvent *event)
         hide();
         event->ignore();
     }
+}
+
+void Whch::initializeHistoryViews()
+{
+    QModelIndex currentDayIndex = m_domModel->currentDayIndex();
+    QModelIndex treeModelIndex= m_treeProxyModel->mapFromSource(currentDayIndex);
+    QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(currentDayIndex);
+
+    // TODO: Nicer way of achieving the same effect?
+    m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent().parent(), true);
+    m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent(), true);
+    m_ui->treeView->setExpanded(treeModelIndex.parent().parent(), true);
+    m_ui->treeView->setExpanded(treeModelIndex.parent(), true);
+    m_ui->tableView_2->setRootIndex(tableModelIndex);
 }
