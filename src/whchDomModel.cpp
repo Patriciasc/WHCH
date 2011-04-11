@@ -117,6 +117,21 @@ WhchDomModel::~WhchDomModel()
 QVariant WhchDomModel::data(const QModelIndex &index,
                             int role) const
 {
+    if ((index.isValid()) && (role == TimeTypeRole))
+    {
+        WhchDomNode *indexNode = static_cast<WhchDomNode*>(index.internalPointer());
+        QString tagName = indexNode->node().nodeName();
+
+        if (tagName.compare("year") == 0)
+            return YearTimeType;
+        if (tagName.compare("month") == 0)
+            return MonthTimeType;
+        if (tagName.compare("week") == 0)
+            return WeekTimeType;
+        if (tagName.compare("day") == 0)
+            return DayTimeType;
+    }
+
     if ((index.isValid()) && ((role == Qt::DisplayRole) || (role == Qt::EditRole)))
     {
         WhchDomNode *indexNode = static_cast<WhchDomNode*>(index.internalPointer());
@@ -127,7 +142,7 @@ QVariant WhchDomModel::data(const QModelIndex &index,
 
         switch (index.column())
         {
-        case 0:
+            case 0:
             for (int i = 0; i < attributeMap.count(); ++i)
             {
                 QDomNode attribute = attributeMap.item(i);
@@ -165,6 +180,7 @@ QVariant WhchDomModel::data(const QModelIndex &index,
             return QVariant();
         }
     }
+
     return QVariant();
 }
 

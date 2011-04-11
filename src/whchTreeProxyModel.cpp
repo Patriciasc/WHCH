@@ -28,6 +28,7 @@
 
 #include "whchTreeProxyModel.h"
 #include "whchDomNode.h"
+#include "whchDomModel.h"
 #include <QStringList>
 #include <QDebug>
 
@@ -59,9 +60,9 @@ bool WhchTreeProxyModel::filterAcceptsColumn (int sourceColumn,
 
 void WhchTreeProxyModel::onItemClicked(const QModelIndex &index)
 {
-    QString currentNodeName = index.data().toString().section(" ", 0, 0);
+    int timeType = index.data(WhchDomModel::TimeTypeRole).toInt();
 
-    if (currentNodeName.compare("date") == 0)
+    if (timeType == WhchDomModel::DayTimeType)
         emit clicked(mapToSource(index));
     else
         emit clicked(QModelIndex());

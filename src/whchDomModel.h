@@ -41,6 +41,19 @@ class WhchDomModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
+    enum ItemDataRole
+    {
+        TimeTypeRole = Qt::UserRole
+    };
+
+    enum TimeType
+    {
+        YearTimeType,
+        MonthTimeType,
+        WeekTimeType,
+        DayTimeType
+    };
+
     WhchDomModel(QObject *parent = 0);
     ~WhchDomModel();
 

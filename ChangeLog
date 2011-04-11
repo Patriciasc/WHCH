@@ -1,4 +1,11 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Apr 11 11:57:20 2011 +0100
+
+    Introduced new custom Qt::UserRole.
+    This is for avoiding future problems regarding
+    to the translations.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Fri Apr 08 15:22:20 2011 +0100
 
     Changes UI style in tree view.
