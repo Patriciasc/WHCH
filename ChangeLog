@@ -1,4 +1,9 @@
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
+Date:   Mon Apr 11 12:28:20 2011 +0100
+
+    Separated view from model implementation.
+
+Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Mon Apr 11 11:57:20 2011 +0100
 
     Introduced new custom Qt::UserRole.

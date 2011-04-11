@@ -69,6 +69,7 @@ private slots:
     void onClickedViewIndex(const QModelIndex &index);
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onTimerTimeOut();
+    void onItemInTreeViewClicked(const QModelIndex &index);
 
     void on_actionTasksClients_triggered();
     void on_actionHistory_View_triggered(bool checked);

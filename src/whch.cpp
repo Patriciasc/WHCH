@@ -29,6 +29,7 @@
 #include "whch.h"
 #include "ui_whch.h"
 #include "ui_dialogTasksClients.h"
+#include "whchDomModel.h"
 #include "whchTask.h"
 #include <QDomDocument>
 #include <iostream>
@@ -329,6 +330,29 @@ void Whch::onTimerTimeOut()
     m_trayIcon->setToolTip("Spent time on task:\n"+ QString("%1").arg(hours) + hoursText + " " + QString("%1").arg(minutes) + minutesText);
 }
 
+void Whch::onItemInTreeViewClicked(const QModelIndex &index)
+{
+    int timeType = index.data(WhchDomModel::TimeTypeRole).toInt();
+
+    if (timeType == WhchDomModel::DayTimeType)
+    {
+        QModelIndex domModelIndex = m_treeProxyModel->mapToSource(index);
+        QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(domModelIndex);
+
+        m_ui->tableView_2->showRow(0);
+        m_ui->tableView_2->setRootIndex(tableModelIndex);
+    }
+    else
+    {
+        m_ui->tableView_2->reset();
+        m_ui->tableView_2->hideRow(0);
+    }
+
+    m_ui->tableView_2->scrollToBottom();
+    m_ui->tableView_2->resizeColumnToContents(1);
+    m_ui->tableView_2->resizeColumnToContents(2);
+}
+
 // Sets up dialog for adding tasks and clients.
 void Whch::on_actionTasksClients_triggered()
 {
@@ -470,13 +494,7 @@ void Whch::setupModelView()
 
     // Connect tree view with table view.
     connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
-            m_treeProxyModel, SLOT(onItemClicked(QModelIndex)));
-
-    connect(m_treeProxyModel, SIGNAL(clicked(QModelIndex)),
-            m_tableProxyModel, SLOT(onItemClicked(QModelIndex)));
-
-    connect(m_tableProxyModel, SIGNAL(retrieve_children(QModelIndex)),
-            this, SLOT(onClickedViewIndex(QModelIndex)));
+            this, SLOT(onItemInTreeViewClicked(QModelIndex)));
 
     // Show current day tasks.
     setCurrentDayIndex();

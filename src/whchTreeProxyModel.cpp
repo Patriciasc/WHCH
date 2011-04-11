@@ -57,13 +57,3 @@ bool WhchTreeProxyModel::filterAcceptsColumn (int sourceColumn,
         return false;
     return true;
 }
-
-void WhchTreeProxyModel::onItemClicked(const QModelIndex &index)
-{
-    int timeType = index.data(WhchDomModel::TimeTypeRole).toInt();
-
-    if (timeType == WhchDomModel::DayTimeType)
-        emit clicked(mapToSource(index));
-    else
-        emit clicked(QModelIndex());
-}
