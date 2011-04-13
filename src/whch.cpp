@@ -31,7 +31,6 @@
 #include "ui_dialogTasksClients.h"
 #include "whchDomModel.h"
 #include "whchTask.h"
-#include "whchWorkTime.h"
 #include <QDomDocument>
 #include <iostream>
 #include <QTextStream>
