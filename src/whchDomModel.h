@@ -48,6 +48,7 @@ public:
 
     enum TimeType
     {
+        RootTimeType,
         YearTimeType,
         MonthTimeType,
         WeekTimeType,
@@ -75,6 +76,7 @@ public:
     QStringList xmlClientTasks(const QString &client);
     bool isXmlClient(const QString &client);
     QString xmlClientOfTask(const QString &task);
+    QString workedTime (const QModelIndex &index);
 
     // Debugging functions.
      void printModelIndexTree();
@@ -83,6 +85,11 @@ private:
     QDomDocument m_domDocument;
     WhchDomNode *m_rootNode;
     QDomElement m_taskNode;
+
+    QString dayWorkedTime(const QModelIndex &index);
+    QString weekWorkedTime(const QModelIndex &index);
+    QString monthWorkedTime(const QModelIndex &index);
+    QString yearWorkedTime(const QModelIndex &index);
 
     // Auxiliary functions.
     void writeInXmlFile(const QString &fileName);

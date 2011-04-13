@@ -31,6 +31,7 @@
 #include "ui_dialogTasksClients.h"
 #include "whchDomModel.h"
 #include "whchTask.h"
+#include "whchWorkTime.h"
 #include <QDomDocument>
 #include <iostream>
 #include <QTextStream>
@@ -333,9 +334,9 @@ void Whch::onTimerTimeOut()
 void Whch::onItemInTreeViewClicked(const QModelIndex &index)
 {
     int timeType = index.data(WhchDomModel::TimeTypeRole).toInt();
-
     if (timeType == WhchDomModel::DayTimeType)
     {
+
         QModelIndex domModelIndex = m_treeProxyModel->mapToSource(index);
         QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(domModelIndex);
 
@@ -344,9 +345,17 @@ void Whch::onItemInTreeViewClicked(const QModelIndex &index)
     }
     else
     {
+        // TODO: flatten tree for displaying leaf-nodes.
         m_ui->tableView_2->reset();
         m_ui->tableView_2->hideRow(0);
     }
+
+    // Display total number of hours worked for the current selected time period.
+    QString workedTime = m_domModel->workedTime(m_treeProxyModel->mapToSource(index));
+    if (timeType == WhchDomModel::RootTimeType)
+        m_ui->label->setText("");
+    else
+        m_ui->label->setText("Total worked time: " + workedTime);
 
     m_ui->tableView_2->scrollToBottom();
     m_ui->tableView_2->resizeColumnToContents(1);
@@ -775,7 +784,14 @@ void Whch::initializeHistoryViews()
         m_ui->treeView->setExpanded(treeModelIndex.parent().parent(), true);
         m_ui->treeView->setExpanded(treeModelIndex.parent(), true);
         m_ui->tableView_2->setRootIndex(tableModelIndex);
+
+        //FIXME: this is not being displayed.
+        QString dayWorkedHours = m_domModel->workedTime(currentDayIndex);
+        m_ui->label->setText("Total worked time: " + dayWorkedHours);
     }
     else
+    {
         m_ui->tableView_2->hideRow(0);
+        m_ui->label->setText("");
+    }
 }

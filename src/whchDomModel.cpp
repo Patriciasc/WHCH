@@ -574,6 +574,140 @@ QString WhchDomModel::xmlClientOfTask(const QString &task)
     return client;
 }
 
+// Calculates total time worked in a given period of time.
+QString WhchDomModel::workedTime (const QModelIndex &index)
+{
+    int timeType = index.data(WhchDomModel::TimeTypeRole).toInt();
+
+    if (timeType == WhchDomModel::DayTimeType)
+        return dayWorkedTime(index);
+    if (timeType == WhchDomModel::WeekTimeType)
+        return weekWorkedTime(index);
+    if (timeType == WhchDomModel::MonthTimeType)
+        return monthWorkedTime(index);
+    if (timeType == WhchDomModel::YearTimeType)
+        return yearWorkedTime(index);
+
+    return QString();
+}
+
+// Calculates total time worked in a day.
+QString WhchDomModel::dayWorkedTime(const QModelIndex &index)
+{
+    int seconds = 0;
+    WhchDomNode *indexNode = static_cast<WhchDomNode*>(index.internalPointer());
+    QDomElement dayElement = indexNode->node().toElement();
+
+    for (QDomElement taskElement = dayElement.firstChildElement();
+    !taskElement.isNull(); taskElement = taskElement.nextSiblingElement())
+    {
+        QVariant start = taskElement.attribute("start");
+        QVariant end = taskElement.attribute("end");
+        seconds += start.toDateTime().secsTo(end.toDateTime());
+    }
+
+    int minutes = seconds / 60;
+    seconds %= 60;
+    int hours = minutes / 60;
+    minutes %= 60;
+
+    return QString("%1h%2m").arg(hours).arg(minutes);
+}
+
+// Calculates total time worked in a week.
+QString WhchDomModel::weekWorkedTime(const QModelIndex &index)
+{
+    int seconds = 0;
+    WhchDomNode *indexNode = static_cast<WhchDomNode*>(index.internalPointer());
+    QDomElement weekElement = indexNode->node().toElement();
+
+    for (QDomElement dayElement = weekElement.firstChildElement();
+    !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+    {
+        for (QDomElement taskElement = dayElement.firstChildElement();
+        !taskElement.isNull(); taskElement = taskElement.nextSiblingElement())
+        {
+            QVariant start = taskElement.attribute("start");
+            QVariant end = taskElement.attribute("end");
+            seconds += start.toDateTime().secsTo(end.toDateTime());
+        }
+    }
+
+    int minutes = seconds / 60;
+    seconds %= 60;
+    int hours = minutes / 60;
+    minutes %= 60;
+
+    return QString("%1h%2m").arg(hours).arg(minutes);
+}
+
+// Calculates total time worked in a month.
+QString WhchDomModel::monthWorkedTime(const QModelIndex &index)
+{
+    int seconds = 0;
+    WhchDomNode *indexNode = static_cast<WhchDomNode*>(index.internalPointer());
+    QDomElement monthElement = indexNode->node().toElement();
+
+    for (QDomElement weekElement = monthElement.firstChildElement();
+    !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+    {
+        for (QDomElement dayElement = weekElement.firstChildElement();
+        !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+        {
+            for (QDomElement taskElement = dayElement.firstChildElement();
+            !taskElement.isNull(); taskElement = taskElement.nextSiblingElement())
+            {
+                QVariant start = taskElement.attribute("start");
+                QVariant end = taskElement.attribute("end");
+                seconds += start.toDateTime().secsTo(end.toDateTime());
+            }
+        }
+    }
+
+    int minutes = seconds / 60;
+    seconds %= 60;
+    int hours = minutes / 60;
+    minutes %= 60;
+
+    return QString("%1h%2m").arg(hours).arg(minutes);
+}
+
+// Calculates total time worked in a year.
+QString WhchDomModel::yearWorkedTime(const QModelIndex &index)
+{
+    int seconds = 0;
+
+    WhchDomNode *indexNode = static_cast<WhchDomNode*>(index.internalPointer());
+    QDomElement yearElement = indexNode->node().toElement();
+
+    for (QDomElement monthElement = yearElement.firstChildElement();
+    !monthElement.isNull(); monthElement = monthElement.nextSiblingElement())
+    {
+        for (QDomElement weekElement = monthElement.firstChildElement();
+        !weekElement.isNull(); weekElement = weekElement.nextSiblingElement())
+        {
+            for (QDomElement dayElement = weekElement.firstChildElement();
+            !dayElement.isNull(); dayElement = dayElement.nextSiblingElement())
+            {
+                for (QDomElement taskElement = dayElement.firstChildElement();
+                !taskElement.isNull(); taskElement = taskElement.nextSiblingElement())
+                {
+                    QVariant start = taskElement.attribute("start");
+                    QVariant end = taskElement.attribute("end");
+                    seconds += start.toDateTime().secsTo(end.toDateTime());
+                }
+            }
+        }
+    }
+
+    int minutes = seconds / 60;
+    seconds %= 60;
+    int hours = minutes / 60;
+    minutes %= 60;
+
+    return QString("%1h%2m").arg(hours).arg(minutes);
+}
+
 // ## Debugging functions ##
 
 // Prints the DomModel.
