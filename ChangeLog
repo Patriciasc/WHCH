@@ -1,3 +1,11 @@
+2011-04-20  Murray Cumming  <murrayc@openismus.com>
+
+	Renamed some variables.
+
+	* data/ui/whch.ui:
+	* src/whch.cpp: Rename page_2 to pageHistory and tableView_2 to 
+	tableViewHistory to make the code clearer. Those were not good names.
+
 2011-04-20  Patricia Santana Cruz <patriciasc@openismus.com>
 
         Made xml file name, a parameter of the DOM model's constructor.

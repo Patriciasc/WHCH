@@ -287,18 +287,18 @@ void Whch::onClickedViewIndex(const QModelIndex &index)
 {
     if (index.isValid())
     {
-        m_ui->tableView_2->showRow(0);
-        m_ui->tableView_2->setRootIndex(index);
+        m_ui->tableViewHistory->showRow(0);
+        m_ui->tableViewHistory->setRootIndex(index);
     }
     else
     {
-        m_ui->tableView_2->reset();
-        m_ui->tableView_2->hideRow(0);
+        m_ui->tableViewHistory->reset();
+        m_ui->tableViewHistory->hideRow(0);
     }
 
-    m_ui->tableView_2->scrollToBottom();
-    m_ui->tableView_2->resizeColumnToContents(1);
-    m_ui->tableView_2->resizeColumnToContents(2);
+    m_ui->tableViewHistory->scrollToBottom();
+    m_ui->tableViewHistory->resizeColumnToContents(1);
+    m_ui->tableViewHistory->resizeColumnToContents(2);
 }
 
 // Handler for tray icon's activation.
@@ -348,14 +348,14 @@ void Whch::onItemInTreeViewClicked(const QModelIndex &index)
         QModelIndex domModelIndex = m_treeProxyModel->mapToSource(index);
         QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(domModelIndex);
 
-        m_ui->tableView_2->showRow(0);
-        m_ui->tableView_2->setRootIndex(tableModelIndex);
+        m_ui->tableViewHistory->showRow(0);
+        m_ui->tableViewHistory->setRootIndex(tableModelIndex);
     }
     else
     {
         // TODO: flatten tree for displaying leaf-nodes.
-        m_ui->tableView_2->reset();
-        m_ui->tableView_2->hideRow(0);
+        m_ui->tableViewHistory->reset();
+        m_ui->tableViewHistory->hideRow(0);
     }
 
     // Display total number of hours worked for the current selected time period.
@@ -365,9 +365,9 @@ void Whch::onItemInTreeViewClicked(const QModelIndex &index)
     else
         m_ui->label->setText("Total worked time: " + workedTime);
 
-    m_ui->tableView_2->scrollToBottom();
-    m_ui->tableView_2->resizeColumnToContents(1);
-    m_ui->tableView_2->resizeColumnToContents(2);
+    m_ui->tableViewHistory->scrollToBottom();
+    m_ui->tableViewHistory->resizeColumnToContents(1);
+    m_ui->tableViewHistory->resizeColumnToContents(2);
 }
 
 // Sets up dialog for adding tasks and clients.
@@ -421,14 +421,14 @@ void Whch::on_actionHistory_View_triggered(bool checked)
 {
     if(checked)
     {
-        m_ui->stackedWidget->setCurrentWidget(m_ui->page_2);
-        m_ui->tableView_2->reset();
+        m_ui->stackedWidget->setCurrentWidget(m_ui->pageHistory);
+        m_ui->tableViewHistory->reset();
 
         initializeHistoryViews();
 
-        m_ui->tableView_2->resizeColumnToContents(1);
-        m_ui->tableView_2->resizeColumnToContents(2);
-        m_ui->tableView_2->scrollToBottom();
+        m_ui->tableViewHistory->resizeColumnToContents(1);
+        m_ui->tableViewHistory->resizeColumnToContents(2);
+        m_ui->tableViewHistory->scrollToBottom();
     }
     else
     {
@@ -483,7 +483,7 @@ void Whch::customizeUi()
     m_ui->tableView->resizeColumnToContents(2);
     m_ui->tableView->scrollToBottom();
     m_ui->tableView->setColumnHidden(0,true);
-    m_ui->tableView_2->setColumnHidden(0,true);
+    m_ui->tableViewHistory->setColumnHidden(0,true);
     m_ui->treeView->setHeaderHidden(true);
 
     m_ui->lineEdit->setEnabled(false);
@@ -507,7 +507,7 @@ void Whch::setupModelView()
 
     m_tableProxyModel = new WhchTableProxyModel(this);
     m_tableProxyModel->setSourceModel(m_domModel);
-    m_ui->tableView_2->setModel(m_tableProxyModel);
+    m_ui->tableViewHistory->setModel(m_tableProxyModel);
     m_ui->tableView->setModel(m_tableProxyModel);
 
     // Connect tree view with table view.
@@ -781,7 +781,7 @@ void Whch::initializeHistoryViews()
 
     if (currentDayIndex.isValid())
     {
-        m_ui->tableView_2->showRow(0);
+        m_ui->tableViewHistory->showRow(0);
 
         QModelIndex treeModelIndex= m_treeProxyModel->mapFromSource(currentDayIndex);
         QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(currentDayIndex);
@@ -791,7 +791,7 @@ void Whch::initializeHistoryViews()
         m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent(), true);
         m_ui->treeView->setExpanded(treeModelIndex.parent().parent(), true);
         m_ui->treeView->setExpanded(treeModelIndex.parent(), true);
-        m_ui->tableView_2->setRootIndex(tableModelIndex);
+        m_ui->tableViewHistory->setRootIndex(tableModelIndex);
 
         //FIXME: this is not being displayed.
         QString dayWorkedHours = m_domModel->workedTime(currentDayIndex);
@@ -799,7 +799,7 @@ void Whch::initializeHistoryViews()
     }
     else
     {
-        m_ui->tableView_2->hideRow(0);
+        m_ui->tableViewHistory->hideRow(0);
         m_ui->label->setText("");
     }
 }
