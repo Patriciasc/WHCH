@@ -83,6 +83,7 @@ private:
     WhchDomModel *m_domModel;
     WhchTreeProxyModel *m_treeProxyModel;
     WhchTableProxyModel *m_tableProxyModel;
+    WhchTableProxyModel *m_tableProxyModelHistory;
 
     // Session data.
     typedef QMap<QString, QStringList> MapQStringToList;

@@ -58,6 +58,7 @@ Whch::Whch(QWidget *parent) :
         m_domModel(0),
         m_treeProxyModel(0),
         m_tableProxyModel(0),
+        m_tableProxyModelHistory(0),
         m_trayIcon(0),
         m_trayIconMenu(0),
         restoreAction(0),
@@ -346,7 +347,7 @@ void Whch::onItemInTreeViewClicked(const QModelIndex &index)
     {
 
         QModelIndex domModelIndex = m_treeProxyModel->mapToSource(index);
-        QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(domModelIndex);
+        QModelIndex tableModelIndex = m_tableProxyModelHistory->mapFromSource(domModelIndex);
 
         m_ui->tableViewHistory->showRow(0);
         m_ui->tableViewHistory->setRootIndex(tableModelIndex);
@@ -507,8 +508,11 @@ void Whch::setupModelView()
 
     m_tableProxyModel = new WhchTableProxyModel(this);
     m_tableProxyModel->setSourceModel(m_domModel);
-    m_ui->tableViewHistory->setModel(m_tableProxyModel);
     m_ui->tableView->setModel(m_tableProxyModel);
+  
+    m_tableProxyModelHistory = new WhchTableProxyModel(this);
+    m_tableProxyModelHistory->setSourceModel(m_domModel);  
+    m_ui->tableViewHistory->setModel(m_tableProxyModelHistory);
 
     // Connect tree view with table view.
     connect(m_ui->treeView, SIGNAL(clicked(QModelIndex)),
@@ -783,14 +787,14 @@ void Whch::initializeHistoryViews()
     {
         m_ui->tableViewHistory->showRow(0);
 
-        QModelIndex treeModelIndex= m_treeProxyModel->mapFromSource(currentDayIndex);
-        QModelIndex tableModelIndex = m_tableProxyModel->mapFromSource(currentDayIndex);
-
         // TODO: Nicer way of achieving the same effect?
+        QModelIndex treeModelIndex = m_treeProxyModel->mapFromSource(currentDayIndex);
         m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent().parent(), true);
         m_ui->treeView->setExpanded(treeModelIndex.parent().parent().parent(), true);
         m_ui->treeView->setExpanded(treeModelIndex.parent().parent(), true);
         m_ui->treeView->setExpanded(treeModelIndex.parent(), true);
+        
+        QModelIndex tableModelIndex = m_tableProxyModelHistory->mapFromSource(currentDayIndex);
         m_ui->tableViewHistory->setRootIndex(tableModelIndex);
 
         //FIXME: this is not being displayed.

@@ -1,5 +1,15 @@
 2011-04-20  Murray Cumming  <murrayc@openismus.com>
 
+	Use a separate proxy model for the history view.
+
+	* src/whch.[h|cpp]: Add and use a separate WhchTableProxyModel for the 
+	history view, making it possible to later use a completely different 
+	proxy model class for the history view, without disturbing the code for the 
+	normal view. The history view should probably be in a separate class anway, 
+	but that can happen later.
+
+2011-04-20  Murray Cumming  <murrayc@openismus.com>
+
 	Renamed some variables.
 
 	* data/ui/whch.ui:
