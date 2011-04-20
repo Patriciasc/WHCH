@@ -80,13 +80,13 @@ static const QString XML_FILENAME = "whch_log.xml";
 
 WhchDomModel::WhchDomModel(QObject *parent) :
               QAbstractItemModel(parent),
+              m_domDocument("WHCH"),
               m_rootNode(0)
 {
     // Set start time and timer for first task.
     m_taskNode = m_domDocument.createElement("task");
     m_taskNode.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
 
-    m_domDocument = QDomDocument("WHCH");
     QString fileName(QDir::homePath() + "/" + "." + XML_FILENAME);
     QFile file(fileName);
 
@@ -275,7 +275,7 @@ QModelIndex WhchDomModel::index(int row,
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    WhchDomNode *parentNode;
+    WhchDomNode *parentNode = 0;
 
     if (!parent.isValid())
         parentNode = m_rootNode;

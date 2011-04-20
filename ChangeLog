@@ -1,5 +1,13 @@
 2011-04-20  Murray Cumming  <murrayc@openismus.com>
 
+	Fix a valgrind error.
+
+	* src/whchDomModel.cpp: Initialize m_domDocument earlier, 
+	instead of creating a node that depends on it, and then leaving that node
+	orphaned by recreating the m_domDocment.
+
+2011-04-20  Murray Cumming  <murrayc@openismus.com>
+
 	Constructors: Improve initialization.
 
 	* src/whch.cpp: 
