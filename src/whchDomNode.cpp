@@ -73,16 +73,15 @@
 #include "whchDomNode.h"
 
 WhchDomNode::WhchDomNode(QDomNode &node, int row, WhchDomNode *parent)
+: m_domNode(node), 
+  m_parentNode(parent),
+  m_rowNumber(row)
 {
-    m_domNode = node;
-    m_rowNumber = row;
-    m_parentNode = parent;
 }
 
 WhchDomNode::~WhchDomNode()
 {
-    QHash<int,WhchDomNode*>::iterator it;
-    for (it = m_childNodes.begin(); it != m_childNodes.end(); ++it)
+    for (QHash<int,WhchDomNode*>::iterator it = m_childNodes.begin(); it != m_childNodes.end(); ++it)
         delete it.value();
 }
 

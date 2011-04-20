@@ -54,7 +54,15 @@ Whch::Whch(QWidget *parent) :
         QMainWindow(parent),
         m_ui(new Ui::whch),
         m_uiDialog(new Ui::Dialog),
-        m_seconds(0)
+        m_domModel(0),
+        m_treeProxyModel(0),
+        m_tableProxyModel(0),
+        m_trayIcon(0),
+        m_trayIconMenu(0),
+        restoreAction(0),
+        quitAction(0),
+        m_seconds(0),
+        m_timer(0)
 {
     m_ui->setupUi(this);
 

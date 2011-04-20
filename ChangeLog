@@ -1,3 +1,14 @@
+2011-04-20  Murray Cumming  <murrayc@openismus.com>
+
+	Constructors: Improve initialization.
+
+	* src/whch.cpp: 
+	* src/whchDomModel.cpp: Constructors: Initialize all pointer member variables.
+	* src/whchDomNode.cpp: Constructor: Use an initializer list instead of 
+	doing initialization in the body. It is neater.
+	* src/whchTask.cpp: Constructor: QString does not need to be initialized 
+	with "".
+
 Author: Patricia Santana Cruz <patriciasc@openismus.com>
 Date:   Wed Apr 13 13:14:20 2011 +0100
 

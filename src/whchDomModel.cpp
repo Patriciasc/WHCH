@@ -79,7 +79,8 @@
 static const QString XML_FILENAME = "whch_log.xml";
 
 WhchDomModel::WhchDomModel(QObject *parent) :
-              QAbstractItemModel(parent)
+              QAbstractItemModel(parent),
+              m_rootNode(0)
 {
     // Set start time and timer for first task.
     m_taskNode = m_domDocument.createElement("task");
