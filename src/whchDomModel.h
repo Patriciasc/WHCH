@@ -55,7 +55,7 @@ public:
         DayTimeType
     };
 
-    WhchDomModel(QObject *parent = 0);
+    WhchDomModel(const QString xmlFileName, QObject *parent = 0);
     ~WhchDomModel();
 
     QVariant data(const QModelIndex &index, int role) const;
@@ -82,6 +82,7 @@ public:
      void printModelIndexTree();
 
 private:
+    const QString m_xmlFileName;
     QDomDocument m_domDocument;
     WhchDomNode *m_rootNode;
     QDomElement m_taskNode;

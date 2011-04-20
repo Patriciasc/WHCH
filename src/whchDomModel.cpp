@@ -76,10 +76,9 @@
 #include <QDir>
 #include <QDebug>
 
-static const QString XML_FILENAME = "whch_log.xml";
-
-WhchDomModel::WhchDomModel(QObject *parent) :
+WhchDomModel::WhchDomModel(const QString xmlFileName, QObject *parent) :
               QAbstractItemModel(parent),
+              m_xmlFileName(xmlFileName),
               m_domDocument("WHCH"),
               m_rootNode(0)
 {
@@ -87,7 +86,7 @@ WhchDomModel::WhchDomModel(QObject *parent) :
     m_taskNode = m_domDocument.createElement("task");
     m_taskNode.setAttribute("start", QDateTime::currentDateTime().toString(Qt::ISODate));
 
-    QString fileName(QDir::homePath() + "/" + "." + XML_FILENAME);
+    QString fileName(QDir::homePath() + "/" + "." + m_xmlFileName);
     QFile file(fileName);
 
     // Create a new .xml file.
@@ -100,13 +99,13 @@ WhchDomModel::WhchDomModel(QObject *parent) :
         m_rootNode = new WhchDomNode(m_domDocument, 0);
 
         // Write memory data in the .xml file.
-        writeInXmlFile(XML_FILENAME);
+        writeInXmlFile(m_xmlFileName);
     }
     else
         m_rootNode = new WhchDomNode(m_domDocument, 0);
 
     // Load .xml file's content in memory.
-    loadXmlFile(XML_FILENAME);
+    loadXmlFile(m_xmlFileName);
 
 }
 
@@ -221,7 +220,7 @@ bool WhchDomModel::setData(const QModelIndex &index,
         }
 
         if (changed)
-            writeInXmlFile(XML_FILENAME);
+            writeInXmlFile(m_xmlFileName);
     }
     return changed;
 }
@@ -383,7 +382,7 @@ void WhchDomModel::addNewTaskElement(WhchTask currentTask)
     dayNode.appendChild(m_taskNode);
 
     // Write data in .xml file.
-    writeInXmlFile (XML_FILENAME);
+    writeInXmlFile (m_xmlFileName);
 
     // Reset view.
     reset();

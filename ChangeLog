@@ -1,3 +1,13 @@
+2011-04-20  Patricia Santana Cruz <patriciasc@openismus.com>
+
+        Made xml file name, a parameter of the DOM model's constructor.
+
+	* src/whch.cpp: added xml file name parameter to the Dom Model instance.
+	* src/whchDomModel.cpp: added xml file name as a parameter of the DOM
+	model constructor.
+	* src/whchDomModel.h: added xml file name as a parameter of the DOM
+	model constructor.
+
 2011-04-20  Murray Cumming  <murrayc@openismus.com>
 
 	Fix a valgrind error.
