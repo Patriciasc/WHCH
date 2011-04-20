@@ -83,6 +83,11 @@ qmake PREFIX=/wanted/prefix
 make
 make install
 
+(
+To build with warnings as errors, do this:
+qmake QMAKE_CXXFLAGS="-pedantic -Wall -Wextra -Wno-long-long -Werror" PREFIX=/wanted/prefix
+)
+
 For development using QtCreator (2.0+) and opening whch.pro is recommended.
 
 
