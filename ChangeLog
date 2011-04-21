@@ -1,5 +1,9 @@
 2011-04-21  Patricia Santana Cruz <patriciasc@openismus.com>
 
+	Added new application icon.
+
+2011-04-21  Patricia Santana Cruz <patriciasc@openismus.com>
+
 	Removed unnecessary and duplicated function.
 
 	* src/whch.[h|cpp]: Removed onClickedViewIndex() function.

@@ -723,7 +723,8 @@ void Whch::createTrayIcon()
 
     m_trayIcon = new QSystemTrayIcon(this);
     m_trayIcon->setContextMenu(m_trayIconMenu);
-    QIcon icon = QIcon(":/data/icons/16x16/whch.png");
+    //FIXME: Change this to make the icon not be part of the binary.
+    QIcon icon = QIcon(":/data/icons/48x48/whch.png");
     m_trayIcon->setIcon(icon);
     m_trayIcon->setVisible(true);
     setWindowIcon(icon);
