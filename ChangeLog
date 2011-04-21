@@ -1,3 +1,10 @@
+2011-04-21  Patricia Santana Cruz <patriciasc@openismus.com>
+
+	Removed unnecessary and duplicated function.
+
+	* src/whch.[h|cpp]: Removed onClickedViewIndex() function.
+	Function onItemInTreeViewClicked has some functionality
+
 2011-04-20  Murray Cumming  <murrayc@openismus.com>
 
 	Use a separate proxy model for the history view.

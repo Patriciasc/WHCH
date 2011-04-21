@@ -284,24 +284,6 @@ void Whch::on_lineEdit_returnPressed()
     on_StopButton_clicked();
 }
 
-void Whch::onClickedViewIndex(const QModelIndex &index)
-{
-    if (index.isValid())
-    {
-        m_ui->tableViewHistory->showRow(0);
-        m_ui->tableViewHistory->setRootIndex(index);
-    }
-    else
-    {
-        m_ui->tableViewHistory->reset();
-        m_ui->tableViewHistory->hideRow(0);
-    }
-
-    m_ui->tableViewHistory->scrollToBottom();
-    m_ui->tableViewHistory->resizeColumnToContents(1);
-    m_ui->tableViewHistory->resizeColumnToContents(2);
-}
-
 // Handler for tray icon's activation.
 void Whch::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {

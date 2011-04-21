@@ -66,7 +66,6 @@ private slots:
     void on_StartButton_clicked();
     void on_StopButton_clicked();
     void on_lineEdit_returnPressed();
-    void onClickedViewIndex(const QModelIndex &index);
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onTimerTimeOut();
     void onItemInTreeViewClicked(const QModelIndex &index);
