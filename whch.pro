@@ -41,7 +41,8 @@ SOURCES += src/main.cpp \
            src/whchDomNode.cpp \
            src/whchDomModel.cpp \
            src/whchTreeProxyModel.cpp \
-           src/whchTableProxyModel.cpp
+           src/whchTableProxyModel.cpp \
+           src/whchClientsTasksDialog.cpp
 
 HEADERS += src/whch.h \
            src/whchTask.h \
@@ -51,7 +52,8 @@ HEADERS += src/whch.h \
            src/whchDomNode.h \
            src/whchDomModel.h \
            src/whchTreeProxyModel.h \
-           src/whchTableProxyModel.h
+           src/whchTableProxyModel.h \
+           src/whchClientsTasksDialog.h
 
 FORMS   += data/ui/whch.ui \
            data/ui/dialogTasksClients.ui

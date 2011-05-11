@@ -1,3 +1,15 @@
+2011-05-11  Patricia Santana Cruz <patriciasc@openismus.com>
+
+	Moved the clients-and-tasks dialog into its own class.
+
+	* src/whchClientsTasksDialog.[h|cpp]: New class for the dialog.
+	* whch.pro: Listed new dialog'class files.
+	* whch.[h|cpp]: Removed the dialog and all it's related functions.
+
+2011-05-09  Patricia Santana Cruz <patriciasc@openismus.com>
+
+	Update scalable icon.
+
 2011-04-21  Patricia Santana Cruz <patriciasc@openismus.com>
 
 	Added new application icon.

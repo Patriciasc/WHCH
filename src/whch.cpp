@@ -31,6 +31,7 @@
 #include "ui_dialogTasksClients.h"
 #include "whchDomModel.h"
 #include "whchTask.h"
+#include "whchClientsTasksDialog.h"
 #include <QDomDocument>
 #include <iostream>
 #include <QTextStream>
@@ -54,7 +55,6 @@ static const QString WARNING(QObject::tr("Soo... What have you been doing in the
 Whch::Whch(QWidget *parent) :
         QMainWindow(parent),
         m_ui(new Ui::whch),
-        m_uiDialog(new Ui::Dialog),
         m_domModel(0),
         m_treeProxyModel(0),
         m_tableProxyModel(0),
@@ -80,7 +80,6 @@ Whch::~Whch()
     saveSessionData();
 
     delete m_ui;
-    delete m_uiDialog;
 }
 
 // ## Slots ##
@@ -96,142 +95,6 @@ void Whch::onUiComboboxItemActivated(const QString &task)
     }
 }
 
-// Shows the related tasks of the selected client.
-void Whch::onDialogComboboxItemActivated(const QString &client)
-{
-    // Make it editable for adding a new client.
-    if (client.compare(NEW_CLIENT) == 0)
-    {
-        m_uiDialog->comboBox->setEditable(true);
-        m_uiDialog->comboBox->clearEditText();
-        QObject::connect(m_uiDialog->comboBox->lineEdit(), SIGNAL(returnPressed()),
-                         this, SLOT(onDialogComboboxLineEditReturn()));
-    }
-    else
-        m_uiDialog->comboBox->setEditable(false);
-
-    // Set current available tasks and new line for new task.
-    QStringList clientTasks(m_domModel->xmlClientTasks(client));
-    if (m_sessionData.contains(client))
-    {
-        QStringList sessionClientTasks(m_sessionData.value(client));
-        for (int i = 0; i < sessionClientTasks.size(); ++i)
-        {
-            const QString sessionTaskItem(sessionClientTasks.at(i));
-            if (!clientTasks.contains(sessionTaskItem))
-                clientTasks << sessionTaskItem;
-        }
-    }
-
-    clientTasks << "";
-
-    // Set number of rows.
-    m_uiDialog->tableWidget->setRowCount(clientTasks.size());
-
-    // Show list of tasks.
-    for (int i=0; i< clientTasks.size(); ++i)
-    {
-        QTableWidgetItem *newItem = new QTableWidgetItem(clientTasks.at(i));
-        m_uiDialog->tableWidget->setItem(i, 0, newItem);
-    }
-}
-
-// Update session data.
-void Whch::onDialogComboboxLineEditReturn()
-{
-    QString newClient = m_uiDialog->comboBox->currentText();
-
-    if (newClient.compare("") != 0)
-    {
-        QStringList clients(m_domModel->AttributesList("client"));
-
-        if (!clients.contains(newClient))
-        {
-            QStringList tasks;
-            m_sessionData.insert(newClient, tasks);
-        }
-    }
-}
-
-// Makes last row editable.
-void Whch::onDialogTableCellChanged(QTableWidgetItem *item)
-{
-    if ((item->column() == 0) && (item->row() == m_uiDialog->tableWidget->rowCount()-1))
-        m_uiDialog->tableWidget->editItem(item);
-}
-
-// Save user's new task into the session's structure.
-void Whch::onDialogTableItemChanged(QTableWidgetItem *item)
-{
-    const QString itemText (item->text());
-    QString selectedClient (m_uiDialog->comboBox->currentText());
-    if (selectedClient.compare("") != 0)
-    {
-        if (itemText.compare("") != 0)
-        {
-            // Update task's combobox.
-            if (!totalTasks().contains(itemText))
-            {
-                m_ui->comboBox->clear();
-                QStringList comboboxTasks;
-                QStringList totalListTasks (totalTasks());
-                QStringList taskClientList;
-                for (int i=0; i < totalListTasks.size(); ++i)
-                {
-                    QString currentTask (totalListTasks.at(i));
-                    QString taskClient (m_domModel->xmlClientOfTask(currentTask));
-                    if (taskClient.compare("") == 0)
-                        taskClient = sessionClientOfTask(currentTask);
-
-                    taskClientList << currentTask + " (" + taskClient + ")";
-                }
-
-                comboboxTasks << itemText + " (" + selectedClient + ")" << taskClientList <<  NEW_TASK;
-                m_ui->comboBox->addItems(comboboxTasks);
-            }
-
-            // Save data into session structure.
-            const QString currentClient(m_uiDialog->comboBox->currentText());
-
-            // Do not repeat tasks.
-            if(!clientTasks(currentClient).contains(itemText))
-            {
-                // FIXME: Commented code is for testing still.
-                // This code should give feedback to the user
-                // when introducing an already existent task.
-                // Still not working.
-                //std::cout << "if" << std::endl;
-
-                // Change color back to white (for repeated elements).
-                /* if (item->backgroundColor() != Qt::white)
-            {
-                const QColor warningColor (Qt::white);
-                item->setBackgroundColor(warningColor);
-            }*/
-
-                // Add new task as session data.
-                QStringList tasks(m_sessionData.value(currentClient));
-                tasks << itemText;
-                m_sessionData.insert(currentClient, tasks);
-
-                // Insert new empty element.
-                m_uiDialog->tableWidget->setRowCount(clientTasks(currentClient).count()+1);
-                QTableWidgetItem *newItem = new QTableWidgetItem("");
-                m_uiDialog->tableWidget->setItem(clientTasks(currentClient).count(), 0, newItem);
-            }
-            /*else
-                        {
-                            // Give feedback to the user on repeated elements.
-                            std::cout << "else" << std::endl;
-                            QColor warningColor;
-                            warningColor.setRed(200);
-                            item->setBackgroundColor(warningColor);
-                            item->setSelected(false);
-                        }*/
-        }
-    }
-}
-
 // Starts timer.
 void Whch::on_StartButton_clicked()
 {
@@ -244,7 +107,7 @@ void Whch::on_StartButton_clicked()
     m_timer->start(1000);
 }
 
-// Stops timer and saves new introduced task
+// Stops timer and saves new introduced task.
 void Whch::on_StopButton_clicked()
 {
     const QString lineEditText(m_ui->lineEdit->text());
@@ -336,7 +199,6 @@ void Whch::onItemInTreeViewClicked(const QModelIndex &index)
     }
     else
     {
-        // TODO: flatten tree for displaying leaf-nodes.
         m_ui->tableViewHistory->reset();
         m_ui->tableViewHistory->hideRow(0);
     }
@@ -353,51 +215,27 @@ void Whch::onItemInTreeViewClicked(const QModelIndex &index)
     m_ui->tableViewHistory->resizeColumnToContents(2);
 }
 
+void Whch::onNewTasksAdded(QStringList tasks)
+{
+    m_ui->comboBox->clear();
+    m_ui->comboBox->addItems(tasks);
+}
+
+void Whch::onSessionDataUpdated(QString client, QStringList tasks)
+{
+    m_sessionData.insert(client, tasks);
+}
+
 // Sets up dialog for adding tasks and clients.
 void Whch::on_actionTasksClients_triggered()
 {
-    QDialog *taskDialog = new QDialog;
-    m_uiDialog->setupUi(taskDialog);
+    WhchClientsTasksDialog *clientsTasksDialog = new WhchClientsTasksDialog(m_domModel, m_sessionData);
 
-    // Insert new added clients always at the top.
-    m_uiDialog->comboBox->setInsertPolicy(QComboBox::InsertAtTop);
+    connect(clientsTasksDialog, SIGNAL(newTasksAdded(QStringList)),
+             this, SLOT(onNewTasksAdded(QStringList)));
 
-    // Load list of clients.
-    QStringList clients(m_domModel->AttributesList("client"));
-    if (!m_sessionData.isEmpty())
-    {
-        QStringList sessionClients (m_sessionData.keys());
-        for (int i=0; i < sessionClients.size(); ++i)
-        {
-            const QString sessionClientItem(sessionClients.at(i));
-            if(!clients.contains(sessionClientItem))
-                clients << sessionClientItem;
-        }
-    }
-
-    clients << NEW_CLIENT;
-    m_uiDialog->comboBox->addItems(clients);
-
-    // Load list of tasks for initial client
-    const QString currentClient (m_uiDialog->comboBox->currentText());
-    if (currentClient.compare(NEW_CLIENT) != 0)
-        onDialogComboboxItemActivated(currentClient);
-
-    // Load list of related tasks to the selected client.
-    QObject::connect(m_uiDialog->comboBox, SIGNAL(activated(QString)),
-                     this, SLOT(onDialogComboboxItemActivated(QString)));
-
-
-    // Makes last row editable.
-    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem *)),
-                     this, SLOT(onDialogTableCellChanged(QTableWidgetItem *)));
-
-
-    // Manages data if any cell of the last row is edited.
-    QObject::connect(m_uiDialog->tableWidget, SIGNAL(itemChanged(QTableWidgetItem *)),
-                     this, SLOT(onDialogTableItemChanged(QTableWidgetItem *)));
-
-    taskDialog->show();
+    connect(clientsTasksDialog, SIGNAL(sessionDataUpdated(QString,QStringList)),
+             this, SLOT(onSessionDataUpdated(QString, QStringList)));
 }
 
 void Whch::on_actionHistory_View_triggered(bool checked)
@@ -517,27 +355,6 @@ void Whch::setCurrentDayIndex()
         m_ui->tableView->hideRow(0);
 }
 
-// List of new added tasks.
-QStringList Whch::sessionTasks()
-{
-    QStringList sessionTasks;
-    MapQStringToList::const_iterator i = m_sessionData.constBegin();
-
-    while (i != m_sessionData.constEnd())
-    {
-        QStringList itemTasks = i.value();
-        for (int j = 0; j < itemTasks.size(); ++j)
-        {
-            // Do not repeat elements.
-            const QString item(itemTasks.at(j));
-            if (!sessionTasks.contains(item))
-                sessionTasks << item;
-        }
-        ++i;
-    }
-    return sessionTasks;
-}
-
 // Get related client of a task.
 QString Whch::sessionClientOfTask(const QString &task)
 {
@@ -555,49 +372,6 @@ QString Whch::sessionClientOfTask(const QString &task)
         ++i;
     }
     return sessionClient;
-}
-
-// Return the tasks of a session client.
-QStringList Whch::sessionClientTasks(const QString &client)
-{
-    return m_sessionData[client];
-}
-
-// Return a list of the total tasks of a client. Those saved
-// in the .xml file and those that are session data.
-QStringList Whch::clientTasks(const QString &client)
-{
-    QStringList clientTasks;
-
-    if (m_domModel->isXmlClient(client))
-        clientTasks << m_domModel->xmlClientTasks(client);
-
-    if (m_sessionData.contains(client))
-    {
-        QStringList sessionClientTasks(m_sessionData.value(client));
-        for (int i = 0; i < sessionClientTasks.size(); ++i)
-        {
-            const QString sessionTaskItem(sessionClientTasks.at(i));
-            if (!clientTasks.contains(sessionTaskItem))
-                clientTasks << sessionTaskItem;
-        }
-    }
-    return clientTasks;
-}
-
-// Return total tasks (session and .xml file ones).
-QStringList Whch::totalTasks()
-{
-    QStringList xmlTotalTasks (m_domModel->AttributesList("name"));
-    QStringList sessionTotalTasks (sessionTasks());
-
-    for (int i = 0; i < sessionTotalTasks.count(); ++i)
-    {
-        const QString sessionTaskItem(sessionTotalTasks.at(i));
-        if (!xmlTotalTasks.contains(sessionTaskItem))
-            xmlTotalTasks << sessionTaskItem;
-    }
-    return xmlTotalTasks;
 }
 
 // Load session data from setting's file.
@@ -780,7 +554,6 @@ void Whch::initializeHistoryViews()
         QModelIndex tableModelIndex = m_tableProxyModelHistory->mapFromSource(currentDayIndex);
         m_ui->tableViewHistory->setRootIndex(tableModelIndex);
 
-        //FIXME: this is not being displayed.
         QString dayWorkedHours = m_domModel->workedTime(currentDayIndex);
         m_ui->label->setText("Total worked time: " + dayWorkedHours);
     }

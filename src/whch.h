@@ -47,6 +47,8 @@ namespace Ui {
     class Dialog;
 }
 
+typedef QMap<QString, QStringList> MapQStringToList;
+
 class Whch : public QMainWindow
 {
     Q_OBJECT
@@ -57,11 +59,6 @@ public:
 
 private slots:
     void onUiComboboxItemActivated(const QString &task);
-    void onDialogComboboxItemActivated(const QString &client);
-    void onDialogComboboxLineEditReturn();
-
-    void onDialogTableCellChanged(QTableWidgetItem *item);
-    void onDialogTableItemChanged(QTableWidgetItem *item);
 
     void on_StartButton_clicked();
     void on_StopButton_clicked();
@@ -69,6 +66,8 @@ private slots:
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onTimerTimeOut();
     void onItemInTreeViewClicked(const QModelIndex &index);
+    void onNewTasksAdded(QStringList tasks);
+    void onSessionDataUpdated(QString client, QStringList tasks);
 
     void on_actionTasksClients_triggered();
     void on_actionHistory_View_triggered(bool checked);
@@ -78,14 +77,12 @@ private slots:
 
 private:
     Ui::whch *m_ui;
-    Ui::Dialog *m_uiDialog;
     WhchDomModel *m_domModel;
     WhchTreeProxyModel *m_treeProxyModel;
     WhchTableProxyModel *m_tableProxyModel;
     WhchTableProxyModel *m_tableProxyModelHistory;
 
     // Session data.
-    typedef QMap<QString, QStringList> MapQStringToList;
     MapQStringToList m_sessionData;
 
     // Tray icon.
@@ -102,11 +99,7 @@ private:
     void setupData();
     void setupModelView();
     void setCurrentDayIndex();
-    QStringList sessionTasks();
     QString sessionClientOfTask(const QString &task);
-    QStringList sessionClientTasks(const QString &client);
-    QStringList clientTasks(const QString &client);
-    QStringList totalTasks();
     void loadSessionData();
     void saveSessionData();
     void setComboboxTasks();
