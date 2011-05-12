@@ -1,4 +1,8 @@
-2011-05-11  Patricia Santana Cruz <patriciasc@openismus.com>
+2011-05-12  Patricia Santana Cruz <patriciasc@openismus.com>
+
+	Removed some duplicated global variables.
+
+2011-05-12  Patricia Santana Cruz <patriciasc@openismus.com>
 
 	Replaced some parameters with const &.
 
@@ -23,7 +27,7 @@
 	Removed unnecessary and duplicated function.
 
 	* src/whch.[h|cpp]: Removed onClickedViewIndex() function.
-	Function onItemInTreeViewClicked has some functionality
+	Function onItemInTreeViewClicked has same functionality
 
 2011-04-20  Murray Cumming  <murrayc@openismus.com>
 

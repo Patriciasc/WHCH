@@ -47,6 +47,10 @@ namespace Ui {
     class Dialog;
 }
 
+const QString NEW_TASK(QObject::tr("Add new task"));
+static const QString XML_FILENAME = "whch_log.xml";
+static const QString WARNING(QObject::tr("Soo... What have you been doing in the last minutes?"));
+
 typedef QMap<QString, QStringList> MapQStringToList;
 
 class Whch : public QMainWindow

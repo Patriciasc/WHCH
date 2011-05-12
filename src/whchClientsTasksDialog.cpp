@@ -3,7 +3,6 @@
 #include <QDebug>
 
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
-static const QString NEW_TASK(QObject::tr("Add new task"));
 
 WhchClientsTasksDialog::WhchClientsTasksDialog(WhchDomModel *domModel,
                                                const MapQStringToList &sessionData) :

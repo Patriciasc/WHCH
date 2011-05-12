@@ -47,11 +47,6 @@
 #include <QDebug>
 #include <QCloseEvent>
 
-static const QString XML_FILENAME = "whch_log.xml";
-static const QString NEW_CLIENT(QObject::tr("Add new client"));
-static const QString NEW_TASK(QObject::tr("Add new task"));
-static const QString WARNING(QObject::tr("Soo... What have you been doing in the last minutes?"));
-
 Whch::Whch(QWidget *parent) :
         QMainWindow(parent),
         m_ui(new Ui::whch),
