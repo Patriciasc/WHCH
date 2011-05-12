@@ -215,13 +215,14 @@ void Whch::onItemInTreeViewClicked(const QModelIndex &index)
     m_ui->tableViewHistory->resizeColumnToContents(2);
 }
 
-void Whch::onNewTasksAdded(QStringList tasks)
+void Whch::onNewTasksAdded(const QStringList &tasks)
 {
     m_ui->comboBox->clear();
     m_ui->comboBox->addItems(tasks);
 }
 
-void Whch::onSessionDataUpdated(QString client, QStringList tasks)
+void Whch::onSessionDataUpdated(const QString &client,
+                                const QStringList &tasks)
 {
     m_sessionData.insert(client, tasks);
 }

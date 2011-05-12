@@ -15,7 +15,7 @@ class WhchClientsTasksDialog : public QDialog
     Q_OBJECT
 
 public:
-    WhchClientsTasksDialog(WhchDomModel *domModel, MapQStringToList sessionData);
+    WhchClientsTasksDialog(WhchDomModel *domModel, const MapQStringToList &sessionData);
 
 private:
     QHBoxLayout *m_hLayout;
@@ -43,8 +43,8 @@ private slots:
     void onTableItemChanged(QTableWidgetItem *item);
 
 signals:
-    void newTasksAdded(QStringList tasks);
-    void sessionDataUpdated (QString client, QStringList tasks);
+    void newTasksAdded(const QStringList &tasks);
+    void sessionDataUpdated (const QString &client, const QStringList &tasks);
 };
 
 #endif // WHCHCLIENTSTASKSDIALOG_H

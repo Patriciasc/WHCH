@@ -55,7 +55,7 @@ public:
         DayTimeType
     };
 
-    WhchDomModel(const QString xmlFileName, QObject *parent = 0);
+    WhchDomModel(const QString &xmlFileName, QObject *parent = 0);
     ~WhchDomModel();
 
     QVariant data(const QModelIndex &index, int role) const;

@@ -66,8 +66,8 @@ private slots:
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onTimerTimeOut();
     void onItemInTreeViewClicked(const QModelIndex &index);
-    void onNewTasksAdded(QStringList tasks);
-    void onSessionDataUpdated(QString client, QStringList tasks);
+    void onNewTasksAdded(const QStringList &tasks);
+    void onSessionDataUpdated(const QString &client, const QStringList &tasks);
 
     void on_actionTasksClients_triggered();
     void on_actionHistory_View_triggered(bool checked);

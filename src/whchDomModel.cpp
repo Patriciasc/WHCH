@@ -76,7 +76,8 @@
 #include <QDir>
 #include <QDebug>
 
-WhchDomModel::WhchDomModel(const QString xmlFileName, QObject *parent) :
+WhchDomModel::WhchDomModel(const QString &xmlFileName,
+                           QObject *parent) :
               QAbstractItemModel(parent),
               m_xmlFileName(xmlFileName),
               m_domDocument("WHCH"),

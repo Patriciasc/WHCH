@@ -1,5 +1,9 @@
 2011-05-11  Patricia Santana Cruz <patriciasc@openismus.com>
 
+	Replaced some parameters with const &.
+
+2011-05-11  Patricia Santana Cruz <patriciasc@openismus.com>
+
 	Moved the clients-and-tasks dialog into its own class.
 
 	* src/whchClientsTasksDialog.[h|cpp]: New class for the dialog.

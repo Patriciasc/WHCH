@@ -5,7 +5,8 @@
 static const QString NEW_CLIENT(QObject::tr("Add new client"));
 static const QString NEW_TASK(QObject::tr("Add new task"));
 
-WhchClientsTasksDialog::WhchClientsTasksDialog(WhchDomModel *domModel, MapQStringToList sessionData) :
+WhchClientsTasksDialog::WhchClientsTasksDialog(WhchDomModel *domModel,
+                                               const MapQStringToList &sessionData) :
         m_hLayout(new QHBoxLayout),
         m_vLayout(new QVBoxLayout (this)),
         m_label(new QLabel ("Client", this)),
